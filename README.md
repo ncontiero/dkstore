@@ -5,27 +5,60 @@
 
 An e-commerce with Next.js.
 
-## Getting Started
+## Install and run the project
 
-First, run the development server:
+### Global Dependencies
+
+You need to have a main dependency installed:
+
+- Node.js LTS v18 (or any higher version)
+
+Do you use `nvm`? Then you can run `nvm install` in the project folder to install and use the most appropriate version of Node.js.
+
+### Get the repository
 
 ```bash
-pnpm run dev
+git clone https://github.com/dkshs/dkstore.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Local Dependencies
 
-## Learn More
+So after getting the repository, don't forget to install the project's local dependencies:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+pnpm install
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Environment variables
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Create a `.env` file similar to [`.env.example`](./.env.example).
 
-## Deploy on Vercel
+```dotenv
+# When adding additional environment variables, the schema in "./src/env.js"
+# should be updated accordingly.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# ------ POSTGRES ENV ------
+# Postgres
+POSTGRES_HOST="localhost"
+POSTGRES_PORT=5432
+POSTGRES_USER="postgres"
+POSTGRES_PASSWORD="postgresw"
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+# ------ PROJECT ENV ------
+# Database (Prisma)
+DATABASE_URL="postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/postgres"
+```
+
+### Run the project
+
+To run the project locally, just run the command below:
+
+```bash
+pnpm dev
+```
+
+- go to <http://localhost:3000> to see the application.
+
+## License
+
+This project is licensed under the **MIT** License - see the [LICENSE](./LICENSE) file for details.
