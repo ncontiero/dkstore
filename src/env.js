@@ -13,6 +13,11 @@ export const env = createEnv({
     // Database (Prisma)
     DATABASE_URL: z.string().url(),
     JWT_SECRET: z.string(),
+
+    // these variables are used for the site's SEO
+    SITE_NAME: z.string().default("DkStore"),
+    SITE_LOCALE: z.string().default("en_US"),
+    SITE_BASEURL: z.string().url().default("http://localhost:3000"),
   },
 
   /**
@@ -33,6 +38,11 @@ export const env = createEnv({
     // Database (Prisma)
     DATABASE_URL: process.env.DATABASE_URL,
     JWT_SECRET: process.env.JWT_SECRET,
+
+    // SEO
+    SITE_NAME: process.env.SITE_NAME,
+    SITE_LOCALE: process.env.SITE_LOCALE,
+    SITE_BASEURL: process.env.SITE_BASEURL,
 
     // Client
     // ----------------------------
