@@ -48,3 +48,14 @@
     @apply bg-background font-inter text-foreground;
   }
 }
+
+/* Toastify */
+.Toastify__toast-container {
+  @apply z-[99999] !important;
+}
+.Toastify__toast-body {
+  @apply font-inter text-foreground !important;
+}
+.Toastify__toast {
+  @apply bg-background !important;
+}

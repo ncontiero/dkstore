@@ -1,7 +1,9 @@
+import "react-toastify/dist/ReactToastify.min.css";
 import "./globals.css";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Inter } from "next/font/google";
+import { ToastContainer } from "react-toastify";
 import { env } from "@/env";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -48,7 +50,18 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.variable}>
-      <body>{children}</body>
+      <body>
+        <ToastContainer
+          autoClose={3000}
+          theme="dark"
+          newestOnTop
+          pauseOnFocusLoss={false}
+          limit={3}
+          closeOnClick
+          stacked
+        />
+        {children}
+      </body>
     </html>
   );
 }
