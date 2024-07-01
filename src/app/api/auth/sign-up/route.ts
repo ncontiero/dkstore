@@ -7,7 +7,7 @@ import { createPassHash } from "@/utils/password";
 import { createJWT } from "@/utils/jwt";
 import { BadRequestError, errorHandler } from "../../errors";
 
-const registerAccountSchema = z.object({
+const signUpSchema = z.object({
   name: z.string().min(3),
   email: z.string().email(),
   password: z.string().min(6),
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const data = registerAccountSchema.parse(body);
+    const data = signUpSchema.parse(body);
     const { name, email, password } = data;
 
     const userWithSameEmail = await prisma.user.findUnique({

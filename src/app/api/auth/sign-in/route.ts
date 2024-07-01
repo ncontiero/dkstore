@@ -7,7 +7,7 @@ import { verifyPassHash } from "@/utils/password";
 import { createJWT } from "@/utils/jwt";
 import { BadRequestError, errorHandler } from "../../errors";
 
-const loginSchema = z.object({
+const signInSchema = z.object({
   email: z.string().email(),
   password: z.string(),
 });
@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const data = loginSchema.parse(body);
+    const data = signInSchema.parse(body);
     const { email, password } = data;
 
     const userFromEmail = await prisma.user.findUnique({
