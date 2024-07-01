@@ -12,6 +12,7 @@ export const env = createEnv({
       .default("development"),
     // Database (Prisma)
     DATABASE_URL: z.string().url(),
+    JWT_SECRET: z.string(),
   },
 
   /**
@@ -31,6 +32,7 @@ export const env = createEnv({
     NODE_ENV: process.env.NODE_ENV,
     // Database (Prisma)
     DATABASE_URL: process.env.DATABASE_URL,
+    JWT_SECRET: process.env.JWT_SECRET,
 
     // Client
     // ----------------------------
