@@ -47,6 +47,14 @@ POSTGRES_PASSWORD="postgresw"
 # ------ PROJECT ENV ------
 # Database (Prisma)
 DATABASE_URL="postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/postgres"
+
+JWT_SECRET="my_jwt_secret"
+
+# these variables are used for the site's SEO
+SITE_NAME="DkStore"
+SITE_LOCALE="en_US"
+# URLs
+SITE_BASEURL="http://localhost:3000" # in PROD put the URL of your project
 ```
 
 ### Run the project
