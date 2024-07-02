@@ -55,6 +55,8 @@ SITE_NAME="DkStore"
 SITE_LOCALE="en_US"
 # URLs
 SITE_BASEURL="http://localhost:3000" # in PROD put the URL of your project
+
+NEXT_PUBLIC_API_URL="http://localhost:3000/api"
 ```
 
 ### Run the project
