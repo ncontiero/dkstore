@@ -2,6 +2,7 @@
 
 import type { ActionsReturn } from "@/hooks/useFormState";
 import { z } from "zod";
+import { cookies } from "next/headers";
 import { api } from "@/utils/api";
 
 const signUpSchema = z
@@ -35,9 +36,17 @@ export async function signUpAction(
   }
 
   try {
-    await api.post("signUp", {
+    const { content } = await api.post<{ token: string }>("signUp", {
       body: JSON.stringify(result.data),
       headers: { "Content-Type": "application/json" },
+    });
+    if (!content?.data?.token) {
+      throw new Error("Invalid token");
+    }
+
+    cookies().set("token", content.data.token, {
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7, // 7 days
     });
   } catch (error) {
     if (error instanceof Error) {
