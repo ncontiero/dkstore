@@ -3,7 +3,10 @@ export const routes = {
     signUp: "/auth/sign-up",
     signIn: "/auth/sign-in",
   },
-  GET: {},
+  GET: {
+    signOut: "/auth/sign-out",
+    profile: "/profile",
+  },
   PUT: {},
   PATCH: {},
   DELETE: {},

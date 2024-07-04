@@ -1,4 +1,5 @@
 import { ZodError } from "zod";
+import { JOSEError } from "jose/errors";
 import { logger } from "@/utils/logger";
 
 export class BadRequestError extends Error {
@@ -31,7 +32,7 @@ export function errorHandler(error: unknown) {
     };
   }
 
-  if (error instanceof UnauthorizedError) {
+  if (error instanceof UnauthorizedError || error instanceof JOSEError) {
     return {
       status: 401,
       message: error.message,

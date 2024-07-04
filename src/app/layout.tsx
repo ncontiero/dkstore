@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import { Inter } from "next/font/google";
 import { ToastContainer } from "react-toastify";
 import { env } from "@/env";
+import { Header } from "@/components/Header";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -60,7 +61,8 @@ export default function RootLayout({
           closeOnClick
           stacked
         />
-        {children}
+        <Header />
+        <div className="pb-20 pt-[72px]">{children}</div>
       </body>
     </html>
   );
