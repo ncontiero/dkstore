@@ -13,7 +13,7 @@ export default function Icon() {
   return new ImageResponse(
     (
       // ImageResponse JSX element
-      <div tw="flex w-full h-full items-center justify-center rounded-full bg-[#270B5B] text-center text-xl text-white">
+      <div tw="flex w-full h-full items-center pl-0.5 justify-center rounded-full bg-[#270B5B] text-center text-2xl text-white">
         D
       </div>
     ),
