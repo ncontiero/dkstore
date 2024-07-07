@@ -5,12 +5,14 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { createPassHash } from "@/utils/password";
 import { createJWT } from "@/utils/jwt";
+import { sessionExpires } from "@/utils/auth";
 import { BadRequestError, ForbiddenError, errorHandler } from "../../errors";
 
 const signUpSchema = z.object({
   name: z.string().min(3),
   email: z.string().email(),
   password: z.string().min(6),
+  remember_me: z.boolean().default(false),
 });
 
 export async function POST(req: NextRequest) {
@@ -22,7 +24,7 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json();
     const data = signUpSchema.parse(body);
-    const { name, email, password } = data;
+    const { name, email, password, remember_me } = data;
 
     const userWithSameEmail = await prisma.user.findUnique({
       where: { email },
@@ -42,14 +44,15 @@ export async function POST(req: NextRequest) {
           passwordHash,
         },
       });
+      const expires = sessionExpires(remember_me);
       const session = await tx.session.create({
-        data: { userId: user.id },
+        data: { userId: user.id, expires },
       });
 
       const token = await createJWT(session.id);
       cookies().set("token", token, {
         path: "/",
-        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+        expires,
       });
 
       return { token };

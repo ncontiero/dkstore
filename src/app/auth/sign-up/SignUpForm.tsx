@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { Link } from "@/components/ui/Link";
+import { Checkbox } from "@/components/ui/CheckBox";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/Alert";
 
 import { type SignUpDataKeys, signUpAction } from "./actions";
@@ -86,6 +87,11 @@ export function SignUpForm() {
             {errors.password_confirmation[0]}
           </p>
         ) : null}
+      </div>
+
+      <div className="flex items-center gap-1">
+        <Checkbox id="remember_me" name="remember_me" />
+        <Label htmlFor="remember_me">Remember me</Label>
       </div>
 
       <Button type="submit" className="mt-2" disabled={isPending}>

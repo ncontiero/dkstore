@@ -17,6 +17,10 @@ const signUpSchema = z
       .string()
       .min(6, { message: "Password should have at least 6 characters." }),
     password_confirmation: z.string(),
+    remember_me: z
+      .string()
+      .transform((value) => value === "on")
+      .default("off"),
   })
   .refine((data) => data.password === data.password_confirmation, {
     message: "Password confirmation does not match.",

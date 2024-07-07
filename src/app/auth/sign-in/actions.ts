@@ -9,6 +9,10 @@ const signInSchema = z.object({
     .string()
     .email({ message: "Please, provide a valid e-mail address." }),
   password: z.string().min(1, { message: "Please, provide your password." }),
+  remember_me: z
+    .string()
+    .transform((value) => value === "on")
+    .default("off"),
 });
 
 export type SignInDataKeys = keyof z.infer<typeof signInSchema>;

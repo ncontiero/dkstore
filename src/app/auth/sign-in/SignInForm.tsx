@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/Label";
 import { Link } from "@/components/ui/Link";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/Alert";
 
+import { Checkbox } from "@/components/ui/CheckBox";
 import { type SignInDataKeys, signInWithEmailAndPassword } from "./actions";
 
 export function SignInForm() {
@@ -57,7 +58,13 @@ export function SignInForm() {
             {errors.password[0]}
           </p>
         ) : null}
+      </div>
 
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-1">
+          <Checkbox id="remember_me" name="remember_me" />
+          <Label htmlFor="remember_me">Remember me</Label>
+        </div>
         <div className="flex justify-end">
           <Link
             href="/auth/forgot-password"
