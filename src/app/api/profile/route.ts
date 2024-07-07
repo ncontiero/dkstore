@@ -16,23 +16,23 @@ export async function GET(request: NextRequest) {
       throw new UnauthorizedError("Invalid token");
     }
 
-    const { sub: userId } = await verifyJWT(token);
-    if (!userId) {
+    const { sub: sessionId } = await verifyJWT(token);
+    if (!sessionId) {
       throw new UnauthorizedError("Invalid token");
     }
 
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      omit: { passwordHash: true },
+    const session = await prisma.session.findUnique({
+      where: { id: sessionId },
+      include: { user: true },
     });
-    if (!user) {
+    if (!session) {
       throw new UnauthorizedError("Invalid token");
     }
 
     return NextResponse.json({
       status: 200,
       message: "User fetched successfully",
-      data: { ...user },
+      data: { ...session.user },
       success: true,
     });
   } catch (error) {

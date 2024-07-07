@@ -5,7 +5,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { createPassHash } from "@/utils/password";
 import { createJWT } from "@/utils/jwt";
-import { BadRequestError, errorHandler } from "../../errors";
+import { BadRequestError, ForbiddenError, errorHandler } from "../../errors";
 
 const signUpSchema = z.object({
   name: z.string().min(3),
@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
   try {
     const cookieToken = req.cookies.get("token")?.value;
     if (cookieToken) {
-      throw new BadRequestError("You are already logged in");
+      throw new ForbiddenError("You are already logged in");
     }
 
     const body = await req.json();
@@ -34,18 +34,25 @@ export async function POST(req: NextRequest) {
 
     const passwordHash = await createPassHash(password);
 
-    const user = await prisma.user.create({
-      data: {
-        name,
-        email,
-        passwordHash,
-      },
-    });
+    const { token } = await prisma.$transaction(async (tx) => {
+      const user = await tx.user.create({
+        data: {
+          name,
+          email,
+          passwordHash,
+        },
+      });
+      const session = await tx.session.create({
+        data: { userId: user.id },
+      });
 
-    const token = await createJWT(user.id);
-    cookies().set("token", token, {
-      path: "/",
-      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+      const token = await createJWT(session.id);
+      cookies().set("token", token, {
+        path: "/",
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+      });
+
+      return { token };
     });
 
     return NextResponse.json(

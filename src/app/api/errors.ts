@@ -16,6 +16,13 @@ export class UnauthorizedError extends Error {
   }
 }
 
+export class ForbiddenError extends Error {
+  constructor(message?: string) {
+    super(message ?? "Forbidden.");
+    this.name = "ForbiddenError";
+  }
+}
+
 export function errorHandler(error: unknown) {
   if (error instanceof ZodError) {
     return {
@@ -35,6 +42,13 @@ export function errorHandler(error: unknown) {
   if (error instanceof UnauthorizedError || error instanceof JOSEError) {
     return {
       status: 401,
+      message: error.message,
+    };
+  }
+
+  if (error instanceof ForbiddenError) {
+    return {
+      status: 403,
       message: error.message,
     };
   }

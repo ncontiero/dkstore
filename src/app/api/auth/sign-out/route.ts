@@ -1,15 +1,21 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
-import { BadRequestError, errorHandler } from "../../errors";
+import { verifyJWT } from "@/utils/jwt";
+import { prisma } from "@/lib/prisma";
+import { ForbiddenError, errorHandler } from "../../errors";
 
-export function GET(request: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
     const cookieToken = cookies().get("token")?.value;
     if (!cookieToken) {
-      throw new BadRequestError("You are not logged in");
+      throw new ForbiddenError("You are not logged in");
     }
 
+    try {
+      const { sub: sessionId } = await verifyJWT(cookieToken);
+      await prisma.session.delete({ where: { id: sessionId } });
+    } catch {}
     cookies().delete("token");
 
     const redirectUrl = request.nextUrl.clone();

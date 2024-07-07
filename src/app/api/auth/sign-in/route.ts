@@ -5,7 +5,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { verifyPassHash } from "@/utils/password";
 import { createJWT } from "@/utils/jwt";
-import { BadRequestError, errorHandler } from "../../errors";
+import { BadRequestError, ForbiddenError, errorHandler } from "../../errors";
 
 const signInSchema = z.object({
   email: z.string().email(),
@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
   try {
     const cookieToken = cookies().get("token")?.value;
     if (cookieToken) {
-      throw new BadRequestError("You are already logged in");
+      throw new ForbiddenError("You are already logged in");
     }
 
     const body = await req.json();
@@ -25,6 +25,7 @@ export async function POST(req: NextRequest) {
 
     const userFromEmail = await prisma.user.findUnique({
       where: { email },
+      omit: { passwordHash: false },
     });
 
     if (!userFromEmail) {
@@ -39,7 +40,10 @@ export async function POST(req: NextRequest) {
       throw new BadRequestError("Invalid credentials");
     }
 
-    const token = await createJWT(userFromEmail.id);
+    const session = await prisma.session.create({
+      data: { userId: userFromEmail.id },
+    });
+    const token = await createJWT(session.id);
     cookies().set("token", token, {
       path: "/",
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),

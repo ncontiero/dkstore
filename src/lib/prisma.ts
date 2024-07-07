@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { env } from "@/env.js";
 
 const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
+  prisma: PrismaClient<{ omit: { user: { passwordHash: true } } }> | undefined;
 };
 
 export const prisma =
@@ -10,6 +10,7 @@ export const prisma =
   new PrismaClient({
     log:
       env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
+    omit: { user: { passwordHash: true } },
   });
 
 if (env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
