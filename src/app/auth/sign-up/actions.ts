@@ -4,6 +4,8 @@ import type { ActionsReturn } from "@/hooks/useFormState";
 import { z } from "zod";
 import { cookies } from "next/headers";
 import { api } from "@/utils/api";
+import { sessionExpires } from "@/utils/auth";
+import { env } from "@/env";
 
 const signUpSchema = z
   .object({
@@ -49,8 +51,10 @@ export async function signUpAction(
     }
 
     cookies().set("token", content.data.token, {
+      httpOnly: true,
+      secure: env.NODE_ENV === "production",
       path: "/",
-      maxAge: 60 * 60 * 24 * 7, // 7 days
+      expires: sessionExpires(result.data.remember_me),
     });
   } catch (error) {
     if (error instanceof Error) {

@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { verifyPassHash } from "@/utils/password";
 import { createJWT } from "@/utils/jwt";
 import { sessionExpires } from "@/utils/auth";
+import { env } from "@/env";
 import { BadRequestError, ForbiddenError, errorHandler } from "../../errors";
 
 const signInSchema = z.object({
@@ -48,6 +49,8 @@ export async function POST(req: NextRequest) {
     });
     const token = await createJWT(session.id);
     cookies().set("token", token, {
+      httpOnly: true,
+      secure: env.NODE_ENV === "production",
       path: "/",
       expires,
     });
