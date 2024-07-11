@@ -6,6 +6,7 @@ export const routes = {
   GET: {
     signOut: "/auth/sign-out",
     profile: "/profile",
+    verifySession: "/auth/session/verify",
   },
   PUT: {},
   PATCH: {},
