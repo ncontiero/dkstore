@@ -3,10 +3,10 @@ import { env } from "@/env";
 
 export const JWT_SECRET = new TextEncoder().encode(env.JWT_SECRET);
 
-export async function createJWT(subject: string) {
+export async function createJWT(subject: string, exp: string = "1d") {
   return await new SignJWT()
     .setIssuedAt()
-    .setExpirationTime("7d")
+    .setExpirationTime(exp)
     .setProtectedHeader({ alg: "HS256", typ: "JWT" })
     .setSubject(subject)
     .sign(JWT_SECRET);

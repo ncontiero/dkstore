@@ -2,8 +2,9 @@ import { type NextRequest, NextResponse } from "next/server";
 
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
-import { verifyJWT } from "@/utils/jwt";
+import { createJWT, verifyJWT } from "@/utils/jwt";
 import { UnauthorizedError, errorHandler } from "@/app/api/errors";
+import { sessionExpires } from "@/utils/auth";
 
 export async function GET(request: NextRequest) {
   try {
@@ -11,13 +12,13 @@ export async function GET(request: NextRequest) {
     const tokenFromHeader = request.headers
       .get("Authorization")
       ?.replace("Bearer ", "");
-    const token = cookieToken || tokenFromHeader;
+    const sessionToken = cookieToken || tokenFromHeader;
 
-    if (!token || token === "null") {
+    if (!sessionToken || sessionToken === "null") {
       throw new UnauthorizedError("Invalid token");
     }
 
-    const { sub: sessionId } = await verifyJWT(token);
+    const { sub: sessionId } = await verifyJWT(sessionToken);
     if (!sessionId) {
       throw new UnauthorizedError("Invalid token");
     }
@@ -31,10 +32,16 @@ export async function GET(request: NextRequest) {
       throw new UnauthorizedError("Invalid or expired session");
     }
 
+    await prisma.session.update({
+      where: { id: session.id },
+      data: { expires: sessionExpires(true) },
+    });
+    const token = await createJWT(session.id, "7d");
+
     return NextResponse.json({
       status: 200,
       message: "Session retrieved successfully",
-      data: { ...session },
+      data: { session, token },
       success: true,
     });
   } catch (error) {
