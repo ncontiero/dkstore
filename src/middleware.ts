@@ -12,7 +12,6 @@ export async function middleware(request: NextRequest) {
 
   const { content } = await api.get<{ token: string }>("verifySession", {
     throwError: false,
-    next: { revalidate: 60 },
   });
 
   if (isPrivate && !content?.data?.token) {

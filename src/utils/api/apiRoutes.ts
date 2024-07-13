@@ -9,8 +9,13 @@ export const routes = {
     verifySession: "/auth/session/verify",
   },
   PUT: {},
-  PATCH: {},
-  DELETE: {},
+  PATCH: {
+    updateProfile: "/profile",
+    updatePassword: "/auth/password",
+  },
+  DELETE: {
+    deleteProfile: "/profile",
+  },
 } as const;
 
 type Routes = typeof routes;
