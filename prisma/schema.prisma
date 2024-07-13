@@ -29,10 +29,11 @@ model User {
 }
 
 model Session {
-  id        String   @id @default(uuid())
-  userId    String   @map("user_id")
-  expires   DateTime @default(dbgenerated("NOW() + interval '1 day'"))
-  createdAt DateTime @default(now()) @map("created_at")
+  id         String   @id @default(uuid())
+  userId     String   @map("user_id")
+  expires    DateTime @default(dbgenerated("NOW() + interval '1 day'"))
+  rememberMe Boolean  @default(false) @map("remember_me")
+  createdAt  DateTime @default(now()) @map("created_at")
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 

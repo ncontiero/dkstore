@@ -25,8 +25,8 @@ export async function GET(request: NextRequest) {
       where: { id: sessionId },
       include: { user: true },
     });
-    if (!session) {
-      throw new UnauthorizedError("Invalid token");
+    if (!session || session.expires < new Date()) {
+      throw new UnauthorizedError("Invalid or expired token");
     }
 
     return NextResponse.json({

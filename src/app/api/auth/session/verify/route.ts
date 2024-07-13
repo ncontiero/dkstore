@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { createJWT, verifyJWT } from "@/utils/jwt";
 import { UnauthorizedError, errorHandler } from "@/app/api/errors";
-import { sessionExpires } from "@/utils/auth";
+import { sessionExpires, setAuthCookie } from "@/utils/auth";
 
 export async function GET(request: NextRequest) {
   try {
@@ -32,15 +32,19 @@ export async function GET(request: NextRequest) {
       throw new UnauthorizedError("Invalid or expired session");
     }
 
+    const expires = session.rememberMe
+      ? sessionExpires(true)
+      : sessionExpires();
     await prisma.session.update({
       where: { id: session.id },
-      data: { expires: sessionExpires(true) },
+      data: { expires },
     });
-    const token = await createJWT(session.id, "7d");
+    const token = await createJWT(session.id, session.rememberMe ? "7d" : "1d");
+    setAuthCookie(token, expires);
 
     return NextResponse.json({
       status: 200,
-      message: "Session retrieved successfully",
+      message: "Session renewed successfully",
       data: { session, token },
       success: true,
     });

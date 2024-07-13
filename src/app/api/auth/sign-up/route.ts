@@ -1,12 +1,10 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import { z } from "zod";
 
 import { prisma } from "@/lib/prisma";
 import { createPassHash } from "@/utils/password";
 import { createJWT } from "@/utils/jwt";
-import { sessionExpires } from "@/utils/auth";
-import { env } from "@/env";
+import { sessionExpires, setAuthCookie } from "@/utils/auth";
 import { BadRequestError, ForbiddenError, errorHandler } from "../../errors";
 
 const signUpSchema = z.object({
@@ -47,16 +45,11 @@ export async function POST(req: NextRequest) {
       });
       const expires = sessionExpires(remember_me);
       const session = await tx.session.create({
-        data: { userId: user.id, expires },
+        data: { userId: user.id, expires, rememberMe: remember_me },
       });
 
-      const token = await createJWT(session.id);
-      cookies().set("token", token, {
-        httpOnly: true,
-        secure: env.NODE_ENV === "production",
-        path: "/",
-        expires,
-      });
+      const token = await createJWT(session.id, remember_me ? "7d" : "1d");
+      setAuthCookie(token, expires);
 
       return { token };
     });

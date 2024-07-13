@@ -5,8 +5,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { verifyPassHash } from "@/utils/password";
 import { createJWT } from "@/utils/jwt";
-import { sessionExpires } from "@/utils/auth";
-import { env } from "@/env";
+import { sessionExpires, setAuthCookie } from "@/utils/auth";
 import { BadRequestError, ForbiddenError, errorHandler } from "../../errors";
 
 const signInSchema = z.object({
@@ -45,15 +44,10 @@ export async function POST(req: NextRequest) {
 
     const expires = sessionExpires(remember_me);
     const session = await prisma.session.create({
-      data: { userId: userFromEmail.id, expires },
+      data: { userId: userFromEmail.id, expires, rememberMe: remember_me },
     });
-    const token = await createJWT(session.id);
-    cookies().set("token", token, {
-      httpOnly: true,
-      secure: env.NODE_ENV === "production",
-      path: "/",
-      expires,
-    });
+    const token = await createJWT(session.id, remember_me ? "7d" : "1d");
+    setAuthCookie(token, expires);
 
     return NextResponse.json({
       status: 200,
