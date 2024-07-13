@@ -2,10 +2,8 @@
 
 import type { ActionsReturn } from "@/hooks/useFormState";
 import { z } from "zod";
-import { cookies } from "next/headers";
 import { api } from "@/utils/api";
-import { sessionExpires } from "@/utils/auth";
-import { env } from "@/env";
+import { sessionExpires, setAuthCookie } from "@/utils/auth";
 
 const signUpSchema = z
   .object({
@@ -50,12 +48,7 @@ export async function signUpAction(
       throw new Error("Invalid token");
     }
 
-    cookies().set("token", content.data.token, {
-      httpOnly: true,
-      secure: env.NODE_ENV === "production",
-      path: "/",
-      expires: sessionExpires(result.data.rememberMe),
-    });
+    setAuthCookie(content.data.token, sessionExpires(result.data.rememberMe));
   } catch (error) {
     if (error instanceof Error) {
       return { success: false, message: error.message, errors: null };

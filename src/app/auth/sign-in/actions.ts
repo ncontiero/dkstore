@@ -1,10 +1,8 @@
 "use server";
 
-import { cookies } from "next/headers";
 import { z } from "zod";
 import { api } from "@/utils/api";
-import { sessionExpires } from "@/utils/auth";
-import { env } from "@/env";
+import { sessionExpires, setAuthCookie } from "@/utils/auth";
 
 const signInSchema = z.object({
   email: z
@@ -37,12 +35,7 @@ export async function signInWithEmailAndPassword(data: FormData) {
       throw new Error("Invalid token");
     }
 
-    cookies().set("token", content.data.token, {
-      httpOnly: true,
-      secure: env.NODE_ENV === "production",
-      path: "/",
-      expires: sessionExpires(result.data.rememberMe),
-    });
+    setAuthCookie(content.data.token, sessionExpires(result.data.rememberMe));
   } catch (error) {
     if (error instanceof Error) {
       return { success: false, message: error.message, errors: null };
