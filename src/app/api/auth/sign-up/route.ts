@@ -11,7 +11,7 @@ const signUpSchema = z.object({
   name: z.string().min(3),
   email: z.string().email(),
   password: z.string().min(6),
-  remember_me: z.boolean().default(false),
+  rememberMe: z.boolean().default(false),
 });
 
 export async function POST(req: NextRequest) {
@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json();
     const data = signUpSchema.parse(body);
-    const { name, email, password, remember_me } = data;
+    const { name, email, password, rememberMe } = data;
 
     const userWithSameEmail = await prisma.user.findUnique({
       where: { email },
@@ -43,12 +43,12 @@ export async function POST(req: NextRequest) {
           passwordHash,
         },
       });
-      const expires = sessionExpires(remember_me);
+      const expires = sessionExpires(rememberMe);
       const session = await tx.session.create({
-        data: { userId: user.id, expires, rememberMe: remember_me },
+        data: { userId: user.id, expires, rememberMe },
       });
 
-      const token = await createJWT(session.id, remember_me ? "7d" : "1d");
+      const token = await createJWT(session.id, rememberMe ? "7d" : "1d");
       setAuthCookie(token, expires);
 
       return { token };

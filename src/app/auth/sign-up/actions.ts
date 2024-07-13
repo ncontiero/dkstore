@@ -18,15 +18,15 @@ const signUpSchema = z
     password: z
       .string()
       .min(6, { message: "Password should have at least 6 characters." }),
-    password_confirmation: z.string(),
-    remember_me: z
+    passwordConfirmation: z.string(),
+    rememberMe: z
       .string()
       .transform((value) => value === "on")
       .default("off"),
   })
-  .refine((data) => data.password === data.password_confirmation, {
+  .refine((data) => data.password === data.passwordConfirmation, {
     message: "Password confirmation does not match.",
-    path: ["password_confirmation"],
+    path: ["passwordConfirmation"],
   });
 
 export type SignUpDataKeys = keyof z.infer<typeof signUpSchema>;
@@ -54,7 +54,7 @@ export async function signUpAction(
       httpOnly: true,
       secure: env.NODE_ENV === "production",
       path: "/",
-      expires: sessionExpires(result.data.remember_me),
+      expires: sessionExpires(result.data.rememberMe),
     });
   } catch (error) {
     if (error instanceof Error) {

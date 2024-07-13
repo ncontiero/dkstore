@@ -75,23 +75,23 @@ export function SignUpForm() {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="password_confirmation">Confirm your password</Label>
+        <Label htmlFor="passwordConfirmation">Confirm your password</Label>
         <Input
-          name="password_confirmation"
+          name="passwordConfirmation"
           type="password"
-          id="password_confirmation"
+          id="passwordConfirmation"
         />
 
-        {errors?.password_confirmation ? (
+        {errors?.passwordConfirmation ? (
           <p className="text-xs font-medium text-red-500 dark:text-red-400">
-            {errors.password_confirmation[0]}
+            {errors.passwordConfirmation[0]}
           </p>
         ) : null}
       </div>
 
       <div className="flex items-center gap-1">
-        <Checkbox id="remember_me" name="remember_me" />
-        <Label htmlFor="remember_me">Remember me</Label>
+        <Checkbox id="rememberMe" name="rememberMe" />
+        <Label htmlFor="rememberMe">Remember me</Label>
       </div>
 
       <Button type="submit" className="mt-2" disabled={isPending}>

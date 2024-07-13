@@ -62,8 +62,8 @@ export function SignInForm() {
 
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1">
-          <Checkbox id="remember_me" name="remember_me" />
-          <Label htmlFor="remember_me">Remember me</Label>
+          <Checkbox id="rememberMe" name="rememberMe" />
+          <Label htmlFor="rememberMe">Remember me</Label>
         </div>
         <div className="flex justify-end">
           <Link

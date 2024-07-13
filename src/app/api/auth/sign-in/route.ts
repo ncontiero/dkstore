@@ -11,7 +11,7 @@ import { BadRequestError, ForbiddenError, errorHandler } from "../../errors";
 const signInSchema = z.object({
   email: z.string().email(),
   password: z.string(),
-  remember_me: z.boolean().default(false),
+  rememberMe: z.boolean().default(false),
 });
 
 export async function POST(req: NextRequest) {
@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json();
     const data = signInSchema.parse(body);
-    const { email, password, remember_me } = data;
+    const { email, password, rememberMe } = data;
 
     const userFromEmail = await prisma.user.findUnique({
       where: { email },
@@ -42,11 +42,11 @@ export async function POST(req: NextRequest) {
       throw new BadRequestError("Invalid credentials");
     }
 
-    const expires = sessionExpires(remember_me);
+    const expires = sessionExpires(rememberMe);
     const session = await prisma.session.create({
-      data: { userId: userFromEmail.id, expires, rememberMe: remember_me },
+      data: { userId: userFromEmail.id, expires, rememberMe },
     });
-    const token = await createJWT(session.id, remember_me ? "7d" : "1d");
+    const token = await createJWT(session.id, rememberMe ? "7d" : "1d");
     setAuthCookie(token, expires);
 
     return NextResponse.json({

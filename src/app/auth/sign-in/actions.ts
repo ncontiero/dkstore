@@ -11,7 +11,7 @@ const signInSchema = z.object({
     .string()
     .email({ message: "Please, provide a valid e-mail address." }),
   password: z.string().min(1, { message: "Please, provide your password." }),
-  remember_me: z
+  rememberMe: z
     .string()
     .transform((value) => value === "on")
     .default("off"),
@@ -41,7 +41,7 @@ export async function signInWithEmailAndPassword(data: FormData) {
       httpOnly: true,
       secure: env.NODE_ENV === "production",
       path: "/",
-      expires: sessionExpires(result.data.remember_me),
+      expires: sessionExpires(result.data.rememberMe),
     });
   } catch (error) {
     if (error instanceof Error) {
