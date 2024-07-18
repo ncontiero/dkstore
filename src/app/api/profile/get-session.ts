@@ -33,6 +33,9 @@ export async function getSession(
     where: { id: session.userId },
     omit: { passwordHash: !includePassHash },
   });
+  if (!user) {
+    throw new UnauthorizedError("Invalid token");
+  }
 
   return { ...session, user };
 }
