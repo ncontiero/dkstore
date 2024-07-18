@@ -3,8 +3,8 @@ import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { createPassHash, verifyPassHash } from "@/utils/password";
 import { prisma } from "@/lib/prisma";
+import { getSession } from "@/utils/auth";
 import { BadRequestError, ForbiddenError, errorHandler } from "../../errors";
-import { getSession } from "../../profile/get-session";
 
 const updatePasswordSchema = z.object({
   currentPassword: z.string(),

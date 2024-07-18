@@ -6,6 +6,7 @@ export const routes = {
   GET: {
     signOut: "/auth/sign-out",
     profile: "/profile",
+    getSessions: "/auth/session",
     refreshSession: "/auth/session/refresh",
   },
   PUT: {},
@@ -15,6 +16,7 @@ export const routes = {
   },
   DELETE: {
     deleteProfile: "/profile",
+    deleteSession: "/auth/session",
   },
 } as const;
 
