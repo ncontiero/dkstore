@@ -26,13 +26,13 @@ export async function getSession(
   const session = await prisma.session.findUnique({
     where: { id: sessionId },
   });
-  const user = await prisma.user.findUnique({
-    where: { id: session?.userId },
-    omit: { passwordHash: !includePassHash },
-  });
-  if (!session || !user || session.expires < new Date()) {
+  if (!session || session.expires < new Date()) {
     throw new UnauthorizedError("Invalid or expired token");
   }
+  const user = await prisma.user.findUnique({
+    where: { id: session.userId },
+    omit: { passwordHash: !includePassHash },
+  });
 
   return { ...session, user };
 }
