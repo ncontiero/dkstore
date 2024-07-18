@@ -2,8 +2,8 @@ import { type NextRequest, NextResponse } from "next/server";
 
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
+import { getSession } from "@/utils/auth";
 import { ForbiddenError, errorHandler } from "../errors";
-import { getSession } from "./get-session";
 
 export async function GET(request: NextRequest) {
   try {
