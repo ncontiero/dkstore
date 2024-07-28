@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { createPassHash } from "@/utils/password";
 import { createJWT } from "@/utils/jwt";
 import { sessionExpires, setAuthCookie } from "@/utils/auth";
-import { BadRequestError, ForbiddenError, errorHandler } from "../../errors";
+import { BadRequestError, errorHandler, ForbiddenError } from "../../errors";
 
 const signUpSchema = z.object({
   name: z.string().min(3),

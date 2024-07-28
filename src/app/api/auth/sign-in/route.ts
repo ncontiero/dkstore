@@ -6,7 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { verifyPassHash } from "@/utils/password";
 import { createJWT } from "@/utils/jwt";
 import { sessionExpires, setAuthCookie } from "@/utils/auth";
-import { BadRequestError, ForbiddenError, errorHandler } from "../../errors";
+import { BadRequestError, errorHandler, ForbiddenError } from "../../errors";
 
 const signInSchema = z.object({
   email: z.string().email(),

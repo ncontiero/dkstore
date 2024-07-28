@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 
 import { verifyJWT } from "@/utils/jwt";
 import { prisma } from "@/lib/prisma";
-import { ForbiddenError, errorHandler } from "../../errors";
+import { errorHandler, ForbiddenError } from "../../errors";
 
 export async function GET(request: NextRequest) {
   try {

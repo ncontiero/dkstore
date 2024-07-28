@@ -4,7 +4,7 @@ import { z } from "zod";
 import { createPassHash, verifyPassHash } from "@/utils/password";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/utils/auth";
-import { BadRequestError, ForbiddenError, errorHandler } from "../../errors";
+import { BadRequestError, errorHandler, ForbiddenError } from "../../errors";
 
 const updatePasswordSchema = z.object({
   currentPassword: z.string(),

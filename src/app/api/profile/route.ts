@@ -3,7 +3,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/utils/auth";
-import { ForbiddenError, errorHandler } from "../errors";
+import { errorHandler, ForbiddenError } from "../errors";
 
 export async function GET(request: NextRequest) {
   try {
