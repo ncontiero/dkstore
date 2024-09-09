@@ -1,9 +1,7 @@
 import { type Dispatch, type SetStateAction, useCallback } from "react";
-import { useRouter } from "next/navigation";
-
 import { toast } from "react-toastify";
 import { Loader2 } from "lucide-react";
-import { api } from "@/utils/api";
+import { useRouter } from "next/navigation";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,6 +14,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/AlertDialog";
 import { Button } from "@/components/ui/Button";
+import { api } from "@/utils/api";
 
 interface DeleteProfileProps {
   readonly isDeletingProfile: boolean;

@@ -1,8 +1,8 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { LogOut } from "lucide-react";
 import { toast } from "react-toastify";
+import { LogOut } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { api } from "@/utils/api";
 import { DropdownMenuItem } from "../ui/DropdownMenu";
 

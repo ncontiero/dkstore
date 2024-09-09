@@ -1,5 +1,5 @@
-import { ZodError } from "zod";
 import { JOSEError } from "jose/errors";
+import { ZodError } from "zod";
 import { logger } from "@/utils/logger";
 
 export class BadRequestError extends Error {

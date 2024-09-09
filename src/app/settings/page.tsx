@@ -1,15 +1,14 @@
+import type { Session } from "@prisma/client";
 import type { Metadata } from "next";
 import type { User } from "@/utils/types";
 
-import type { Session } from "@prisma/client";
-import { redirect } from "next/navigation";
 import { X } from "lucide-react";
-import { api } from "@/utils/api";
-
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
+import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/Button";
-import { ProfileForm } from "./ProfileForm";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
+import { api } from "@/utils/api";
 import { PasswordForm } from "./PasswordForm";
+import { ProfileForm } from "./ProfileForm";
 
 export const metadata: Metadata = {
   title: "Settings",

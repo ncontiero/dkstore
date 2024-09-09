@@ -1,15 +1,15 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { AlertTriangle, Loader2 } from "lucide-react";
-import { useFormState } from "@/hooks/useFormState";
+import { useRouter } from "next/navigation";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/Alert";
 import { Button } from "@/components/ui/Button";
+import { Checkbox } from "@/components/ui/CheckBox";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { Link } from "@/components/ui/Link";
-import { Checkbox } from "@/components/ui/CheckBox";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/Alert";
+import { useFormState } from "@/hooks/useFormState";
 
 import { type SignUpDataKeys, signUpAction } from "./actions";
 

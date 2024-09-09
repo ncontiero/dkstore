@@ -2,17 +2,16 @@
 
 import type { User } from "@/utils/types";
 
+import { useCallback, useState } from "react";
 import { toast } from "react-toastify";
 import { AlertTriangle, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useCallback, useState } from "react";
-import { useFormState } from "@/hooks/useFormState";
-import { Label } from "@/components/ui/Label";
-import { Input } from "@/components/ui/Input";
-import { Button } from "@/components/ui/Button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/Alert";
-
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Label } from "@/components/ui/Label";
+import { useFormState } from "@/hooks/useFormState";
 import { api } from "@/utils/api";
 import { type UpdateProfileDataKeys, updateProfileAction } from "./actions";
 import { DeleteProfile } from "./DeleteProfile";

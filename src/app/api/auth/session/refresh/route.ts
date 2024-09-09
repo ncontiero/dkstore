@@ -1,10 +1,9 @@
-import { type NextRequest, NextResponse } from "next/server";
-
 import { cookies } from "next/headers";
-import { prisma } from "@/lib/prisma";
-import { createJWT } from "@/utils/jwt";
+import { type NextRequest, NextResponse } from "next/server";
 import { errorHandler } from "@/app/api/errors";
+import { prisma } from "@/lib/prisma";
 import { getSession, sessionExpires, setAuthCookie } from "@/utils/auth";
+import { createJWT } from "@/utils/jwt";
 
 export async function GET(request: NextRequest) {
   try {
