@@ -1,11 +1,10 @@
-import { type NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-
 import { prisma } from "@/lib/prisma";
-import { verifyPassHash } from "@/utils/password";
-import { createJWT } from "@/utils/jwt";
 import { sessionExpires, setAuthCookie } from "@/utils/auth";
+import { createJWT } from "@/utils/jwt";
+import { verifyPassHash } from "@/utils/password";
 import { BadRequestError, errorHandler, ForbiddenError } from "../../errors";
 
 const signInSchema = z.object({

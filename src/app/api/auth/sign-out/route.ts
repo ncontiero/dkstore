@@ -1,8 +1,7 @@
-import { type NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-
-import { verifyJWT } from "@/utils/jwt";
+import { type NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { verifyJWT } from "@/utils/jwt";
 import { errorHandler, ForbiddenError } from "../../errors";
 
 export async function GET(request: NextRequest) {

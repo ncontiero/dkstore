@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { cookies } from "next/headers";
-import { env } from "@/env";
 import { UnauthorizedError } from "@/app/api/errors";
+import { env } from "@/env";
 import { prisma } from "@/lib/prisma";
 import { verifyJWT } from "./jwt";
 

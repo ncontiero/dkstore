@@ -1,9 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server";
 
 import { z } from "zod";
-import { createPassHash, verifyPassHash } from "@/utils/password";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/utils/auth";
+import { createPassHash, verifyPassHash } from "@/utils/password";
 import { BadRequestError, errorHandler, ForbiddenError } from "../../errors";
 
 const updatePasswordSchema = z.object({

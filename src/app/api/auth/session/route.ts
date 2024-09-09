@@ -1,9 +1,8 @@
-import { type NextRequest, NextResponse } from "next/server";
-
 import { cookies } from "next/headers";
+import { type NextRequest, NextResponse } from "next/server";
 import { errorHandler } from "@/app/api/errors";
-import { getSession } from "@/utils/auth";
 import { prisma } from "@/lib/prisma";
+import { getSession } from "@/utils/auth";
 
 export async function GET(request: NextRequest) {
   try {
