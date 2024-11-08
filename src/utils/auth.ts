@@ -12,8 +12,8 @@ export function sessionExpires(rememberMe: boolean = false) {
     : new Date(Date.now() + oneDay);
 }
 
-export function setAuthCookie(token: string, expires?: Date) {
-  cookies().set("token", token, {
+export async function setAuthCookie(token: string, expires?: Date) {
+  (await cookies()).set("token", token, {
     httpOnly: true,
     secure: env.NODE_ENV === "production",
     path: "/",

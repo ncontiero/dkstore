@@ -15,7 +15,7 @@ const signInSchema = z.object({
 
 export async function POST(req: NextRequest) {
   try {
-    const cookieToken = cookies().get("token")?.value;
+    const cookieToken = (await cookies()).get("token")?.value;
     if (cookieToken) {
       throw new ForbiddenError("You are already logged in");
     }

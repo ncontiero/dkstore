@@ -1,5 +1,4 @@
-import type { CookiesFn } from "cookies-next/lib/types";
-import { getCookie } from "cookies-next";
+import { type CookiesFn, getCookie } from "cookies-next";
 import {
   type Method,
   type Route,
@@ -30,7 +29,8 @@ export class API {
       const { cookies } = await import("next/headers");
       this.cookieStore = cookies;
     }
-    this.token = getCookie("token", { cookies: this.cookieStore }) ?? null;
+    this.token =
+      (await getCookie("token", { cookies: this.cookieStore })) ?? null;
     this.headers = {
       Authorization: `Bearer ${this.token}`,
     };

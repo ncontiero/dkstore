@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     const err = errorHandler(error);
-    cookies().delete("token");
+    (await cookies()).delete("token");
     return NextResponse.json(
       { ...err, success: false },
       { status: err.status },
@@ -42,7 +42,7 @@ export async function DELETE(request: NextRequest) {
         id: session.id,
       },
     });
-    cookies().delete("token");
+    (await cookies()).delete("token");
 
     return NextResponse.json({
       status: 200,

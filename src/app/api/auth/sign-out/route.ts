@@ -6,7 +6,7 @@ import { errorHandler, ForbiddenError } from "../../errors";
 
 export async function GET(request: NextRequest) {
   try {
-    const cookieToken = cookies().get("token")?.value;
+    const cookieToken = (await cookies()).get("token")?.value;
     if (!cookieToken) {
       throw new ForbiddenError("You are not logged in");
     }
@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
       const { sub: sessionId } = await verifyJWT(cookieToken);
       await prisma.session.delete({ where: { id: sessionId } });
     } catch {}
-    cookies().delete("token");
+    (await cookies()).delete("token");
 
     const redirectUrl = request.nextUrl.clone();
     const isToRedirect = redirectUrl.searchParams.get("redirect") === "true";

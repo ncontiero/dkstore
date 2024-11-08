@@ -2,7 +2,7 @@
 
 import type { User } from "@/utils/types";
 
-import { useCallback, useState } from "react";
+// import { useCallback, useState } from "react";
 import { toast } from "react-toastify";
 import { AlertTriangle, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -12,18 +12,18 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { useFormState } from "@/hooks/useFormState";
-import { api } from "@/utils/api";
+// import { api } from "@/utils/api";
 import { type UpdateProfileDataKeys, updateProfileAction } from "./actions";
-import { DeleteProfile } from "./DeleteProfile";
+// import { DeleteProfile } from "./DeleteProfile";
 
 interface ProfileFormProps {
   readonly user: User;
 }
 
 export function ProfileForm({ user }: ProfileFormProps) {
-  const [isSendingEmailVerification, setIsSendingEmailVerification] =
-    useState(false);
-  const [isDeletingProfile, setIsDeletingProfile] = useState(false);
+  // const [isSendingEmailVerification, setIsSendingEmailVerification] =
+  //   useState(false);
+  // const [isDeletingProfile, setIsDeletingProfile] = useState(false);
   const router = useRouter();
 
   const [{ errors, message, success }, handleSubmit, isPending] =
@@ -35,21 +35,21 @@ export function ProfileForm({ user }: ProfileFormProps) {
       },
     );
 
-  const requestEmailVerification = useCallback(async () => {
-    setIsSendingEmailVerification(true);
-    const { ok } = await api.post("requestEmailVerification", {
-      throwError: false,
-    });
-    if (!ok) {
-      toast.error(
-        "Failed to request email verification. Please try again later.",
-      );
-      setIsSendingEmailVerification(false);
-      return;
-    }
-    toast.success("Email verification link sent to your email address.");
-    setIsSendingEmailVerification(false);
-  }, []);
+  // const requestEmailVerification = useCallback(async () => {
+  //   setIsSendingEmailVerification(true);
+  //   const { ok } = await api.post("requestEmailVerification", {
+  //     throwError: false,
+  //   });
+  //   if (!ok) {
+  //     toast.error(
+  //       "Failed to request email verification. Please try again later.",
+  //     );
+  //     setIsSendingEmailVerification(false);
+  //     return;
+  //   }
+  //   toast.success("Email verification link sent to your email address.");
+  //   setIsSendingEmailVerification(false);
+  // }, []);
 
   return (
     <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
@@ -97,7 +97,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
             "Save changes"
           )}
         </Button>
-        {!user.verifiedEmail ? (
+        {/* {!user.verifiedEmail ? (
           <Button
             type="button"
             disabled={isSendingEmailVerification}
@@ -115,7 +115,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
             isDeletingProfile={isDeletingProfile}
             setIsDeletingProfile={setIsDeletingProfile}
           />
-        )}
+        )} */}
       </div>
     </form>
   );
