@@ -51,10 +51,7 @@
 
 /* Toastify */
 .Toastify__toast-container {
-  @apply z-[99999] !important;
-}
-.Toastify__toast-body {
-  @apply font-inter text-foreground !important;
+  @apply z-[99999] font-inter text-foreground !important;
 }
 .Toastify__toast {
   @apply bg-background !important;
