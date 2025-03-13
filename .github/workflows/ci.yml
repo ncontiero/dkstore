@@ -9,9 +9,6 @@ concurrency:
   group: ${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
-env:
-  SKIP_ENV_VALIDATION: true
-
 jobs:
   lint-styles:
     name: Lint Styles
@@ -27,13 +24,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           cache: pnpm
-          node-version: 20
+          node-version-file: .nvmrc
 
       - name: Install dependencies
         run: pnpm install
 
-      - name: Running lint
-        run: pnpm lint
+      - name: Check code
+        run: pnpm check
 
   lint-commits:
     name: Lint Commits

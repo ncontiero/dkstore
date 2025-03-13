@@ -1,112 +1,106 @@
 "use client";
 
+import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { AlertTriangle, Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/Alert";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader } from "lucide-react";
+import { useAction } from "next-safe-action/hooks";
+import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/Button";
-import { Checkbox } from "@/components/ui/CheckBox";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
-import { Link } from "@/components/ui/Link";
-import { useFormState } from "@/hooks/useFormState";
-
-import { type SignUpDataKeys, signUpAction } from "./actions";
+import { PasswordInput } from "@/components/ui/PasswordInput";
+import { signUpAction } from "../actions";
+import { type SignUpSchema, signUpSchema } from "../actions/schema";
+import { BaseAuthFormContainer } from "../BaseFormContainer";
 
 export function SignUpForm() {
-  const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirect") || undefined;
+  const signUp = useAction(signUpAction, {
+    onError: (args) => {
+      toast.error(args.error.serverError);
+    },
+    onSuccess() {
+      toast.success(
+        "Account created successfully! Please check your email to verify your account",
+      );
+    },
+  });
 
-  const [{ errors, message, success }, handleSubmit, isPending] =
-    useFormState<SignUpDataKeys>(signUpAction, (message) => {
-      toast.success(message);
-      router.push("/");
-    });
+  const form = useForm<SignUpSchema>({
+    resolver: zodResolver(signUpSchema),
+  });
+
+  function onSubmit(data: SignUpSchema) {
+    signUp.execute({ ...data, redirectTo });
+  }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
-      {success === false && message ? (
-        <Alert variant="destructive">
-          <AlertTriangle className="size-4" />
-          <AlertTitle>Sign up failed!</AlertTitle>
-          <AlertDescription>
-            <p>{message}</p>
-          </AlertDescription>
-        </Alert>
-      ) : null}
+    <BaseAuthFormContainer mode="signup" redirectTo={redirectTo}>
+      <form className="mt-8 space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+        <div className="space-y-1">
+          <Label htmlFor="name">Name</Label>
+          <Input
+            type="text"
+            id="name"
+            autoComplete="name"
+            placeholder="Enter your name"
+            {...form.register("name")}
+          />
 
-      <div className="mb-4 flex flex-col items-center justify-center space-y-1 text-center">
-        <h2 className="text-lg font-bold">Create your account</h2>
-        <p className="text-sm font-medium text-foreground/60">
-          Welcome! Please fill in the details to get started.
-        </p>
-      </div>
+          {form.formState.errors.name ? (
+            <p className="text-sm text-destructive">
+              {form.formState.errors.name.message}
+            </p>
+          ) : null}
+        </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="name">Name</Label>
-        <Input name="name" type="text" id="name" />
+        <div className="space-y-1">
+          <Label htmlFor="email">Email</Label>
+          <Input
+            type="email"
+            id="email"
+            autoComplete="email"
+            placeholder="Enter your email"
+            {...form.register("email")}
+          />
 
-        {errors?.name ? (
-          <p className="text-xs font-medium text-red-500 dark:text-red-400">
-            {errors.name[0]}
-          </p>
-        ) : null}
-      </div>
+          {form.formState.errors.email ? (
+            <p className="text-sm text-destructive">
+              {form.formState.errors.email.message}
+            </p>
+          ) : null}
+        </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="email">E-mail</Label>
-        <Input name="email" type="email" id="email" />
+        <div className="space-y-1">
+          <Label htmlFor="password">Password</Label>
+          <PasswordInput
+            id="password"
+            autoComplete="current-password"
+            placeholder="Enter your password"
+            {...form.register("password")}
+          />
 
-        {errors?.email ? (
-          <p className="text-xs font-medium text-red-500 dark:text-red-400">
-            {errors.email[0]}
-          </p>
-        ) : null}
-      </div>
+          {form.formState.errors.password ? (
+            <p className="text-sm text-destructive">
+              {form.formState.errors.password.message}
+            </p>
+          ) : null}
+        </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
-        <Input name="password" type="password" id="password" />
-
-        {errors?.password ? (
-          <p className="text-xs font-medium text-red-500 dark:text-red-400">
-            {errors.password[0]}
-          </p>
-        ) : null}
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="passwordConfirmation">Confirm your password</Label>
-        <Input
-          name="passwordConfirmation"
-          type="password"
-          id="passwordConfirmation"
-        />
-
-        {errors?.passwordConfirmation ? (
-          <p className="text-xs font-medium text-red-500 dark:text-red-400">
-            {errors.passwordConfirmation[0]}
-          </p>
-        ) : null}
-      </div>
-
-      <div className="flex items-center gap-1">
-        <Checkbox id="rememberMe" name="rememberMe" />
-        <Label htmlFor="rememberMe">Remember me</Label>
-      </div>
-
-      <Button type="submit" className="mt-2" disabled={isPending}>
-        {isPending ? (
-          <Loader2 className="size-4 animate-spin" />
-        ) : (
-          "Create account"
-        )}
-      </Button>
-
-      <div className="mt-2 flex justify-center">
-        <Link className="w-fit" size="sm" href="/auth/sign-in">
-          Already registered? Sign In
-        </Link>
-      </div>
-    </form>
+        <Button
+          type="submit"
+          className="w-full rounded-full"
+          disabled={signUp.status === "executing"}
+        >
+          {signUp.status === "executing" ? (
+            <Loader className="animate-spin" />
+          ) : (
+            "Create account"
+          )}
+        </Button>
+      </form>
+    </BaseAuthFormContainer>
   );
 }

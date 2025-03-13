@@ -1,0 +1,85 @@
+"use server";
+
+import { signOutAction } from "@/app/auth/actions";
+import { prisma } from "@/lib/prisma";
+import { authActionClient } from "@/lib/safe-action";
+import { comparePasswords, hashPassword } from "@/utils/password";
+import { updateUserPasswordSchema, updateUserSchema } from "./schema";
+
+export const updateUserAction = authActionClient
+  .schema(updateUserSchema)
+  .action(async ({ parsedInput: { name, email }, ctx: { user } }) => {
+    const isSameEmail = user.email === email;
+    if (isSameEmail && name === user.name) {
+      throw new Error("Nothing to update.");
+    }
+
+    await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        name: name || user.name,
+        email,
+        isEmailVerified: !isSameEmail ? false : user.isEmailVerified,
+      },
+    });
+
+    return `User updated successfully.${isSameEmail ? "" : " Verify your new email address."}`;
+  });
+
+export const updateUserPasswordAction = authActionClient
+  .schema(updateUserPasswordSchema)
+  .action(
+    async ({
+      parsedInput: { currentPassword, newPassword },
+      ctx: { user },
+    }) => {
+      if (!user.isEmailVerified) {
+        throw new Error("Please verify your email address first.");
+      }
+
+      const isPasswordValid = await comparePasswords(
+        currentPassword,
+        user.passwordHash,
+      );
+      if (!isPasswordValid) {
+        throw new Error("Invalid password.");
+      }
+
+      const isSamePassword = await comparePasswords(
+        newPassword,
+        user.passwordHash,
+      );
+      if (isSamePassword) {
+        throw new Error(
+          "New password cannot be the same as the current password.",
+        );
+      }
+
+      await prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          passwordHash: await hashPassword(newPassword),
+        },
+      });
+
+      return "Password updated successfully.";
+    },
+  );
+
+export const deleteUserAction = authActionClient.action(
+  async ({ ctx: { user } }) => {
+    await prisma.user.delete({
+      where: {
+        id: user.id,
+      },
+    });
+
+    await signOutAction({ redirectTo: "/auth/sign-in" });
+
+    return "User deleted successfully.";
+  },
+);

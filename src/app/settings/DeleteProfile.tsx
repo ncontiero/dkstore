@@ -1,7 +1,8 @@
-import { type Dispatch, type SetStateAction, useCallback } from "react";
+"use client";
+
 import { toast } from "react-toastify";
 import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useAction } from "next-safe-action/hooks";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,59 +15,45 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/AlertDialog";
 import { Button } from "@/components/ui/Button";
-import { api } from "@/utils/api";
+import { deleteUserAction } from "./actions";
 
-interface DeleteProfileProps {
-  readonly isDeletingProfile: boolean;
-  readonly setIsDeletingProfile: Dispatch<SetStateAction<boolean>>;
-}
-
-export function DeleteProfile({
-  isDeletingProfile,
-  setIsDeletingProfile,
-}: DeleteProfileProps) {
-  const router = useRouter();
-
-  const deleteProfile = useCallback(async () => {
-    setIsDeletingProfile(true);
-    const { ok } = await api.delete("deleteProfile", {
-      throwError: false,
-    });
-    if (!ok) {
-      toast.error("Failed to delete profile. Please try again later.");
-      setIsDeletingProfile(false);
-    }
-    toast.success("Profile deleted successfully. Goodbye!");
-    setIsDeletingProfile(false);
-    router.push("/api/auth/sign-out?redirect=true");
-  }, [router, setIsDeletingProfile]);
+export function DeleteProfile() {
+  const deleteUser = useAction(deleteUserAction, {
+    onError: (args) => {
+      toast.error(args.error.serverError);
+    },
+    onSuccess: ({ data: resultMsg }) => {
+      toast.success("Redirecting to sign-in page...");
+      toast.success(resultMsg);
+    },
+  });
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger>
+      <AlertDialogTrigger asChild>
         <Button
           type="button"
           variant="destructive"
-          disabled={isDeletingProfile}
+          disabled={deleteUser.status === "executing"}
           className="gap-2"
         >
-          {isDeletingProfile ? (
+          {deleteUser.status === "executing" ? (
             <Loader2 className="size-4 animate-spin" />
           ) : null}
-          {isDeletingProfile ? "Deleting" : "Delete"} profile
+          {deleteUser.status === "executing" ? "Deleting" : "Delete"} user
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            profile and remove your data from our servers.
+            This action cannot be undone. This will permanently delete your user
+            and remove your data from our servers.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={() => deleteProfile()}>
+          <AlertDialogAction onClick={() => deleteUser.execute()}>
             Continue
           </AlertDialogAction>
         </AlertDialogFooter>

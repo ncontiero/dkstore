@@ -6,32 +6,23 @@
   :root {
     --background: 0 0% 0%;
     --foreground: 210 20% 98%;
-
     --card: 0 0% 0%;
     --card-foreground: 210 20% 98%;
-
     --popover: 0 0% 0%;
     --popover-foreground: 210 20% 98%;
-
     --primary: 262 83% 60%;
     --primary-foreground: 210 20% 98%;
-
     --secondary: 240 6% 10%;
     --secondary-foreground: 210 20% 98%;
-
     --muted: 240 6% 10%;
     --muted-foreground: 217.9 10.6% 64.9%;
-
     --accent: 240 6% 10%;
     --accent-foreground: 210 20% 98%;
-
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 20% 98%;
-
     --border: 240 6% 10%;
     --input: 240 6% 10%;
     --ring: 262 83% 60%;
-
     --radius: 0.5rem;
   }
 }
@@ -41,18 +32,25 @@
     @apply border-border selection:bg-primary/30;
   }
   html {
-    @apply scroll-smooth;
+    @apply scroll-smooth antialiased;
     color-scheme: dark;
   }
   body {
-    @apply bg-background font-inter text-foreground;
+    @apply relative bg-background text-foreground font-inter overscroll-none;
   }
-}
 
-/* Toastify */
-.Toastify__toast-container {
-  @apply z-[99999] font-inter text-foreground !important;
-}
-.Toastify__toast {
-  @apply bg-background !important;
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 5px;
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
+  }
 }

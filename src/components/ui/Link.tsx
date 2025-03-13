@@ -2,7 +2,6 @@ import { type AnchorHTMLAttributes, forwardRef } from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { type VariantProps, cva } from "class-variance-authority";
 import NextLink from "next/link";
-
 import { cn } from "@/lib/utils";
 
 const linkVariants = cva(

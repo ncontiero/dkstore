@@ -1,27 +1,18 @@
-import type { Session } from "@prisma/client";
 import type { Metadata } from "next";
-import type { User } from "@/utils/types";
-
-import { X } from "lucide-react";
-import { redirect } from "next/navigation";
-import { Button } from "@/components/ui/Button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
-import { api } from "@/utils/api";
-import { PasswordForm } from "./PasswordForm";
-import { ProfileForm } from "./ProfileForm";
+import { getUser } from "@/lib/auth/user";
+import { PasswordForm } from "./forms/PasswordForm";
+import { ProfileForm } from "./forms/ProfileForm";
 
 export const metadata: Metadata = {
   title: "Settings",
 };
 
 export default async function ProfilePage() {
-  const { content } = await api.get<{ user: User; sessions: Session[] }>(
-    "getSessions",
-    { throwError: false, searchParams: { includeUser: "true" } },
-  );
-  const { user, sessions } = content?.data || {};
+  const user = await getUser({});
+
   if (!user) {
-    redirect("/api/auth/sign-out");
+    return null;
   }
 
   return (
@@ -41,28 +32,6 @@ export default async function ProfilePage() {
               </p>
             </div>
             <ProfileForm user={user} />
-            <div className="mt-8 flex flex-col gap-2">
-              <h3 className="text-xl font-semibold">Sessions</h3>
-              <p className="text-sm text-muted-foreground">
-                Manage and revoke your active sessions.
-              </p>
-              <div className="flex flex-col gap-2">
-                {sessions?.map((session) => (
-                  <div
-                    key={session.id}
-                    className="flex items-center justify-between rounded-md border p-2"
-                  >
-                    <span className="text-xs text-muted-foreground">
-                      {new Date(session.createdAt).toLocaleTimeString()} - {""}
-                      {new Date(session.createdAt).toLocaleDateString()}
-                    </span>
-                    <Button type="button" variant="destructive" size="icon">
-                      <X />
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
         </TabsContent>
         <TabsContent value="password">

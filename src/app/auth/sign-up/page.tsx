@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+import { LoadingForm } from "../LoadingForm";
 import { SignUpForm } from "./SignUpForm";
 
 export const metadata = {
@@ -5,5 +7,9 @@ export const metadata = {
 };
 
 export default function SignUpPage() {
-  return <SignUpForm />;
+  return (
+    <Suspense fallback={<LoadingForm />}>
+      <SignUpForm />
+    </Suspense>
+  );
 }
