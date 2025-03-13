@@ -10,3 +10,11 @@ services:
       - .env
     ports:
       - ${POSTGRES_PORT}:5432
+
+  mailpit:
+    image: axllent/mailpit:latest
+    env_file:
+      - .env
+    ports:
+      - 8025:8025
+      - 1025:1025

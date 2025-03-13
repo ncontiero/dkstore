@@ -16,7 +16,8 @@
 
     // Path Aliases
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@/emails/*": ["./emails/*"],
     },
 
     // JavaScript and Strictness

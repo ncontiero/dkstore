@@ -2,7 +2,10 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { renderWelcomeEmail } from "@/emails/templates";
+import { env } from "@/env";
 import { setSession } from "@/lib/auth/session";
+import { sendMail } from "@/lib/nodemailer";
 import { prisma } from "@/lib/prisma";
 import { actionClient, authActionClient } from "@/lib/safe-action";
 import { comparePasswords, hashPassword } from "@/utils/password";
@@ -77,6 +80,11 @@ export const signUpAction = actionClient
     }
 
     await sendEmailVerificationAction();
+    await sendMail({
+      to: email,
+      subject: `Welcome to ${env.SITE_NAME}`,
+      html: await renderWelcomeEmail({ fullName: name }),
+    });
 
     redirect(redirectTo || "/");
   });

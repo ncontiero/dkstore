@@ -14,6 +14,17 @@ export const env = createEnv({
     DATABASE_URL: z.string().url(),
     JWT_SECRET: z.string(),
 
+    // SMTP
+    SMTP_HOST: z.string(),
+    SMTP_PORT: z.coerce.number(),
+    SMTP_SECURE: z
+      .string()
+      .transform((v) => v === "true")
+      .default("false"),
+    SMTP_USER: z.string(),
+    SMTP_PASSWORD: z.string(),
+    DEFAULT_FROM_EMAIL: z.string().optional(),
+
     // these variables are used for the site's SEO
     SITE_NAME: z.string().default("DkStore"),
     SITE_LOCALE: z.string().default("en_US"),
@@ -36,6 +47,14 @@ export const env = createEnv({
     // Database (Prisma)
     DATABASE_URL: process.env.DATABASE_URL,
     JWT_SECRET: process.env.JWT_SECRET,
+
+    // SMTP
+    SMTP_HOST: process.env.SMTP_HOST,
+    SMTP_PORT: process.env.SMTP_PORT,
+    SMTP_SECURE: process.env.SMTP_SECURE,
+    SMTP_USER: process.env.SMTP_USER,
+    SMTP_PASSWORD: process.env.SMTP_PASSWORD,
+    DEFAULT_FROM_EMAIL: process.env.DEFAULT_FROM_EMAIL,
 
     // SEO
     SITE_NAME: process.env.SITE_NAME,
