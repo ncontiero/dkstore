@@ -3,7 +3,7 @@ import { LoadingForm } from "../LoadingForm";
 import { SignUpForm } from "./SignUpForm";
 
 export const metadata = {
-  title: "Sign up",
+  title: "Sign Up",
 };
 
 export default function SignUpPage() {

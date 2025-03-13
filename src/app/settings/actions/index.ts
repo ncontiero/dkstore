@@ -21,7 +21,7 @@ export const updateUserAction = authActionClient
       data: {
         name: name || user.name,
         email,
-        isEmailVerified: !isSameEmail ? false : user.isEmailVerified,
+        isEmailVerified: isSameEmail ? user.isEmailVerified : false,
       },
     });
 
@@ -79,7 +79,5 @@ export const deleteUserAction = authActionClient.action(
     });
 
     await signOutAction({ redirectTo: "/auth/sign-in" });
-
-    return "User deleted successfully.";
   },
 );

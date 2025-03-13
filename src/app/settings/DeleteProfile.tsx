@@ -22,9 +22,8 @@ export function DeleteProfile() {
     onError: (args) => {
       toast.error(args.error.serverError);
     },
-    onSuccess: ({ data: resultMsg }) => {
-      toast.success("Redirecting to sign-in page...");
-      toast.success(resultMsg);
+    onSuccess: () => {
+      toast.success("User deleted successfully.");
     },
   });
 

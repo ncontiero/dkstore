@@ -38,7 +38,7 @@ export async function Header() {
                 variant="ghostOutline"
                 className="hidden px-2 text-center lg:flex"
               >
-                <NextLink href="/auth/sign-up">Create an account</NextLink>
+                <NextLink href="/auth/sign-up">Create account</NextLink>
               </Button>
               <Button asChild variant="ghostOutline" className="flex px-2">
                 <NextLink href="/auth/sign-in">Sign In</NextLink>
