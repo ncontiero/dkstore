@@ -9,7 +9,7 @@ import {
   Preview,
   Tailwind,
 } from "@react-email/components";
-import { SITE_BASEURL } from "../utils";
+import { SITE_NAME } from "../utils";
 import { Footer } from "./footer";
 import { Text } from "./text";
 
@@ -33,7 +33,7 @@ export function Layout({
             fontFamily="Geist"
             fallbackFontFamily="Helvetica"
             webFont={{
-              url: "https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.0.1/files/geist-sans-latin-400-normal.woff2",
+              url: "https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.2.5/files/geist-sans-latin-400-normal.woff2",
               format: "woff2",
             }}
             fontWeight={400}
@@ -44,7 +44,7 @@ export function Layout({
             fontFamily="Geist"
             fallbackFontFamily="Helvetica"
             webFont={{
-              url: "https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.0.1/files/geist-sans-latin-500-normal.woff2",
+              url: "https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.2.5/files/geist-sans-latin-500-normal.woff2",
               format: "woff2",
             }}
             fontWeight={500}
@@ -55,7 +55,7 @@ export function Layout({
             fontFamily="Geist"
             fallbackFontFamily="Helvetica"
             webFont={{
-              url: "https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.0.1/files/geist-sans-latin-600-normal.woff2",
+              url: "https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.2.5/files/geist-sans-latin-600-normal.woff2",
               format: "woff2",
             }}
             fontWeight={600}
@@ -81,7 +81,7 @@ export function Layout({
             <Text>
               Best regards,
               <br />
-              <span className="font-medium">{SITE_BASEURL} team.</span>
+              <span className="font-medium">{SITE_NAME} team.</span>
             </Text>
 
             <br />

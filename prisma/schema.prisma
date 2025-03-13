@@ -17,5 +17,22 @@ model User {
   createdAt       DateTime @default(now()) @map("created_at")
   updatedAt       DateTime @updatedAt @map("updated_at")
 
+  tokens Token[]
+
   @@map("users")
+}
+
+enum TokenType {
+  EMAIL_VERIFICATION
+}
+
+model Token {
+  id      String    @id @default(uuid())
+  type    TokenType
+  expires DateTime
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id")
+
+  @@map("tokens")
 }
