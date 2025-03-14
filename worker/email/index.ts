@@ -1,4 +1,5 @@
 import { renderWelcomeEmail } from "@/emails/templates";
+import { renderAccountDeletedEmail } from "@/emails/templates/deleted-account";
 import { env } from "@/env";
 import { sendMail } from "@/lib/nodemailer";
 import { SEND_EMAIL_QUEUE_NAME } from "@/queue/email";
@@ -10,8 +11,13 @@ import { emailVerification } from "./email-verification";
 export const sendEmailWorker = createWorker<SendEmailSchema>(
   SEND_EMAIL_QUEUE_NAME,
   async ({ data }) => {
-    const { fullName, email, isWelcomeEmail, isEmailVerification } =
-      sendEmailSchema.parse(data);
+    const {
+      fullName,
+      email,
+      isWelcomeEmail,
+      isEmailVerification,
+      isDeleteAccountEmail,
+    } = sendEmailSchema.parse(data);
 
     if (isWelcomeEmail) {
       await sendMail({
@@ -25,6 +31,16 @@ export const sendEmailWorker = createWorker<SendEmailSchema>(
 
     if (isEmailVerification) {
       await emailVerification({ fullName, email });
+    }
+
+    if (isDeleteAccountEmail) {
+      await sendMail({
+        to: email,
+        subject: `Your account has been deleted`,
+        html: await renderAccountDeletedEmail({ fullName }),
+      });
+
+      logger.info(`Deleted account email sent to ${email}`);
     }
   },
 );

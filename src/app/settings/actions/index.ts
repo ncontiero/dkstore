@@ -3,6 +3,7 @@
 import { signOutAction } from "@/app/auth/actions";
 import { prisma } from "@/lib/prisma";
 import { authActionClient } from "@/lib/safe-action";
+import { sendEmailQueue } from "@/queue/email";
 import { comparePasswords, hashPassword } from "@/utils/password";
 import { updateUserPasswordSchema, updateUserSchema } from "./schema";
 
@@ -72,10 +73,17 @@ export const updateUserPasswordAction = authActionClient
 
 export const deleteUserAction = authActionClient.action(
   async ({ ctx: { user } }) => {
-    await prisma.user.delete({
-      where: {
-        id: user.id,
-      },
+    await prisma.$transaction(async (tx) => {
+      await tx.user.delete({
+        where: {
+          id: user.id,
+        },
+      });
+      await sendEmailQueue.add("send-delete-account-email", {
+        fullName: user.name,
+        email: user.email,
+        isDeleteAccountEmail: true,
+      });
     });
 
     await signOutAction({ redirectTo: "/auth/sign-in" });

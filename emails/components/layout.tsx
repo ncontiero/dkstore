@@ -81,7 +81,7 @@ export function Layout({
             <Text>
               Best regards,
               <br />
-              <span className="font-medium">{SITE_NAME} team.</span>
+              <span className="font-medium">{SITE_NAME} Team.</span>
             </Text>
 
             <br />
