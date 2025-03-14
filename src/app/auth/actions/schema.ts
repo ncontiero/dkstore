@@ -4,7 +4,7 @@ import { passwordSchema } from "@/utils/password";
 export const signOutSchema = z.object({
   redirectTo: z
     .string()
-    .transform((value) => (!value.startsWith("/") ? undefined : value))
+    .transform((value) => (value.startsWith("/") ? value : undefined))
     .optional(),
 });
 

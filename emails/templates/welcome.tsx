@@ -39,8 +39,7 @@ export function WelcomeEmail({ fullName }: WelcomeEmailProps) {
         by phone at (XX) XXXX-XXXX.
         <br />
         <br />
-        Thank you for choosing {SITE_NAME}. We look forward to serving you and
-        being a part of your technology journey.
+        Thank you for choosing {SITE_NAME}.
       </Text>
     </Layout>
   );

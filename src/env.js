@@ -25,6 +25,12 @@ export const env = createEnv({
     SMTP_PASSWORD: z.string(),
     DEFAULT_FROM_EMAIL: z.string().optional(),
 
+    // Redis
+    REDIS_HOST: z.string().default("localhost"),
+    REDIS_PORT: z.coerce.number().default(6379),
+    REDIS_USER: z.string().optional(),
+    REDIS_PASSWORD: z.string().optional(),
+
     // these variables are used for the site's SEO
     SITE_NAME: z.string().default("DkStore"),
     SITE_LOCALE: z.string().default("en_US"),
@@ -55,6 +61,12 @@ export const env = createEnv({
     SMTP_USER: process.env.SMTP_USER,
     SMTP_PASSWORD: process.env.SMTP_PASSWORD,
     DEFAULT_FROM_EMAIL: process.env.DEFAULT_FROM_EMAIL,
+
+    // Redis
+    REDIS_HOST: process.env.REDIS_HOST,
+    REDIS_PORT: process.env.REDIS_PORT,
+    REDIS_USER: process.env.REDIS_USER,
+    REDIS_PASSWORD: process.env.REDIS_PASSWORD,
 
     // SEO
     SITE_NAME: process.env.SITE_NAME,

@@ -2,13 +2,10 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { renderWelcomeEmail } from "@/emails/templates";
-import { renderVerifyEmail } from "@/emails/templates/verify-email";
-import { env } from "@/env";
 import { setSession } from "@/lib/auth/session";
-import { sendMail } from "@/lib/nodemailer";
 import { prisma } from "@/lib/prisma";
 import { actionClient, authActionClient } from "@/lib/safe-action";
+import { sendEmailQueue } from "@/queue/email";
 import { comparePasswords, hashPassword } from "@/utils/password";
 import { signInSchema, signOutSchema, signUpSchema } from "./schema";
 
@@ -42,36 +39,10 @@ export const sendEmailVerificationAction = authActionClient.action(
       throw new Error("Email already verified");
     }
 
-    await prisma.$transaction(async (tx) => {
-      const existingToken = await tx.token.findFirst({
-        where: {
-          userId: user.id,
-          type: "EMAIL_VERIFICATION",
-        },
-      });
-
-      const oneHourFromNow = new Date(Date.now() + 1000 * 60 * 60);
-
-      const token = await tx.token.upsert({
-        where: { id: existingToken?.id || "" },
-        update: {
-          expires: oneHourFromNow,
-        },
-        create: {
-          userId: user.id,
-          type: "EMAIL_VERIFICATION",
-          expires: oneHourFromNow,
-        },
-      });
-
-      await sendMail({
-        html: await renderVerifyEmail({
-          fullName: user.name,
-          verificationPath: `auth/verify-email/${token.id}`,
-        }),
-        subject: `Verify your email at ${env.SITE_NAME}!`,
-        to: user.email,
-      });
+    await sendEmailQueue.add("send-email-verification", {
+      fullName: user.name,
+      email: user.email,
+      isEmailVerification: true,
     });
 
     return "Email verification link sent";
@@ -111,10 +82,10 @@ export const signUpAction = actionClient
       );
     }
 
-    await sendMail({
-      to: email,
-      subject: `Welcome to ${env.SITE_NAME}`,
-      html: await renderWelcomeEmail({ fullName: name }),
+    await sendEmailQueue.add("send-welcome-email", {
+      fullName: name,
+      email,
+      isWelcomeEmail: true,
     });
     await sendEmailVerificationAction();
 
