@@ -15,11 +15,11 @@
     "url": "https://github.com/dkshs/dkstore.git"
   },
   "scripts": {
-    "dev": "concurrently --names \"next,email,worker\" -c \"black,blue,yellow\" \"pnpm dev:next\" \"pnpm dev:email\" \"pnpm dev:worker\"",
+    "dev": "concurrently --kill-others --names \"next,email,worker\" -c \"black,blue,yellow\" \"pnpm dev:next\" \"pnpm dev:email\" \"pnpm dev:worker\"",
     "dev:next": "next dev --turbo",
     "dev:email": "email dev -p 3001",
     "dev:worker:start": "pm2 start ecosystem.config.cjs --watch --env development && pm2 logs",
-    "dev:worker": "concurrently --names \"build,logs\" -c \"blue,yellow\" \"rslib build --watch\" \"pnpm dev:worker:start\"",
+    "dev:worker": "concurrently --kill-others --names \"build,logs\" -c \"blue,yellow\" \"rslib build --watch\" \"pnpm dev:worker:start\"",
     "pm2:down": "pm2 delete all",
     "build": "pnpm build:worker && pnpm build:next",
     "build:next": "next build",
