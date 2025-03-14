@@ -7,6 +7,7 @@ import { getUser } from "@/lib/auth/user";
 import { ProfileButton } from "./ProfileButton";
 import { SearchDialog } from "./Search/Dialog";
 import { SearchForm } from "./Search/Form";
+import { ThemeToggle } from "./ThemeToggle";
 
 export async function Header() {
   const user = await getUser({});
@@ -55,6 +56,7 @@ export async function Header() {
               <ShoppingCart />
             </NextLink>
           </Button>
+          <ThemeToggle />
         </div>
       </div>
     </header>

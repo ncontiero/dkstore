@@ -2,6 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import type { PropsWithChildren } from "react";
 import { ToastContainer } from "react-toastify";
+import { ThemeProvider } from "next-themes";
 import { Inter } from "next/font/google";
 import { Header } from "@/components/Header";
 import { env } from "@/env";
@@ -51,21 +52,23 @@ export default async function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.variable}>
-        <UserProvider user={user}>
-          <ToastContainer
-            autoClose={3000}
-            theme="dark"
-            newestOnTop
-            pauseOnFocusLoss={false}
-            limit={3}
-            closeOnClick
-            stacked
-            className="z-[99999] font-inter text-foreground"
-            toastClassName="bg-background"
-          />
-          <Header />
-          <div className="pt-16 sm:container">{children}</div>
-        </UserProvider>
+        <ThemeProvider attribute="class">
+          <UserProvider user={user}>
+            <ToastContainer
+              autoClose={3000}
+              theme="dark"
+              newestOnTop
+              pauseOnFocusLoss={false}
+              limit={3}
+              closeOnClick
+              stacked
+              className="z-[99999] bg-background font-inter text-foreground"
+              toastClassName="bg-background text-foreground"
+            />
+            <Header />
+            <div className="pt-16 sm:container">{children}</div>
+          </UserProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
