@@ -15,15 +15,52 @@ export const updateUserAction = authActionClient
       throw new Error("Nothing to update.");
     }
 
-    await prisma.user.update({
-      where: {
-        id: user.id,
-      },
-      data: {
-        name: name || user.name,
-        email,
-        isEmailVerified: isSameEmail ? user.isEmailVerified : false,
-      },
+    if (!isSameEmail) {
+      if (!user.isEmailVerified) {
+        throw new Error("Please verify your email address first.");
+      }
+
+      const existingUser = await prisma.user.findUnique({
+        where: { email },
+      });
+
+      if (existingUser) {
+        throw new Error("Email already exists.");
+      }
+    }
+
+    await prisma.$transaction(async (tx) => {
+      await tx.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          name: name || user.name,
+          email,
+          isEmailVerified: isSameEmail ? user.isEmailVerified : false,
+        },
+      });
+
+      if (!isSameEmail) {
+        await sendEmailQueue.addBulk([
+          {
+            name: "send-email-verification",
+            data: {
+              fullName: user.name,
+              email,
+              isEmailVerification: true,
+            },
+          },
+          {
+            name: "send-email-changed-email",
+            data: {
+              fullName: user.name,
+              email: user.email,
+              isEmailChangedEmail: { newEmail: email },
+            },
+          },
+        ]);
+      }
     });
 
     return `User updated successfully.${isSameEmail ? "" : " Verify your new email address."}`;

@@ -1,5 +1,6 @@
 import {
   renderAccountDeletedEmail,
+  renderEmailChangedEmail,
   renderPasswordChangedEmail,
   renderWelcomeEmail,
 } from "@/emails/templates";
@@ -19,8 +20,9 @@ export const sendEmailWorker = createWorker<SendEmailSchema>(
       email,
       isWelcomeEmail,
       isEmailVerification,
-      isDeleteAccountEmail,
+      isEmailChangedEmail,
       isPasswordChangeEmail,
+      isDeleteAccountEmail,
     } = sendEmailSchema.parse(data);
 
     if (isWelcomeEmail) {
@@ -35,6 +37,19 @@ export const sendEmailWorker = createWorker<SendEmailSchema>(
 
     if (isEmailVerification) {
       await emailVerification({ fullName, email });
+    }
+
+    if (isEmailChangedEmail) {
+      await sendMail({
+        to: email,
+        subject: `Your email has been changed`,
+        html: await renderEmailChangedEmail({
+          fullName,
+          newEmail: isEmailChangedEmail.newEmail,
+        }),
+      });
+
+      logger.info(`Email changed email sent to ${email}`);
     }
 
     if (isPasswordChangeEmail) {
