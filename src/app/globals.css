@@ -29,7 +29,7 @@
 
 @layer base {
   * {
-    @apply border-border selection:bg-primary/30;
+    @apply border-border selection:bg-secondary;
   }
   html {
     @apply scroll-smooth antialiased;
