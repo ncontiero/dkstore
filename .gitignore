@@ -39,4 +39,5 @@ next-env.d.ts
 # React Email
 .react-email
 
+# Worker build output
 dist
