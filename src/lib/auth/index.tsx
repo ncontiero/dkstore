@@ -5,8 +5,14 @@ import {
   type PropsWithChildren,
   createContext,
   useContext,
+  useEffect,
   useMemo,
 } from "react";
+import { toast } from "react-toastify";
+import { useAction } from "next-safe-action/hooks";
+import { usePathname } from "next/navigation";
+import { signOutAction } from "@/app/auth/actions";
+import { authRoutes, protectedRoutes } from "./routes";
 
 type UserContextType = {
   user: User | null;
@@ -27,6 +33,28 @@ export function UserProvider({
   user,
 }: PropsWithChildren<{ readonly user: UserContextType["user"] }>) {
   const props = useMemo(() => ({ user }), [user]);
+  const pathname = usePathname();
+  const signOut = useAction(signOutAction, {
+    onSuccess: () => {
+      toast.warn("You have been signed out");
+    },
+  });
+
+  const isProtectedRoute = useMemo(
+    () => protectedRoutes.some((route) => pathname.startsWith(route)),
+    [pathname],
+  );
+  const isAuthRoute = useMemo(
+    () => authRoutes.some((route) => pathname.startsWith(route)),
+    [pathname],
+  );
+
+  useEffect(() => {
+    if (isProtectedRoute && !user) {
+      signOut.execute({ redirectTo: isAuthRoute ? "/" : pathname });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthRoute, isProtectedRoute, user]);
 
   return <UserContext.Provider value={props}>{children}</UserContext.Provider>;
 }

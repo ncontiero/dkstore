@@ -1,9 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { sessionExpires } from "@/lib/auth/session";
 import { createJWT, verifyJWT } from "@/utils/jwt";
-
-const authRoutes = ["/auth/sign-in", "/auth/sign-up"];
-const protectedRoutes = ["/account"];
+import { authRoutes, protectedRoutes } from "./lib/auth/routes";
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
