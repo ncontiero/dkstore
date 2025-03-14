@@ -24,8 +24,8 @@ export default async function VerifyEmailPage({ params }: PageProps) {
         </p>
         <p>
           Request a new link on the{" "}
-          <Link href="/settings" className="text-primary">
-            settings page.
+          <Link href="/account" className="text-primary">
+            my account page.
           </Link>
         </p>
       </div>

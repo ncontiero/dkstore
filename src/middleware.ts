@@ -3,7 +3,7 @@ import { sessionExpires } from "@/lib/auth/session";
 import { createJWT, verifyJWT } from "@/utils/jwt";
 
 const authRoutes = ["/auth/sign-in", "/auth/sign-up"];
-const protectedRoutes = ["/settings"];
+const protectedRoutes = ["/account"];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;

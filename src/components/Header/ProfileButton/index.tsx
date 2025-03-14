@@ -23,11 +23,11 @@ export function ProfileButton({ user }: { readonly user: UserProps }) {
       <DropdownMenuContent align="end" className="md:w-36">
         <DropdownMenuItem asChild className="p-2">
           <Link
-            href="/settings"
+            href="/account"
             className="flex cursor-pointer items-center gap-2"
           >
             <User className="size-4" />
-            Settings
+            My account
           </Link>
         </DropdownMenuItem>
         <SignOutButton />

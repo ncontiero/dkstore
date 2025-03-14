@@ -5,10 +5,10 @@ import { PasswordForm } from "./forms/PasswordForm";
 import { ProfileForm } from "./forms/ProfileForm";
 
 export const metadata: Metadata = {
-  title: "Settings",
+  title: "My Account",
 };
 
-export default async function ProfilePage() {
+export default async function MyAccountPage() {
   const user = await getUser({});
 
   if (!user) {
