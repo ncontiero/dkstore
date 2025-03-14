@@ -58,13 +58,21 @@ export const updateUserPasswordAction = authActionClient
         );
       }
 
-      await prisma.user.update({
-        where: {
-          id: user.id,
-        },
-        data: {
-          passwordHash: await hashPassword(newPassword),
-        },
+      await prisma.$transaction(async (tx) => {
+        await tx.user.update({
+          where: {
+            id: user.id,
+          },
+          data: {
+            passwordHash: await hashPassword(newPassword),
+          },
+        });
+
+        await sendEmailQueue.add("send-password-change-email", {
+          fullName: user.name,
+          email: user.email,
+          isPasswordChangeEmail: true,
+        });
       });
 
       return "Password updated successfully.";

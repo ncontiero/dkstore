@@ -5,6 +5,7 @@ export const sendEmailSchema = z.object({
   email: z.string().email("Invalid email address"),
   isWelcomeEmail: z.boolean().default(false).optional(),
   isEmailVerification: z.boolean().default(false).optional(),
+  isPasswordChangeEmail: z.boolean().default(false).optional(),
   isDeleteAccountEmail: z.boolean().default(false).optional(),
 });
 export type SendEmailSchema = z.infer<typeof sendEmailSchema>;

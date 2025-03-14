@@ -1,5 +1,8 @@
-import { renderWelcomeEmail } from "@/emails/templates";
-import { renderAccountDeletedEmail } from "@/emails/templates/deleted-account";
+import {
+  renderAccountDeletedEmail,
+  renderPasswordChangedEmail,
+  renderWelcomeEmail,
+} from "@/emails/templates";
 import { env } from "@/env";
 import { sendMail } from "@/lib/nodemailer";
 import { SEND_EMAIL_QUEUE_NAME } from "@/queue/email";
@@ -17,6 +20,7 @@ export const sendEmailWorker = createWorker<SendEmailSchema>(
       isWelcomeEmail,
       isEmailVerification,
       isDeleteAccountEmail,
+      isPasswordChangeEmail,
     } = sendEmailSchema.parse(data);
 
     if (isWelcomeEmail) {
@@ -31,6 +35,16 @@ export const sendEmailWorker = createWorker<SendEmailSchema>(
 
     if (isEmailVerification) {
       await emailVerification({ fullName, email });
+    }
+
+    if (isPasswordChangeEmail) {
+      await sendMail({
+        to: email,
+        subject: `Your password has been changed`,
+        html: await renderPasswordChangedEmail({ fullName }),
+      });
+
+      logger.info(`Password changed email sent to ${email}`);
     }
 
     if (isDeleteAccountEmail) {
