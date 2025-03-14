@@ -2,8 +2,8 @@ module.exports = {
   apps: [
     {
       name: "worker",
-      script: "./src/worker/index.ts",
-      ignore_watch: ["node_modules", ".next"],
+      cwd: "./dist",
+      script: "./index.js",
       env_production: {
         NODE_ENV: "production",
       },
