@@ -51,7 +51,7 @@ export async function emailVerification({
     await sendMail({
       html: await renderVerifyEmail({
         fullName,
-        verificationPath: `auth/verify-email/${token.id}`,
+        verificationPath: `auth/email/${token.id}/verify`,
       }),
       subject: `Verify your email at ${env.SITE_NAME}!`,
       to: user.email,

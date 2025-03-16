@@ -1,8 +1,13 @@
+import type { Metadata } from "next";
 import { Link } from "@/components/ui/Link";
 import { prisma } from "@/lib/prisma";
 
 type PageProps = {
   readonly params: Promise<{ token: string }>;
+};
+
+export const metadata: Metadata = {
+  title: "Email Verification",
 };
 
 export default async function VerifyEmailPage({ params }: PageProps) {
@@ -24,7 +29,7 @@ export default async function VerifyEmailPage({ params }: PageProps) {
         </p>
         <p>
           Request a new link on the{" "}
-          <Link href="/account" className="text-primary">
+          <Link href="/account/data" className="text-primary">
             my account page.
           </Link>
         </p>

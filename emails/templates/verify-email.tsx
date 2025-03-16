@@ -10,7 +10,7 @@ export interface VerifyEmailProps {
 
 export function VerifyEmail({
   fullName,
-  verificationPath = "auth/verify-email/123",
+  verificationPath = "auth/email/123/verify",
 }: VerifyEmailProps) {
   const verificationLink = absoluteUrl(verificationPath);
   const firstName = getFirstName(fullName);
