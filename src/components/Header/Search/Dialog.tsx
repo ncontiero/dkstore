@@ -22,10 +22,10 @@ export function SearchDialog() {
         </Button>
       </DialogTrigger>
       <DialogPortal>
-        <DialogOverlay className="z-[99999] backdrop-blur-sm" />
+        <DialogOverlay />
         <DialogContent
           variant="custom"
-          className="z-[99999] flex h-14 w-full p-0 sm:rounded-none md:h-16"
+          className="flex h-14 w-full p-0 sm:rounded-none md:h-16"
         >
           <DialogHeader className="sr-only">
             <DialogTitle>Search</DialogTitle>

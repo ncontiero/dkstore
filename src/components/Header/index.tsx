@@ -13,7 +13,7 @@ export async function Header() {
   const user = await getUser({});
 
   return (
-    <header className="fixed inset-x-0 top-0 z-[9999] h-14 w-full border-b-2 border-secondary bg-secondary/60 backdrop-blur md:h-16">
+    <header className="sticky inset-x-0 top-0 z-[9999] h-14 w-full border-b-2 border-secondary bg-secondary/60 backdrop-blur md:h-16">
       <div className="flex size-full items-center justify-between gap-4 px-4 py-2 sm:container">
         <div className="flex items-center gap-3">
           <Link href="/" className="group rounded-full text-foreground">

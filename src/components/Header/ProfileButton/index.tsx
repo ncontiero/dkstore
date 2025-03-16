@@ -1,5 +1,11 @@
 import type { User as UserProps } from "@/utils/types";
-import { ChevronDown, Menu, User } from "lucide-react";
+import {
+  BookHeart,
+  ChevronDown,
+  Menu,
+  ShoppingBasket,
+  User,
+} from "lucide-react";
 import Link from "next/link";
 import {
   DropdownMenu,
@@ -23,11 +29,29 @@ export function ProfileButton({ user }: { readonly user: UserProps }) {
       <DropdownMenuContent align="end" className="md:w-36">
         <DropdownMenuItem asChild className="p-2">
           <Link
-            href="/account"
+            href="/account/data"
             className="flex cursor-pointer items-center gap-2"
           >
             <User className="size-4" />
             My account
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild className="p-2">
+          <Link
+            href="/account/orders"
+            className="flex cursor-pointer items-center gap-2"
+          >
+            <ShoppingBasket className="size-4" />
+            My orders
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild className="p-2">
+          <Link
+            href="/account/favorites"
+            className="flex cursor-pointer items-center gap-2"
+          >
+            <BookHeart className="size-4" />
+            My favorites
           </Link>
         </DropdownMenuItem>
         <SignOutButton />
