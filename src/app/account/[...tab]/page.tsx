@@ -12,7 +12,7 @@ import { AccountDetails } from "./TabsContent/AccountDetails";
 import { AccountSecurity } from "./TabsContent/AccountSecurity";
 
 type PageProps = {
-  readonly params: Promise<{ account: string[] }>;
+  readonly params: Promise<{ tab: string[] }>;
 };
 
 const tabs = [
@@ -54,11 +54,11 @@ const tabs = [
 ];
 
 export default async function AccountPage({ params }: PageProps) {
-  const { account: accountUrlParam } = await params;
-  const tabParam = accountUrlParam[1];
+  const tabsParam = (await params).tab;
+  const tabParam = tabsParam[0];
   const defaultTab = tabs[0]!.value;
 
-  if (!tabs.some((tab) => tab.value === tabParam)) {
+  if (tabsParam.length > 1 || !tabs.some((tab) => tab.value === tabParam)) {
     redirect(`/account/${defaultTab}`);
   }
 
