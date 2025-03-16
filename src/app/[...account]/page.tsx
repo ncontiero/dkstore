@@ -66,7 +66,7 @@ export default async function AccountPage({ params }: PageProps) {
   if (!user) return null;
 
   return (
-    <main className="mx-auto mb-10 flex max-w-5xl flex-col gap-4 px-2 md:px-0">
+    <main className="mx-auto my-10 flex max-w-5xl flex-col gap-4 px-2 md:px-0">
       <h1 className="text-3xl font-bold">Account Settings</h1>
       <Separator className="mt-3 md:mt-6" />
       <Suspense fallback={<div>Loading...</div>}>

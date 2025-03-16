@@ -74,7 +74,7 @@ export function AccountSecurity() {
 
         <Dialog>
           <DialogTrigger asChild>
-            <Button>Change password</Button>
+            <Button size="sm">Change password</Button>
           </DialogTrigger>
           <DialogPortal>
             <DialogOverlay />

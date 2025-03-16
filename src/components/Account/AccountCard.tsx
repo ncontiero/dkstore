@@ -85,7 +85,7 @@ export const AccountCardFooter = forwardRef<
     <Comp
       ref={ref}
       className={cn(
-        "flex items-center justify-between border-t bg-secondary/40 px-6 py-3",
+        "flex flex-col items-center justify-center gap-4 border-t bg-secondary/40 p-6 text-center sm:flex-row sm:justify-between sm:py-3 sm:text-start",
         className,
       )}
       {...props}

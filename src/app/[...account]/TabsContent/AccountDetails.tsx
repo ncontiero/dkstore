@@ -36,6 +36,7 @@ import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { PasswordInput } from "@/components/ui/PasswordInput";
 import { Separator } from "@/components/ui/Separator";
+import { cn } from "@/lib/utils";
 
 export function AccountDetails({ user }: { readonly user: User }) {
   return (
@@ -55,7 +56,9 @@ export function AccountDetails({ user }: { readonly user: User }) {
             <AccountCardFooterDescription>
               Please use 32 characters at maximum.
             </AccountCardFooterDescription>
-            <Button type="submit">Save</Button>
+            <Button type="submit" size="sm">
+              Save
+            </Button>
           </AccountCardFooter>
         </form>
       </AccountCard>
@@ -78,26 +81,34 @@ export function AccountDetails({ user }: { readonly user: User }) {
         </AccountCardContent>
         <AccountCardFooter>
           <AccountCardFooterDescription>
-            You will receive a verification email to your email address.
+            {user.isEmailVerified
+              ? "You will receive a verification email to your email address."
+              : "Your email is not verified. Please verify your email address."}
           </AccountCardFooterDescription>
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button>Change email</Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Change email</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Are you sure you want to change your email address? You will
-                  receive an email with a link to change your email address.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction>Change</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          {user.isEmailVerified ? (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button size="sm">Change email</Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Change email</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Are you sure you want to change your email address? You will
+                    receive an email with a link to change your email address.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction>Change</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          ) : (
+            <Button type="button" size="sm">
+              Resend verification email
+            </Button>
+          )}
         </AccountCardFooter>
       </AccountCard>
       <AccountCard className="border-destructive/60">
@@ -108,10 +119,27 @@ export function AccountDetails({ user }: { readonly user: User }) {
             certain.
           </AccountCardDescription>
         </AccountCardContent>
-        <AccountCardFooter className="justify-end border-destructive/60 bg-destructive/20">
+        <AccountCardFooter
+          className={cn(
+            "border-destructive/60 bg-destructive/20",
+            user.isEmailVerified && "sm:justify-end",
+          )}
+        >
+          {!user.isEmailVerified && (
+            <AccountCardFooterDescription className="font-medium text-foreground">
+              You must verify your email address before you can delete your
+              account.
+            </AccountCardFooterDescription>
+          )}
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="destructive">Delete your account</Button>
+              <Button
+                variant="destructive"
+                disabled={!user.isEmailVerified}
+                size="sm"
+              >
+                Delete your account
+              </Button>
             </DialogTrigger>
             <DialogPortal>
               <DialogOverlay />
