@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { emailSchema } from "@/actions/schema";
+import { Card } from "@/components/Card";
+import { Loading } from "../../Loading";
 import { ForgotPasswordForm } from "./ForgotPasswordForm";
 
 type PageProps = {
@@ -15,17 +18,13 @@ export default async function ForgotPasswordPage({ searchParams }: PageProps) {
   const { data: email } = emailSchema.safeParse(params.email);
 
   return (
-    <div className="xs:px-4 mt-16 flex flex-col items-center justify-center">
-      <div className="w-full max-w-md border px-3 py-6 sm:rounded-md sm:p-6">
-        <div className="flex flex-col items-center justify-center space-y-1 text-center">
-          <h2 className="text-3xl font-bold">Forgot password</h2>
-          <p className="text-base font-medium text-foreground/60">
-            Enter your email below to reset your password
-          </p>
-        </div>
-
+    <Suspense fallback={<Loading />}>
+      <Card
+        title="Forgot password"
+        description="Enter your email below to reset your password"
+      >
         <ForgotPasswordForm email={email} />
-      </div>
-    </div>
+      </Card>
+    </Suspense>
   );
 }

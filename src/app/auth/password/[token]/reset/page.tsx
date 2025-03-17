@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
+import { Loading } from "@/app/auth/Loading";
+import { Card } from "@/components/Card";
 import { Link } from "@/components/ui/Link";
 import { getUser } from "@/lib/auth/user";
 import { prisma } from "@/lib/prisma";
@@ -26,40 +29,28 @@ export default async function ResetPasswordPage({ params }: PageProps) {
     existingToken.type !== "RESET_PASSWORD"
   ) {
     return (
-      <div className="xs:px-4 mt-16 flex flex-col items-center justify-center">
-        <div className="xs:rounded-md w-full max-w-lg border px-3 py-6 text-center sm:p-6">
-          <h2 className="text-3xl font-bold">Invalid link</h2>
-          <div className="mt-4 flex flex-col gap-2">
-            <p className="text-base font-medium text-foreground">
-              The link you clicked is invalid or expired.
-            </p>
-            <p>
-              Request a new link on the{" "}
-              <Link
-                href={user ? "/account/security" : "/auth/password/forgot"}
-                className="text-primary"
-              >
-                {user ? "security page" : "forgot password page"}
-              </Link>
-            </p>
-          </div>
-        </div>
-      </div>
+      <Card>
+        <p className="mt-4 text-center">
+          Request a new link on the{" "}
+          <Link
+            href={`/auth/password/forgot${user ? `?email=${user.email}` : ""}`}
+            className="text-primary"
+          >
+            forgot password page.
+          </Link>
+        </p>
+      </Card>
     );
   }
 
   return (
-    <div className="xs:px-4 mt-16 flex flex-col items-center justify-center">
-      <div className="w-full max-w-md border px-3 py-6 sm:rounded-md sm:p-6">
-        <div className="flex flex-col items-center justify-center space-y-1 text-center">
-          <h2 className="text-3xl font-bold">Reset password</h2>
-          <p className="text-base font-medium text-foreground/60">
-            Enter your new password below
-          </p>
-        </div>
-
+    <Suspense fallback={<Loading />}>
+      <Card
+        title="Reset password"
+        description="Enter your new password below to reset your password"
+      >
         <ResetPasswordForm userId={existingToken.userId} />
-      </div>
-    </div>
+      </Card>
+    </Suspense>
   );
 }

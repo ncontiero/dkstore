@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Card } from "@/components/Card";
 import { Link } from "@/components/ui/Link";
 import { prisma } from "@/lib/prisma";
 
@@ -23,17 +24,14 @@ export default async function VerifyEmailPage({ params }: PageProps) {
     existingToken.type !== "EMAIL_VERIFICATION"
   ) {
     return (
-      <div className="mt-4 flex flex-col gap-2">
-        <p className="text-base font-medium text-foreground">
-          The email verification link is invalid or expired.
-        </p>
-        <p>
+      <Card>
+        <p className="mt-4 text-center">
           Request a new link on the{" "}
           <Link href="/account/data" className="text-primary">
             my account page.
           </Link>
         </p>
-      </div>
+      </Card>
     );
   }
 
@@ -46,8 +44,9 @@ export default async function VerifyEmailPage({ params }: PageProps) {
   });
 
   return (
-    <p className="mt-4 text-base font-medium text-foreground">
-      Your email has been successfully verified. You can close this page.
-    </p>
+    <Card
+      title="Email Verification"
+      description="Your email has been successfully verified. You can close this page."
+    />
   );
 }
