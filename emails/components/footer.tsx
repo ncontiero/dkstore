@@ -53,7 +53,7 @@ export function Footer() {
               123 Main Street Anytown, CA 12345
             </Text>
             <Text className="mb-0 mt-[4px] text-[16px] font-semibold leading-[24px] text-gray-500">
-              suporte@vcell.com (XX) XXXX-XXXX
+              support@dkstore.com (XX) XXXX-XXXX
             </Text>
           </td>
         </tr>
