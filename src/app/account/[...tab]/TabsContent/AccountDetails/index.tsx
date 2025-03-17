@@ -9,7 +9,6 @@ import {
 } from "@/components/Account";
 import {
   AlertDialog,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -77,7 +76,6 @@ export function AccountDetails({ user }: { readonly user: User }) {
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <ChangeEmailBtn />
                 </AlertDialogFooter>
               </AlertDialogContent>
