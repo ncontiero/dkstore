@@ -1,11 +1,19 @@
 import type { Metadata } from "next";
+import { emailSchema } from "@/actions/schema";
 import { ForgotPasswordForm } from "./ForgotPasswordForm";
+
+type PageProps = {
+  readonly searchParams: Promise<Record<string, string | string[] | undefined>>;
+};
 
 export const metadata: Metadata = {
   title: "Forgot Password",
 };
 
-export default function ForgotPasswordPage() {
+export default async function ForgotPasswordPage({ searchParams }: PageProps) {
+  const params = await searchParams;
+  const { data: email } = emailSchema.safeParse(params.email);
+
   return (
     <div className="xs:px-4 mt-16 flex flex-col items-center justify-center">
       <div className="w-full max-w-md border px-3 py-6 sm:rounded-md sm:p-6">
@@ -16,7 +24,7 @@ export default function ForgotPasswordPage() {
           </p>
         </div>
 
-        <ForgotPasswordForm />
+        <ForgotPasswordForm email={email} />
       </div>
     </div>
   );

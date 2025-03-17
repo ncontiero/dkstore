@@ -8,15 +8,6 @@ import {
   AccountCardFooterDescription,
   AccountCardTitle,
 } from "@/components/Account";
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/AlertDialog";
 import { Button } from "@/components/ui/Button";
 import {
   Dialog,
@@ -28,8 +19,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/Dialog";
+import { Link } from "@/components/ui/Link";
 import { Separator } from "@/components/ui/Separator";
-import { ForgotPasswordBtn } from "./ForgotPasswordBtn";
 import { UpdatePasswordForm } from "./forms/UpdatePasswordForm";
 
 export function AccountSecurity({ user }: { readonly user: User }) {
@@ -46,27 +37,11 @@ export function AccountSecurity({ user }: { readonly user: User }) {
         </div>
       </AccountCardContent>
       <AccountCardFooter>
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <AccountCardFooterDescription asChild>
-              <Button variant="link" className="h-fit p-0">
-                Forgot password? Click here.
-              </Button>
-            </AccountCardFooterDescription>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Reset password</AlertDialogTitle>
-              <AlertDialogDescription>
-                Are you sure you want to reset your password? You will receive
-                an email with a link to reset your password.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <ForgotPasswordBtn userEmail={user.email} />
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+        <AccountCardFooterDescription asChild>
+          <Link href={`/auth/password/forgot?email=${user.email}`}>
+            Forgot password? Click here.
+          </Link>
+        </AccountCardFooterDescription>
 
         <Dialog>
           <DialogTrigger asChild>

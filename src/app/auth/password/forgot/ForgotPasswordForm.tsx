@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 
-export function ForgotPasswordForm() {
+export function ForgotPasswordForm({ email }: { readonly email?: string }) {
   const forgotPassword = useAction(forgotPasswordAction, {
     onError: (args) => {
       toast.error(args.error.serverError);
@@ -26,6 +26,9 @@ export function ForgotPasswordForm() {
 
   const form = useForm<ForgotPasswordSchema>({
     resolver: zodResolver(forgotPasswordSchema),
+    defaultValues: {
+      email: email || "",
+    },
   });
 
   function onSubmit(data: ForgotPasswordSchema) {
