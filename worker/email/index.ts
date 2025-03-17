@@ -10,6 +10,7 @@ import { SEND_EMAIL_QUEUE_NAME } from "@/queue/email";
 import { type SendEmailSchema, sendEmailSchema } from "@/queue/schemas";
 import { createWorker } from "@/queue/utils";
 import { logger } from "@/utils/logger";
+import { changeEmail } from "./change-email";
 import { emailVerification } from "./email-verification";
 
 export const sendEmailWorker = createWorker<SendEmailSchema>(
@@ -20,6 +21,7 @@ export const sendEmailWorker = createWorker<SendEmailSchema>(
       email,
       isWelcomeEmail,
       isEmailVerification,
+      isEmailChangeEmail,
       isEmailChangedEmail,
       isPasswordChangeEmail,
       isDeleteAccountEmail,
@@ -37,6 +39,10 @@ export const sendEmailWorker = createWorker<SendEmailSchema>(
 
     if (isEmailVerification) {
       await emailVerification({ fullName, email });
+    }
+
+    if (isEmailChangeEmail) {
+      await changeEmail({ fullName, email });
     }
 
     if (isEmailChangedEmail) {

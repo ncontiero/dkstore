@@ -62,7 +62,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
               limit={3}
               closeOnClick
               stacked
-              className="z-[99999] bg-background font-inter text-foreground"
+              className="z-[999999] bg-background font-inter text-foreground"
               toastClassName="bg-background text-foreground"
             />
             <Header />

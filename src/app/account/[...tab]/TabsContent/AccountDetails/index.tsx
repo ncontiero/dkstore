@@ -9,7 +9,6 @@ import {
 } from "@/components/Account";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -22,49 +21,28 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogOverlay,
   DialogPortal,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/Dialog";
-import { Input } from "@/components/ui/Input";
-import { Label } from "@/components/ui/Label";
-import { PasswordInput } from "@/components/ui/PasswordInput";
 import { Separator } from "@/components/ui/Separator";
 import { cn } from "@/lib/utils";
+import { ChangeEmailBtn } from "./ChangeEmailBtn";
+import { DeleteUserForm } from "./forms/DeleteUserForm";
+import { UpdateUserNameForm } from "./forms/UpdateUserNameForm";
+import { VerifyEmailBtn } from "./VerifyEmailBtn";
 
 export function AccountDetails({ user }: { readonly user: User }) {
   return (
     <>
-      <AccountCard asChild>
-        <form>
-          <AccountCardContent>
-            <Label className="flex flex-col" htmlFor="name">
-              <AccountCardTitle>Name</AccountCardTitle>
-              <AccountCardDescription>
-                Please enter your full name.
-              </AccountCardDescription>
-            </Label>
-            <Input type="text" id="name" defaultValue={user.name} />
-          </AccountCardContent>
-          <AccountCardFooter>
-            <AccountCardFooterDescription>
-              Please use 32 characters at maximum.
-            </AccountCardFooterDescription>
-            <Button type="submit" size="sm">
-              Save
-            </Button>
-          </AccountCardFooter>
-        </form>
-      </AccountCard>
+      <UpdateUserNameForm user={user} />
       <AccountCard>
         <AccountCardContent>
-          <AccountCardTitle>Email</AccountCardTitle>
+          <AccountCardTitle id="email">Email</AccountCardTitle>
           <AccountCardDescription>
             This is your email address.
           </AccountCardDescription>
@@ -100,14 +78,12 @@ export function AccountDetails({ user }: { readonly user: User }) {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction>Change</AlertDialogAction>
+                  <ChangeEmailBtn />
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
           ) : (
-            <Button type="button" size="sm">
-              Resend verification email
-            </Button>
+            <VerifyEmailBtn />
           )}
         </AccountCardFooter>
       </AccountCard>
@@ -158,37 +134,7 @@ export function AccountDetails({ user }: { readonly user: User }) {
                   This action is not reversible. Please be certain.
                 </div>
                 <Separator />
-                <form className="mt-4 flex flex-col gap-6">
-                  <div className="flex flex-col gap-2">
-                    <Label
-                      htmlFor="confirm-email"
-                      className="text-muted-foreground"
-                    >
-                      Enter your <span className="text-foreground">email</span>{" "}
-                      to continue:
-                    </Label>
-                    <Input type="email" id="confirm-email" />
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <Label
-                      htmlFor="confirm-password"
-                      className="text-muted-foreground"
-                    >
-                      Confirm your{" "}
-                      <span className="text-foreground">password</span> to
-                      continue:
-                    </Label>
-                    <PasswordInput id="confirm-password" />
-                  </div>
-                  <DialogFooter>
-                    <DialogClose asChild>
-                      <Button variant="outline">Cancel</Button>
-                    </DialogClose>
-                    <Button type="submit" variant="destructive">
-                      Delete
-                    </Button>
-                  </DialogFooter>
-                </form>
+                <DeleteUserForm />
               </DialogContent>
             </DialogPortal>
           </Dialog>

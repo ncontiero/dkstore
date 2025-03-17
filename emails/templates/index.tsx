@@ -1,3 +1,4 @@
+export * from "./change-email";
 export * from "./deleted-account";
 export * from "./email-changed";
 export * from "./password-changed";

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import type { User as UserProps } from "@/utils/types";
 import { Suspense } from "react";
 import { BookHeart, Lock, MapPin, ShoppingBasket, User } from "lucide-react";
@@ -52,6 +53,17 @@ const tabs = [
     content: (user: UserProps) => <AccountDetails user={user} />,
   },
 ];
+
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const tab = (await params).tab[0];
+  const tabData = tabs.find((t) => t.value === tab);
+
+  return {
+    title: tabData?.name || "Account",
+  };
+}
 
 export default async function AccountPage({ params }: PageProps) {
   const tabsParam = (await params).tab;
