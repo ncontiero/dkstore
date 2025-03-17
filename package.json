@@ -20,6 +20,7 @@
     "dev:email": "email dev -p 3001",
     "dev:worker:start": "pm2 start ecosystem.config.cjs --watch --env development && pm2 logs",
     "dev:worker": "concurrently --kill-others --names \"build,logs\" -c \"blue,yellow\" \"rslib build --watch\" \"pnpm dev:worker:start\"",
+    "postdev": "pnpm pm2:down",
     "pm2:down": "pm2 delete all",
     "build": "pnpm build:worker && pnpm build:next",
     "build:next": "next build",
