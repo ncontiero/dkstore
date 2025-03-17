@@ -29,7 +29,7 @@ const tabs = [
     value: "security",
     description: "Security settings for your account.",
     icon: Lock,
-    content: () => <AccountSecurity />,
+    content: (user: UserProps) => <AccountSecurity user={user} />,
   },
   {
     name: "Your addresses",

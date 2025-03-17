@@ -67,6 +67,9 @@ export const updateUserEmailAction = authActionClient
         where: { id: user.id },
         data: { email, isEmailVerified: false },
       });
+      await tx.token.deleteMany({
+        where: { userId: user.id, type: "EMAIL_VERIFICATION" },
+      });
 
       await sendEmailQueue.add("send-email-changed-email", {
         fullName: user.name,

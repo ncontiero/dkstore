@@ -1,3 +1,4 @@
+import type { User } from "@/utils/types";
 import { LockKeyhole } from "lucide-react";
 import {
   AccountCard,
@@ -9,8 +10,6 @@ import {
 } from "@/components/Account";
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -30,9 +29,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/Dialog";
 import { Separator } from "@/components/ui/Separator";
+import { ForgotPasswordBtn } from "./ForgotPasswordBtn";
 import { UpdatePasswordForm } from "./forms/UpdatePasswordForm";
 
-export function AccountSecurity() {
+export function AccountSecurity({ user }: { readonly user: User }) {
   return (
     <AccountCard>
       <AccountCardContent>
@@ -63,8 +63,7 @@ export function AccountSecurity() {
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction>Reset</AlertDialogAction>
+              <ForgotPasswordBtn userEmail={user.email} />
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>

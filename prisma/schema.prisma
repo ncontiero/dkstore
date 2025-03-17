@@ -25,6 +25,7 @@ model User {
 enum TokenType {
   EMAIL_VERIFICATION
   CHANGE_EMAIL
+  RESET_PASSWORD
 }
 
 model Token {

@@ -11,6 +11,7 @@ import { type SignInSchema, signInSchema } from "@/actions/auth/schema";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
+import { Link } from "@/components/ui/Link";
 import { PasswordInput } from "@/components/ui/PasswordInput";
 import { BaseAuthFormContainer } from "../BaseFormContainer";
 
@@ -52,7 +53,12 @@ export function SignInForm() {
         </div>
 
         <div className="space-y-1">
-          <Label htmlFor="password">Password</Label>
+          <div className="flex items-center justify-between">
+            <Label htmlFor="password">Password</Label>
+            <Link href="/auth/password/forgot" size="sm" variant="default">
+              Forgot your password?
+            </Link>
+          </div>
           <PasswordInput
             id="password"
             autoComplete="current-password"

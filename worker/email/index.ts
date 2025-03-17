@@ -12,6 +12,7 @@ import { createWorker } from "@/queue/utils";
 import { logger } from "@/utils/logger";
 import { changeEmail } from "./change-email";
 import { emailVerification } from "./email-verification";
+import { forgotPassword } from "./forgot-password";
 
 export const sendEmailWorker = createWorker<SendEmailSchema>(
   SEND_EMAIL_QUEUE_NAME,
@@ -23,6 +24,7 @@ export const sendEmailWorker = createWorker<SendEmailSchema>(
       isEmailVerification,
       isEmailChangeEmail,
       isEmailChangedEmail,
+      isPasswordResetEmail,
       isPasswordChangeEmail,
       isDeleteAccountEmail,
     } = sendEmailSchema.parse(data);
@@ -70,6 +72,11 @@ export const sendEmailWorker = createWorker<SendEmailSchema>(
       });
 
       logger.info(`Password changed email sent to ${email}`);
+      return;
+    }
+
+    if (isPasswordResetEmail) {
+      await forgotPassword({ fullName, email });
       return;
     }
 

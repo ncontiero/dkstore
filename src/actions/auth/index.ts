@@ -8,7 +8,13 @@ import { actionClient } from "@/lib/safe-action";
 import { sendEmailQueue } from "@/queue/email";
 import { comparePasswords, hashPassword } from "@/utils/password";
 import { sendEmailVerificationAction } from "../account";
-import { signInSchema, signOutSchema, signUpSchema } from "./schema";
+import {
+  forgotPasswordSchema,
+  resetPasswordSchema,
+  signInSchema,
+  signOutSchema,
+  signUpSchema,
+} from "./schema";
 
 export const signInAction = actionClient
   .schema(signInSchema)
@@ -82,4 +88,56 @@ export const signOutAction = actionClient
   .action(async ({ parsedInput: { redirectTo } }) => {
     (await cookies()).delete("session");
     redirect(`/auth/sign-in${redirectTo ? `?redirect=${redirectTo}` : ""}`);
+  });
+
+export const forgotPasswordAction = actionClient
+  .schema(forgotPasswordSchema)
+  .action(async ({ parsedInput: { email } }) => {
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+    if (!user.isEmailVerified) {
+      throw new Error("Please verify your email address first.");
+    }
+
+    await sendEmailQueue.add("send-password-reset-email", {
+      fullName: user.name,
+      email,
+      isPasswordResetEmail: true,
+    });
+  });
+
+export const resetPasswordAction = actionClient
+  .schema(resetPasswordSchema)
+  .action(async ({ parsedInput: { userId, password } }) => {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const passwordHash = await hashPassword(password);
+
+    await prisma.$transaction(async (tx) => {
+      await tx.user.update({
+        where: { id: userId },
+        data: {
+          passwordHash,
+        },
+      });
+      await tx.token.deleteMany({
+        where: { userId, type: "RESET_PASSWORD" },
+      });
+
+      await sendEmailQueue.add("send-password-change-email", {
+        fullName: user.name,
+        email: user.email,
+        isPasswordChangeEmail: true,
+      });
+    });
   });
