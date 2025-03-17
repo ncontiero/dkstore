@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { passwordSchema } from "@/utils/password";
+import { emailSchema, nameSchema } from "../schema";
 
 export const signOutSchema = z.object({
   redirectTo: z
@@ -10,14 +11,14 @@ export const signOutSchema = z.object({
 
 export const signInSchema = z
   .object({
-    email: z.string().email("Invalid email address"),
+    email: emailSchema,
     password: z.string().min(1, "Password is required"),
   })
   .extend(signOutSchema.shape);
 
 export const signUpSchema = z
   .object({
-    name: z.string().min(3, "Name must be at least 3 characters long"),
+    name: nameSchema,
     password: passwordSchema,
   })
   .merge(signInSchema.omit({ password: true }));

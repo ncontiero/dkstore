@@ -3,7 +3,7 @@
 import { LogOut } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { usePathname } from "next/navigation";
-import { signOutAction } from "@/app/auth/actions";
+import { signOutAction } from "@/actions/auth";
 import { DropdownMenuItem } from "@/components/ui/DropdownMenu";
 
 export function SignOutButton() {

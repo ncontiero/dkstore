@@ -5,11 +5,11 @@ import { toast } from "react-toastify";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
-import { updateUserEmailAction } from "@/app/account/[...tab]/actions";
+import { updateUserEmailAction } from "@/actions/account";
 import {
   type UpdateUserEmailSchema,
   updateUserEmailSchema,
-} from "@/app/account/[...tab]/actions/schemas";
+} from "@/actions/account/schema";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";

@@ -5,16 +5,16 @@ import { toast } from "react-toastify";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
+import { deleteUserAction } from "@/actions/account";
+import {
+  type DeleteUserSchema,
+  deleteUserSchema,
+} from "@/actions/account/schema";
 import { Button } from "@/components/ui/Button";
 import { DialogClose, DialogFooter } from "@/components/ui/Dialog";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { PasswordInput } from "@/components/ui/PasswordInput";
-import { deleteUserAction } from "../../../actions";
-import {
-  type DeleteUserSchema,
-  deleteUserSchema,
-} from "../../../actions/schemas";
 
 export function DeleteUserForm() {
   const deleteUser = useAction(deleteUserAction, {

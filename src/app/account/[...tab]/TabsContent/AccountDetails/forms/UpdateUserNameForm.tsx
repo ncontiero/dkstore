@@ -6,6 +6,11 @@ import { toast } from "react-toastify";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
+import { updateUserNameAction } from "@/actions/account";
+import {
+  type UpdateUserNameSchema,
+  updateUserNameSchema,
+} from "@/actions/account/schema";
 import {
   AccountCard,
   AccountCardContent,
@@ -17,11 +22,6 @@ import {
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
-import { updateUserNameAction } from "../../../actions";
-import {
-  type UpdateUserNameSchema,
-  updateUserNameSchema,
-} from "../../../actions/schemas";
 
 export function UpdateUserNameForm({ user }: { readonly user: User }) {
   const updateUserName = useAction(updateUserNameAction, {

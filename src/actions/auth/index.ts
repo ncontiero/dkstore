@@ -4,9 +4,10 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { setSession } from "@/lib/auth/session";
 import { prisma } from "@/lib/prisma";
-import { actionClient, authActionClient } from "@/lib/safe-action";
+import { actionClient } from "@/lib/safe-action";
 import { sendEmailQueue } from "@/queue/email";
 import { comparePasswords, hashPassword } from "@/utils/password";
+import { sendEmailVerificationAction } from "../account";
 import { signInSchema, signOutSchema, signUpSchema } from "./schema";
 
 export const signInAction = actionClient
@@ -32,22 +33,6 @@ export const signInAction = actionClient
 
     redirect(redirectTo || "/");
   });
-
-export const sendEmailVerificationAction = authActionClient.action(
-  async ({ ctx: { user } }) => {
-    if (user.isEmailVerified) {
-      throw new Error("Email already verified");
-    }
-
-    await sendEmailQueue.add("send-email-verification", {
-      fullName: user.name,
-      email: user.email,
-      isEmailVerification: true,
-    });
-
-    return "Email verification link sent";
-  },
-);
 
 export const signUpAction = actionClient
   .schema(signUpSchema)

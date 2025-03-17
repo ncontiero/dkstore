@@ -6,12 +6,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { useSearchParams } from "next/navigation";
+import { signUpAction } from "@/actions/auth";
+import { type SignUpSchema, signUpSchema } from "@/actions/auth/schema";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { PasswordInput } from "@/components/ui/PasswordInput";
-import { signUpAction } from "../actions";
-import { type SignUpSchema, signUpSchema } from "../actions/schema";
 import { BaseAuthFormContainer } from "../BaseFormContainer";
 
 export function SignUpForm() {

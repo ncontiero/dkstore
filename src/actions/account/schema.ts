@@ -1,17 +1,18 @@
 import { z } from "zod";
+import { emailSchema, nameSchema } from "../schema";
 
 export const updateUserNameSchema = z.object({
-  name: z.string().min(3).max(32),
+  name: nameSchema,
 });
 export type UpdateUserNameSchema = z.infer<typeof updateUserNameSchema>;
 
 export const updateUserEmailSchema = z.object({
-  email: z.string().email(),
+  email: emailSchema,
 });
 export type UpdateUserEmailSchema = z.infer<typeof updateUserEmailSchema>;
 
 export const deleteUserSchema = z.object({
-  confirmEmail: z.string().email(),
-  confirmPassword: z.string().min(8),
+  confirmEmail: emailSchema,
+  confirmPassword: z.string().min(1, "Password is required"),
 });
 export type DeleteUserSchema = z.infer<typeof deleteUserSchema>;

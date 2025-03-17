@@ -3,7 +3,7 @@
 import { toast } from "react-toastify";
 import { Loader2 } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
-import { sendEmailVerificationAction } from "@/app/auth/actions";
+import { sendEmailVerificationAction } from "@/actions/account";
 import { Button } from "@/components/ui/Button";
 
 export function VerifyEmailBtn() {

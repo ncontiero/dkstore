@@ -3,8 +3,8 @@
 import { toast } from "react-toastify";
 import { Loader2 } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
+import { sendEmailToChangeEmailAction } from "@/actions/account";
 import { AlertDialogAction } from "@/components/ui/AlertDialog";
-import { sendEmailToChangeEmailAction } from "../../actions";
 
 export function ChangeEmailBtn() {
   const changeEmail = useAction(sendEmailToChangeEmailAction, {

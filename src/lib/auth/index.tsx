@@ -11,7 +11,7 @@ import {
 import { toast } from "react-toastify";
 import { useAction } from "next-safe-action/hooks";
 import { usePathname } from "next/navigation";
-import { signOutAction } from "@/app/auth/actions";
+import { signOutAction } from "@/actions/auth";
 import { authRoutes, protectedRoutes } from "./routes";
 
 type UserContextType = {

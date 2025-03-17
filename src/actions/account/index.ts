@@ -1,16 +1,32 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { signOutAction } from "@/app/auth/actions";
 import { prisma } from "@/lib/prisma";
 import { authActionClient } from "@/lib/safe-action";
 import { sendEmailQueue } from "@/queue/email";
 import { comparePasswords } from "@/utils/password";
+import { signOutAction } from "../auth";
 import {
   deleteUserSchema,
   updateUserEmailSchema,
   updateUserNameSchema,
-} from "./schemas";
+} from "./schema";
+
+export const sendEmailVerificationAction = authActionClient.action(
+  async ({ ctx: { user } }) => {
+    if (user.isEmailVerified) {
+      throw new Error("Email already verified");
+    }
+
+    await sendEmailQueue.add("send-email-verification", {
+      fullName: user.name,
+      email: user.email,
+      isEmailVerification: true,
+    });
+
+    return "Email verification link sent";
+  },
+);
 
 export const updateUserNameAction = authActionClient
   .schema(updateUserNameSchema)
@@ -45,29 +61,20 @@ export const updateUserEmailAction = authActionClient
       throw new Error("Email already exists");
     }
 
-    await prisma.user.update({
-      where: { id: user.id },
-      data: { email, isEmailVerified: false },
+    await prisma.$transaction(async (tx) => {
+      await tx.user.update({
+        where: { id: user.id },
+        data: { email, isEmailVerified: false },
+      });
+
+      await sendEmailQueue.add("send-email-changed-email", {
+        fullName: user.name,
+        email: user.email,
+        isEmailChangedEmail: { newEmail: email },
+      });
     });
 
-    await sendEmailQueue.addBulk([
-      {
-        name: "send-email-verification",
-        data: {
-          fullName: user.name,
-          email,
-          isEmailVerification: true,
-        },
-      },
-      {
-        name: "send-email-changed-email",
-        data: {
-          fullName: user.name,
-          email: user.email,
-          isEmailChangedEmail: { newEmail: email },
-        },
-      },
-    ]);
+    await sendEmailVerificationAction();
 
     redirect("/account/data");
   });

@@ -35,14 +35,17 @@ export const sendEmailWorker = createWorker<SendEmailSchema>(
       });
 
       logger.info(`Welcome email sent to ${email}`);
+      return;
     }
 
     if (isEmailVerification) {
       await emailVerification({ fullName, email });
+      return;
     }
 
     if (isEmailChangeEmail) {
       await changeEmail({ fullName, email });
+      return;
     }
 
     if (isEmailChangedEmail) {
@@ -56,6 +59,7 @@ export const sendEmailWorker = createWorker<SendEmailSchema>(
       });
 
       logger.info(`Email changed email sent to ${email}`);
+      return;
     }
 
     if (isPasswordChangeEmail) {
@@ -66,6 +70,7 @@ export const sendEmailWorker = createWorker<SendEmailSchema>(
       });
 
       logger.info(`Password changed email sent to ${email}`);
+      return;
     }
 
     if (isDeleteAccountEmail) {
@@ -76,6 +81,7 @@ export const sendEmailWorker = createWorker<SendEmailSchema>(
       });
 
       logger.info(`Deleted account email sent to ${email}`);
+      return;
     }
   },
 );
