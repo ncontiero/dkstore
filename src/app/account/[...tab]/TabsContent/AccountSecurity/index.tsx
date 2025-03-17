@@ -21,19 +21,16 @@ import {
 import { Button } from "@/components/ui/Button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogOverlay,
   DialogPortal,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/Dialog";
-import { Label } from "@/components/ui/Label";
-import { PasswordInput } from "@/components/ui/PasswordInput";
 import { Separator } from "@/components/ui/Separator";
+import { UpdatePasswordForm } from "./forms/UpdatePasswordForm";
 
 export function AccountSecurity() {
   return (
@@ -90,44 +87,7 @@ export function AccountSecurity() {
                 </DialogDescription>
               </DialogHeader>
               <Separator />
-              <form className="mt-4 flex flex-col gap-6">
-                <div className="flex flex-col gap-2">
-                  <Label
-                    htmlFor="current-password"
-                    className="text-muted-foreground"
-                  >
-                    Enter your{" "}
-                    <span className="text-foreground">current password</span>:
-                  </Label>
-                  <PasswordInput id="current-password" />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <Label
-                    htmlFor="new-password"
-                    className="text-muted-foreground"
-                  >
-                    Enter your{" "}
-                    <span className="text-foreground">new password</span>:
-                  </Label>
-                  <PasswordInput id="new-password" />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <Label
-                    htmlFor="confirm-new-password"
-                    className="text-muted-foreground"
-                  >
-                    Confirm your{" "}
-                    <span className="text-foreground">new password</span>:
-                  </Label>
-                  <PasswordInput id="confirm-new-password" />
-                </div>
-                <DialogFooter>
-                  <DialogClose asChild>
-                    <Button variant="outline">Cancel</Button>
-                  </DialogClose>
-                  <Button type="submit">Update</Button>
-                </DialogFooter>
-              </form>
+              <UpdatePasswordForm />
             </DialogContent>
           </DialogPortal>
         </Dialog>

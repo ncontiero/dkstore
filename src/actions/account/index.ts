@@ -4,12 +4,13 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { authActionClient } from "@/lib/safe-action";
 import { sendEmailQueue } from "@/queue/email";
-import { comparePasswords } from "@/utils/password";
+import { comparePasswords, hashPassword } from "@/utils/password";
 import { signOutAction } from "../auth";
 import {
   deleteUserSchema,
   updateUserEmailSchema,
   updateUserNameSchema,
+  updateUserPasswordSchema,
 } from "./schema";
 
 export const sendEmailVerificationAction = authActionClient.action(
@@ -78,6 +79,54 @@ export const updateUserEmailAction = authActionClient
 
     redirect("/account/data");
   });
+
+export const updateUserPasswordAction = authActionClient
+  .schema(updateUserPasswordSchema)
+  .action(
+    async ({
+      parsedInput: { currentPassword, newPassword },
+      ctx: { user },
+    }) => {
+      if (!user.isEmailVerified) {
+        throw new Error("Please verify your email address first.");
+      }
+
+      const isPasswordValid = await comparePasswords(
+        currentPassword,
+        user.passwordHash,
+      );
+      if (!isPasswordValid) {
+        throw new Error("Current password is incorrect");
+      }
+
+      const isSamePassword = await comparePasswords(
+        newPassword,
+        user.passwordHash,
+      );
+      if (isSamePassword) {
+        throw new Error(
+          "New password cannot be the same as the current password.",
+        );
+      }
+
+      await prisma.$transaction(async (tx) => {
+        await tx.user.update({
+          where: {
+            id: user.id,
+          },
+          data: {
+            passwordHash: await hashPassword(newPassword),
+          },
+        });
+
+        await sendEmailQueue.add("send-password-change-email", {
+          fullName: user.name,
+          email: user.email,
+          isPasswordChangeEmail: true,
+        });
+      });
+    },
+  );
 
 export const deleteUserAction = authActionClient
   .schema(deleteUserSchema)
