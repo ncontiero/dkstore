@@ -34,5 +34,4 @@ export async function renderResetPasswordEmail(props: ResetPasswordEmailProps) {
   return await render(<ResetPasswordEmail {...props} />);
 }
 
-// eslint-disable-next-line import/no-default-export
 export default ResetPasswordEmail;

@@ -1,8 +1,8 @@
+import { cn } from "@dkstore/ui/utils";
 import {
   type TextProps,
   Text as ReactEmailText,
 } from "@react-email/components";
-import { cn } from "@/lib/utils";
 
 export function Text({ className, ...props }: TextProps) {
   return (

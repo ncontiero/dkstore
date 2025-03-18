@@ -1,4 +1,4 @@
-import { renderChangeEmail } from "@/emails/templates";
+import { renderChangeEmail } from "@dkstore/email/change-email";
 import { sendMail } from "@/lib/nodemailer";
 import { prisma } from "@/lib/prisma";
 import { logger } from "@/utils/logger";

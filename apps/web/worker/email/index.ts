@@ -1,9 +1,7 @@
-import {
-  renderAccountDeletedEmail,
-  renderEmailChangedEmail,
-  renderPasswordChangedEmail,
-  renderWelcomeEmail,
-} from "@/emails/templates";
+import { renderAccountDeletedEmail } from "@dkstore/email/deleted-account";
+import { renderEmailChangedEmail } from "@dkstore/email/email-changed";
+import { renderPasswordChangedEmail } from "@dkstore/email/password-changed";
+import { renderWelcomeEmail } from "@dkstore/email/welcome";
 import { sendMail } from "@/lib/nodemailer";
 import { SEND_EMAIL_QUEUE_NAME } from "@/queue/email";
 import { type SendEmailSchema, sendEmailSchema } from "@/queue/schemas";

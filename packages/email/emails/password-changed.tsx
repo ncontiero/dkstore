@@ -39,5 +39,4 @@ export async function renderPasswordChangedEmail(
   return await render(<PasswordChangedEmail {...props} />);
 }
 
-// eslint-disable-next-line import/no-default-export
 export default PasswordChangedEmail;

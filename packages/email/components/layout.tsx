@@ -9,7 +9,7 @@ import {
   Preview,
   Tailwind,
 } from "@react-email/components";
-import { SITE_NAME } from "../utils";
+import { env } from "../utils";
 import { Footer } from "./footer";
 import { Text } from "./text";
 
@@ -81,7 +81,7 @@ export function Layout({
             <Text>
               Best regards,
               <br />
-              <span className="font-medium">{SITE_NAME} Team.</span>
+              <span className="font-medium">{env.SITE_NAME} Team.</span>
             </Text>
 
             <br />

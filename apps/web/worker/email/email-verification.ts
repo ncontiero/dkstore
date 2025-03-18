@@ -1,4 +1,4 @@
-import { renderVerifyEmail } from "@/emails/templates";
+import { renderVerifyEmail } from "@dkstore/email/verify-email";
 import { sendMail } from "@/lib/nodemailer";
 import { prisma } from "@/lib/prisma";
 import { logger } from "@/utils/logger";

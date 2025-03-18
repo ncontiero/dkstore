@@ -1,7 +1,7 @@
 import { Link } from "@react-email/components";
 import { Layout } from "../components/layout";
 import { Text } from "../components/text";
-import { absoluteUrl, getFirstName, render, SITE_NAME } from "../utils";
+import { absoluteUrl, env, getFirstName, render } from "../utils";
 
 export interface VerifyEmailProps {
   readonly fullName: string;
@@ -15,11 +15,11 @@ export function VerifyEmail({
   const verificationLink = absoluteUrl(verificationPath);
   const firstName = getFirstName(fullName);
   const title = `Verify your email address`;
-  const text = `Hello ${firstName}, check your email to activate your ${SITE_NAME} account!`;
+  const text = `Hello ${firstName}, check your email to activate your ${env.SITE_NAME} account!`;
 
   return (
     <Layout firstName={firstName} title={title} previewText={text}>
-      <Text>Check your email to activate your {SITE_NAME} account!</Text>
+      <Text>Check your email to activate your {env.SITE_NAME} account!</Text>
       <Link href={verificationLink} target="_blank">
         Click here to verify your email.
       </Link>
@@ -34,5 +34,4 @@ export async function renderVerifyEmail(props: VerifyEmailProps) {
   return await render(<VerifyEmail {...props} />);
 }
 
-// eslint-disable-next-line import/no-default-export
 export default VerifyEmail;

@@ -1,7 +1,7 @@
 import { Link } from "@react-email/components";
 import { Layout } from "../components/layout";
 import { Text } from "../components/text";
-import { getFirstName, render, SITE_BASEURL, SITE_NAME } from "../utils";
+import { env, getFirstName, render } from "../utils";
 
 export interface WelcomeEmailProps {
   readonly fullName: string;
@@ -9,22 +9,22 @@ export interface WelcomeEmailProps {
 
 export function WelcomeEmail({ fullName }: WelcomeEmailProps) {
   const firstName = getFirstName(fullName);
-  const title = `Welcome to ${SITE_NAME}!`;
-  const text = `Hello ${firstName}, welcome to ${SITE_NAME}! We hope you enjoy your experience with us.`;
+  const title = `Welcome to ${env.SITE_NAME}!`;
+  const text = `Hello ${firstName}, welcome to ${env.SITE_NAME}! We hope you enjoy your experience with us.`;
 
   return (
     <Layout firstName={firstName} title={title} previewText={text}>
       <Text>
-        We are so happy to welcome you to {SITE_NAME}!
+        We are so happy to welcome you to {env.SITE_NAME}!
         <br />
         <br />
-        At {SITE_NAME}, you will find a wide variety of products. Our goal is to
-        provide the best shopping experience and help you find exactly what you
-        need for your needs.
+        At {env.SITE_NAME}, you will find a wide variety of products. Our goal
+        is to provide the best shopping experience and help you find exactly
+        what you need for your needs.
         <br />
         <br />
         To get started, we invite you to explore{" "}
-        <Link href={SITE_BASEURL} target="_blank">
+        <Link href={env.SITE_BASEURL} target="_blank">
           our website
         </Link>{" "}
         and check out our special offers. Plus, as a way of thanking you for
@@ -39,7 +39,7 @@ export function WelcomeEmail({ fullName }: WelcomeEmailProps) {
         by phone at (XX) XXXX-XXXX.
         <br />
         <br />
-        Thank you for choosing {SITE_NAME}.
+        Thank you for choosing {env.SITE_NAME}.
       </Text>
     </Layout>
   );
@@ -49,5 +49,4 @@ export async function renderWelcomeEmail(props: WelcomeEmailProps) {
   return await render(<WelcomeEmail {...props} />);
 }
 
-// eslint-disable-next-line import/no-default-export
 export default WelcomeEmail;

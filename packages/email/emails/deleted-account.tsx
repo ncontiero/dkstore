@@ -1,6 +1,6 @@
 import { Layout } from "../components/layout";
 import { Text } from "../components/text";
-import { getFirstName, render, SITE_NAME } from "../utils";
+import { env, getFirstName, render } from "../utils";
 
 export interface AccountDeletedEmailProps {
   readonly fullName: string;
@@ -26,8 +26,8 @@ export function AccountDeletedEmail({ fullName }: AccountDeletedEmailProps) {
         please contact our support team at support@dkstore.com.
         <br />
         <br />
-        Thank you for being a part of {SITE_NAME}. We hope you consider joining
-        us again in the future.
+        Thank you for being a part of {env.SITE_NAME}. We hope you consider
+        joining us again in the future.
       </Text>
     </Layout>
   );
@@ -39,5 +39,4 @@ export async function renderAccountDeletedEmail(
   return await render(<AccountDeletedEmail {...props} />);
 }
 
-// eslint-disable-next-line import/no-default-export
 export default AccountDeletedEmail;

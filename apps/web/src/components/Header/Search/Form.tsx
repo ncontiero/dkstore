@@ -1,11 +1,11 @@
 "use client";
 
 import { useForm } from "react-hook-form";
+import { cn } from "@dkstore/ui/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Search } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { useSearchParams } from "next/navigation";
-import { cn } from "@/lib/utils";
 import { searchAction } from "./actions";
 import { type SearchSchema, searchSchema } from "./actions/schema";
 

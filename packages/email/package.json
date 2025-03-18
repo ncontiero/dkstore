@@ -1,0 +1,43 @@
+{
+  "name": "@dkstore/email",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Emails for DKStore.",
+  "exports": {
+    "./*": "./emails/*.tsx"
+  },
+  "scripts": {
+    "dev": "email dev -p 3001",
+    "build": "email build",
+    "start": "email start",
+    "clean": "git clean -xdf .turbo node_modules",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "dependencies": {
+    "@dkstore/env": "workspace:*",
+    "@dkstore/ui": "workspace:*",
+    "@react-email/components": "0.0.34"
+  },
+  "devDependencies": {
+    "@dkshs/eslint-config": "4.5.0",
+    "@dkstore/tsconfig": "workspace:*",
+    "@types/node": "^22.13.10",
+    "@types/react": "^19.0.11",
+    "@types/react-dom": "^19.0.4",
+    "eslint": "^9.22.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-email": "3.0.7",
+    "typescript": "^5.8.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

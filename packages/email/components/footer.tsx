@@ -7,7 +7,7 @@ import {
   Section,
   Text,
 } from "@react-email/components";
-import { SITE_BASEURL, SITE_NAME } from "../utils";
+import { env } from "../utils";
 
 export function Footer() {
   return (
@@ -17,7 +17,7 @@ export function Footer() {
         <tr className="w-full">
           <td align="center">
             <Text className="my-[8px] text-[24px] font-semibold leading-[24px] text-gray-900">
-              {SITE_NAME}
+              {env.SITE_NAME}
             </Text>
           </td>
         </tr>
@@ -25,7 +25,7 @@ export function Footer() {
           <td align="center">
             <Row className="table-cell h-[44px] w-[56px] align-bottom">
               <Column className="pr-[8px]">
-                <Link href={SITE_BASEURL}>
+                <Link href={env.SITE_BASEURL}>
                   <Img
                     alt="Facebook"
                     height="36"
@@ -35,7 +35,7 @@ export function Footer() {
                 </Link>
               </Column>
               <Column>
-                <Link href={SITE_BASEURL}>
+                <Link href={env.SITE_BASEURL}>
                   <Img
                     alt="Instagram"
                     height="36"

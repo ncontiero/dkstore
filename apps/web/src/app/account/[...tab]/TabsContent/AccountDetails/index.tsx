@@ -21,6 +21,7 @@ import {
   DialogTrigger,
 } from "@dkstore/ui/dialog";
 import { Separator } from "@dkstore/ui/separator";
+import { cn } from "@dkstore/ui/utils";
 import {
   AccountCard,
   AccountCardContent,
@@ -29,7 +30,6 @@ import {
   AccountCardFooterDescription,
   AccountCardTitle,
 } from "@/components/Account";
-import { cn } from "@/lib/utils";
 import { ChangeEmailBtn } from "./ChangeEmailBtn";
 import { DeleteUserForm } from "./forms/DeleteUserForm";
 import { UpdateUserNameForm } from "./forms/UpdateUserNameForm";

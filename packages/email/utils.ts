@@ -1,14 +1,14 @@
 import type { ReactElement } from "react";
+import { baseEnv } from "@dkstore/env";
 import {
   type Options,
   render as renderReactEmail,
 } from "@react-email/components";
-import { env } from "@/env";
 
-export const { SITE_BASEURL, SITE_NAME } = env;
+export const env = baseEnv();
 
 export function absoluteUrl(path: string) {
-  const url = new URL(path, SITE_BASEURL);
+  const url = new URL(path, env.SITE_BASEURL);
   return url.toString();
 }
 

@@ -1,6 +1,6 @@
 import { type HTMLAttributes, forwardRef } from "react";
+import { cn } from "@dkstore/ui/utils";
 import { Slot } from "@radix-ui/react-slot";
-import { cn } from "@/lib/utils";
 
 export interface AccountCardProps extends HTMLAttributes<HTMLDivElement> {
   readonly asChild?: boolean;

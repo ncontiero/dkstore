@@ -34,5 +34,4 @@ export async function renderChangeEmail(props: ChangeEmailProps) {
   return await render(<ChangeEmail {...props} />);
 }
 
-// eslint-disable-next-line import/no-default-export
 export default ChangeEmail;

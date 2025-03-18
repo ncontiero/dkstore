@@ -1,4 +1,4 @@
-import { renderResetPasswordEmail } from "@/emails/templates/reset-password";
+import { renderResetPasswordEmail } from "@dkstore/email/reset-password";
 import { sendMail } from "@/lib/nodemailer";
 import { prisma } from "@/lib/prisma";
 import { logger } from "@/utils/logger";
