@@ -3,7 +3,7 @@
 [![license mit](https://img.shields.io/badge/licence-MIT-7c3aed)](/LICENSE)
 [![Built with dkcutter-nextjs](https://img.shields.io/badge/built%20with-DKCutter%20NextJs-7c3aed.svg)](https://github.com/dkshs/dkcutter-nextjs)
 
-An e-commerce with Next.js.
+An e-commerce with Turborepo, Next.Js, BullMQ and React Email.
 
 ## Install and run the project
 
