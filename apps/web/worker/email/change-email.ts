@@ -1,8 +1,8 @@
 import { renderChangeEmail } from "@/emails/templates";
-import { env } from "@/env";
 import { sendMail } from "@/lib/nodemailer";
 import { prisma } from "@/lib/prisma";
 import { logger } from "@/utils/logger";
+import { env } from "../env";
 
 interface ChangeEmailProps {
   fullName: string;

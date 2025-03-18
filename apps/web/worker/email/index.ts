@@ -4,12 +4,12 @@ import {
   renderPasswordChangedEmail,
   renderWelcomeEmail,
 } from "@/emails/templates";
-import { env } from "@/env";
 import { sendMail } from "@/lib/nodemailer";
 import { SEND_EMAIL_QUEUE_NAME } from "@/queue/email";
 import { type SendEmailSchema, sendEmailSchema } from "@/queue/schemas";
 import { createWorker } from "@/queue/utils";
 import { logger } from "@/utils/logger";
+import { env } from "../env";
 import { changeEmail } from "./change-email";
 import { emailVerification } from "./email-verification";
 import { forgotPassword } from "./forgot-password";

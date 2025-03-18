@@ -1,0 +1,9 @@
+{
+  "extends": "@dkstore/tsconfig/base.json",
+  "compilerOptions": {
+    "lib": ["ES2022"],
+    "moduleResolution": "bundler"
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}

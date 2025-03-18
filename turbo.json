@@ -1,7 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env"],
-  "ui": "tui",
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
@@ -21,6 +20,7 @@
       "dependsOn": ["^lint:fix"]
     },
     "dev": {
+      "dependsOn": ["^@dkstore/env#build"],
       "inputs": ["$TURBO_DEFAULT$", ".env"],
       "cache": false,
       "persistent": true

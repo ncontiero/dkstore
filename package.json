@@ -16,7 +16,9 @@
   },
   "scripts": {
     "build": "turbo build",
+    "build:env": "pnpm build --filter=@dkstore/env",
     "dev": "turbo dev",
+    "postdev": "pnpm -r pm2:down",
     "start": "turbo start",
     "clean": "turbo clean && git clean -xdf .turbo node_modules -e .turbo/config.json",
     "eslint": "eslint . --flag unstable_config_lookup_from_file",
