@@ -1,14 +1,5 @@
 import type { User } from "@/utils/types";
-import { LockKeyhole } from "lucide-react";
-import {
-  AccountCard,
-  AccountCardContent,
-  AccountCardDescription,
-  AccountCardFooter,
-  AccountCardFooterDescription,
-  AccountCardTitle,
-} from "@/components/Account";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@dkstore/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -18,9 +9,18 @@ import {
   DialogPortal,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/Dialog";
-import { Link } from "@/components/ui/Link";
-import { Separator } from "@/components/ui/Separator";
+} from "@dkstore/ui/dialog";
+import { Link } from "@dkstore/ui/link";
+import { Separator } from "@dkstore/ui/separator";
+import { LockKeyhole } from "lucide-react";
+import {
+  AccountCard,
+  AccountCardContent,
+  AccountCardDescription,
+  AccountCardFooter,
+  AccountCardFooterDescription,
+  AccountCardTitle,
+} from "@/components/Account";
 import { UpdatePasswordForm } from "./forms/UpdatePasswordForm";
 
 export function AccountSecurity({ user }: { readonly user: User }) {

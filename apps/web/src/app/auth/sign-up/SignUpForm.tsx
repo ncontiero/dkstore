@@ -2,16 +2,16 @@
 
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { Button } from "@dkstore/ui/button";
+import { Input } from "@dkstore/ui/input";
+import { Label } from "@dkstore/ui/label";
+import { PasswordInput } from "@dkstore/ui/password-input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { useSearchParams } from "next/navigation";
 import { signUpAction } from "@/actions/auth";
 import { type SignUpSchema, signUpSchema } from "@/actions/auth/schema";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
-import { Label } from "@/components/ui/Label";
-import { PasswordInput } from "@/components/ui/PasswordInput";
 import { BaseAuthFormContainer } from "../BaseFormContainer";
 
 export function SignUpForm() {

@@ -1,8 +1,8 @@
 "use client";
 
 import type { PropsWithChildren } from "react";
+import { Tabs } from "@dkstore/ui/tabs";
 import { useWindowSize } from "@uidotdev/usehooks";
-import { Tabs } from "@/components/ui/Tabs";
 
 export function AccountTabsRoot({
   children,

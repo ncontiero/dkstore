@@ -2,6 +2,11 @@
 
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { Button } from "@dkstore/ui/button";
+import { DialogClose, DialogFooter } from "@dkstore/ui/dialog";
+import { Input } from "@dkstore/ui/input";
+import { Label } from "@dkstore/ui/label";
+import { PasswordInput } from "@dkstore/ui/password-input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
@@ -10,11 +15,6 @@ import {
   type DeleteUserSchema,
   deleteUserSchema,
 } from "@/actions/account/schema";
-import { Button } from "@/components/ui/Button";
-import { DialogClose, DialogFooter } from "@/components/ui/Dialog";
-import { Input } from "@/components/ui/Input";
-import { Label } from "@/components/ui/Label";
-import { PasswordInput } from "@/components/ui/PasswordInput";
 
 export function DeleteUserForm() {
   const deleteUser = useAction(deleteUserAction, {

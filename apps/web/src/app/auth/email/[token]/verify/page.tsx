@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { Card } from "@/components/Card";
-import { Link } from "@/components/ui/Link";
+import { Card } from "@dkstore/ui/card";
+import { Link } from "@dkstore/ui/link";
 import { prisma } from "@/lib/prisma";
 
 type PageProps = {

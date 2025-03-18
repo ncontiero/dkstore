@@ -1,4 +1,4 @@
-import "./globals.css";
+import "@dkstore/ui/globals.css";
 import type { Metadata } from "next";
 import type { PropsWithChildren } from "react";
 import { ToastContainer } from "react-toastify";

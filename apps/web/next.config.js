@@ -5,6 +5,8 @@
 import "./src/env.js";
 
 /** @type {import("next").NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  transpilePackages: ["@dkstore/ui"],
+};
 
 export default nextConfig;

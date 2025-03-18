@@ -3,6 +3,10 @@
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { Button } from "@dkstore/ui/button";
+import { DialogClose, DialogFooter } from "@dkstore/ui/dialog";
+import { Label } from "@dkstore/ui/label";
+import { PasswordInput } from "@dkstore/ui/password-input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
@@ -11,10 +15,6 @@ import {
   type UpdateUserPasswordSchema,
   updateUserPasswordSchema,
 } from "@/actions/account/schema";
-import { Button } from "@/components/ui/Button";
-import { DialogClose, DialogFooter } from "@/components/ui/Dialog";
-import { Label } from "@/components/ui/Label";
-import { PasswordInput } from "@/components/ui/PasswordInput";
 
 export function UpdatePasswordForm() {
   const closeDialogButtonRef = useRef<HTMLButtonElement | null>(null);

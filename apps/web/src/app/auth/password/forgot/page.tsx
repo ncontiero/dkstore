@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { Card } from "@dkstore/ui/card";
 import { emailSchema } from "@/actions/schema";
-import { Card } from "@/components/Card";
 import { Loading } from "../../Loading";
 import { ForgotPasswordForm } from "./ForgotPasswordForm";
 

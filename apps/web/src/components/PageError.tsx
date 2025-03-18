@@ -1,4 +1,4 @@
-import { Link } from "./ui/Link";
+import { Link } from "./Link";
 
 interface PageErrorProps {
   readonly title: string;

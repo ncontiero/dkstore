@@ -1,5 +1,11 @@
 import type { User as UserProps } from "@/utils/types";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@dkstore/ui/dropdown-menu";
+import {
   BookHeart,
   ChevronDown,
   Menu,
@@ -7,12 +13,6 @@ import {
   User,
 } from "lucide-react";
 import Link from "next/link";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/DropdownMenu";
 import { SignOutButton } from "./SignOutButton";
 
 export function ProfileButton({ user }: { readonly user: UserProps }) {

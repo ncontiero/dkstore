@@ -2,6 +2,9 @@
 
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { Button } from "@dkstore/ui/button";
+import { Label } from "@dkstore/ui/label";
+import { PasswordInput } from "@dkstore/ui/password-input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
@@ -11,9 +14,6 @@ import {
   type ResetPasswordSchema,
   resetPasswordSchema,
 } from "@/actions/auth/schema";
-import { Button } from "@/components/ui/Button";
-import { Label } from "@/components/ui/Label";
-import { PasswordInput } from "@/components/ui/PasswordInput";
 
 export function ResetPasswordForm({ userId }: { readonly userId: string }) {
   const router = useRouter();

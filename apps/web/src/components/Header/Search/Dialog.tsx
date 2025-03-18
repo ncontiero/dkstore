@@ -1,5 +1,4 @@
-import { ArrowLeft, Search } from "lucide-react";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@dkstore/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -10,7 +9,8 @@ import {
   DialogPortal,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/Dialog";
+} from "@dkstore/ui/dialog";
+import { ArrowLeft, Search } from "lucide-react";
 import { SearchForm } from "./Form";
 
 export function SearchDialog() {

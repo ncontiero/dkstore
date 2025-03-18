@@ -1,8 +1,8 @@
+import { Button } from "@dkstore/ui/button";
+import { Link } from "@dkstore/ui/link";
 import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import NextLink from "next/link";
-import { Button } from "@/components/ui/Button";
-import { Link } from "@/components/ui/Link";
 import { getUser } from "@/lib/auth/user";
 import { ProfileButton } from "./ProfileButton";
 import { SearchDialog } from "./Search/Dialog";

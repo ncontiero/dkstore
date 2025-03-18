@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from "react";
 
-interface CardProps extends PropsWithChildren {
+export interface CardProps extends PropsWithChildren {
   readonly title?: string;
   readonly description?: string;
 }

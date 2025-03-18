@@ -2,13 +2,10 @@
 
 import { useRef } from "react";
 import { toast } from "react-toastify";
+import { AlertDialogAction, AlertDialogCancel } from "@dkstore/ui/alert-dialog";
 import { Loader2 } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { sendEmailToChangeEmailAction } from "@/actions/account";
-import {
-  AlertDialogAction,
-  AlertDialogCancel,
-} from "@/components/ui/AlertDialog";
 
 export function ChangeEmailBtn() {
   const dialogCloseRef = useRef<HTMLButtonElement | null>(null);

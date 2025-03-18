@@ -1,13 +1,5 @@
 import type { User } from "@/utils/types";
 import {
-  AccountCard,
-  AccountCardContent,
-  AccountCardDescription,
-  AccountCardFooter,
-  AccountCardFooterDescription,
-  AccountCardTitle,
-} from "@/components/Account";
-import {
   AlertDialog,
   AlertDialogContent,
   AlertDialogDescription,
@@ -15,9 +7,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/AlertDialog";
-import { Badge } from "@/components/ui/Badge";
-import { Button } from "@/components/ui/Button";
+} from "@dkstore/ui/alert-dialog";
+import { Badge } from "@dkstore/ui/badge";
+import { Button } from "@dkstore/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -27,8 +19,16 @@ import {
   DialogPortal,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/Dialog";
-import { Separator } from "@/components/ui/Separator";
+} from "@dkstore/ui/dialog";
+import { Separator } from "@dkstore/ui/separator";
+import {
+  AccountCard,
+  AccountCardContent,
+  AccountCardDescription,
+  AccountCardFooter,
+  AccountCardFooterDescription,
+  AccountCardTitle,
+} from "@/components/Account";
 import { cn } from "@/lib/utils";
 import { ChangeEmailBtn } from "./ChangeEmailBtn";
 import { DeleteUserForm } from "./forms/DeleteUserForm";

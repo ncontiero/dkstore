@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from "react";
+import { Button } from "@dkstore/ui/button";
+import { Card } from "@dkstore/ui/card";
 import Link from "next/link";
-import { Card } from "@/components/Card";
-import { Button } from "@/components/ui/Button";
 
 interface BaseAuthFormContainerProps extends PropsWithChildren {
   readonly mode?: "signin" | "signup";

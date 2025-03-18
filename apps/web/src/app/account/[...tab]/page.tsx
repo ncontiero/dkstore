@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import type { User as UserProps } from "@/utils/types";
 import { Suspense } from "react";
+import { ScrollArea, ScrollBar } from "@dkstore/ui/scroll-area";
+import { Separator } from "@dkstore/ui/separator";
+import { TabsContent, TabsList, TabsTrigger } from "@dkstore/ui/tabs";
 import { BookHeart, Lock, MapPin, ShoppingBasket, User } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AccountTabsRoot } from "@/components/Account";
-import { ScrollArea, ScrollBar } from "@/components/ui/ScrollArea";
-import { Separator } from "@/components/ui/Separator";
-import { TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { getUser } from "@/lib/auth/user";
 import { AccountDetails } from "./TabsContent/AccountDetails";
 import { AccountSecurity } from "./TabsContent/AccountSecurity";

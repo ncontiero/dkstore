@@ -2,6 +2,9 @@
 
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { Button } from "@dkstore/ui/button";
+import { Input } from "@dkstore/ui/input";
+import { Label } from "@dkstore/ui/label";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
@@ -10,9 +13,6 @@ import {
   type UpdateUserEmailSchema,
   updateUserEmailSchema,
 } from "@/actions/account/schema";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
-import { Label } from "@/components/ui/Label";
 
 export function UpdateEmailForm() {
   const updateEmail = useAction(updateUserEmailAction, {
