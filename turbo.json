@@ -8,10 +8,11 @@
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "next-env.d.ts"]
     },
     "clean": {
-      "dependsOn": ["^clean"]
+      "dependsOn": ["^clean"],
+      "cache": false
     },
     "typecheck": {
-      "dependsOn": ["^typecheck"]
+      "dependsOn": ["^@dkstore/env#build", "^typecheck"]
     },
     "lint": {
       "dependsOn": ["^lint"]
