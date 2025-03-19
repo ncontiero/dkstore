@@ -1,7 +1,8 @@
 import { Link } from "@react-email/components";
-import { Layout } from "../components/layout";
-import { Text } from "../components/text";
-import { absoluteUrl, env, getFirstName, render } from "../utils";
+import { Layout } from "@/components/layout";
+import { Text } from "@/components/text";
+import { env } from "@/env";
+import { absoluteUrl, getFirstName, render } from "@/utils";
 
 export interface VerifyEmailProps {
   readonly fullName: string;

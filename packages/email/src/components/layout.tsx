@@ -9,7 +9,7 @@ import {
   Preview,
   Tailwind,
 } from "@react-email/components";
-import { env } from "../utils";
+import { env } from "@/env";
 import { Footer } from "./footer";
 import { Text } from "./text";
 

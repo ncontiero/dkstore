@@ -1,6 +1,7 @@
-import { Layout } from "../components/layout";
-import { Text } from "../components/text";
-import { env, getFirstName, render } from "../utils";
+import { Layout } from "@/components/layout";
+import { Text } from "@/components/text";
+import { env } from "@/env";
+import { getFirstName, render } from "@/utils";
 
 export interface AccountDeletedEmailProps {
   readonly fullName: string;

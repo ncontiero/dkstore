@@ -6,13 +6,26 @@
   "description": "UI components for DkStore.",
   "sideEffects": false,
   "exports": {
-    "./*": "./src/components/*.tsx",
-    "./utils": "./src/utils/index.ts",
-    "./globals.css": "./src/globals.css",
-    "./tailwind.config": "./tailwind.config.ts"
+    "./*": {
+      "types": "./dist/components/*.d.ts",
+      "import": "./dist/components/*.js"
+    },
+    "./utils": {
+      "types": "./dist/utils/index.d.ts",
+      "import": "./dist/utils/index.js"
+    },
+    "./tailwind.config": "./tailwind.config.ts",
+    "./globals.css": "./src/globals.css"
   },
+  "files": [
+    "dist",
+    "src/globals.css",
+    "tailwind.config.ts"
+  ],
   "scripts": {
-    "clean": "git clean -xdf .turbo node_modules",
+    "dev": "rslib build --watch",
+    "build": "rslib build",
+    "clean": "git clean -xdf .turbo dist node_modules",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc --noEmit"
@@ -38,6 +51,8 @@
   "devDependencies": {
     "@dkshs/eslint-config": "4.5.0",
     "@dkstore/tsconfig": "workspace:*",
+    "@rsbuild/plugin-react": "^1.1.1",
+    "@rslib/core": "^0.5.4",
     "@types/node": "^22.13.10",
     "@types/react": "^19.0.11",
     "@types/react-dom": "^19.0.4",

@@ -7,7 +7,7 @@ import {
   Section,
   Text,
 } from "@react-email/components";
-import { env } from "../utils";
+import { env } from "@/env";
 
 export function Footer() {
   return (

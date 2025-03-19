@@ -35,7 +35,7 @@
     "@t3-oss/env-nextjs": "^0.12.0",
     "@uidotdev/usehooks": "^2.4.1",
     "bcryptjs": "^3.0.2",
-    "bullmq": "^5.43.1",
+    "bullmq": "^5.44.0",
     "colorette": "^2.0.20",
     "jose": "^6.0.10",
     "lucide-react": "^0.483.0",

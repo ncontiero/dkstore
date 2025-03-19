@@ -1,7 +1,7 @@
 import { Link } from "@react-email/components";
-import { Layout } from "../components/layout";
-import { Text } from "../components/text";
-import { absoluteUrl, getFirstName, render } from "../utils";
+import { Layout } from "@/components/layout";
+import { Text } from "@/components/text";
+import { absoluteUrl, getFirstName, render } from "@/utils";
 
 export interface ChangeEmailProps {
   readonly fullName: string;

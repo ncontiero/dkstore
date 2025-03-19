@@ -5,13 +5,22 @@
   "private": true,
   "description": "Emails for DKStore.",
   "exports": {
-    "./*": "./emails/*.tsx"
+    "./*": {
+      "types": "./dist/emails/*.d.ts",
+      "import": "./dist/emails/*.js"
+    },
+    "./utils": {
+      "types": "./dist/utils.d.ts",
+      "import": "./dist/utils.js"
+    }
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "dev": "email dev -p 3001",
-    "build": "email build",
-    "start": "email start",
-    "clean": "git clean -xdf .turbo node_modules",
+    "dev": "concurrently --kill-others --names \"email-web,email-build\" -c \"black,blue\" \"email dev -p 3001 -d src/emails\" \"rslib build --watch\"",
+    "build": "rslib build",
+    "clean": "git clean -xdf .turbo dist node_modules",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc --noEmit"
@@ -28,9 +37,12 @@
   "devDependencies": {
     "@dkshs/eslint-config": "4.5.0",
     "@dkstore/tsconfig": "workspace:*",
+    "@rsbuild/plugin-react": "^1.1.1",
+    "@rslib/core": "^0.5.4",
     "@types/node": "^22.13.10",
     "@types/react": "^19.0.11",
     "@types/react-dom": "^19.0.4",
+    "concurrently": "^9.1.2",
     "eslint": "^9.22.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

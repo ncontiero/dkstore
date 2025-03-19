@@ -1,6 +1,6 @@
-import { Layout } from "../components/layout";
-import { Text } from "../components/text";
-import { getFirstName, render } from "../utils";
+import { Layout } from "@/components/layout";
+import { Text } from "@/components/text";
+import { getFirstName, render } from "@/utils";
 
 export interface EmailChangedEmailProps {
   readonly fullName: string;

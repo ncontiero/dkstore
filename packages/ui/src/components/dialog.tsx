@@ -9,7 +9,7 @@ import {
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { type VariantProps, cva } from "class-variance-authority";
 import { X } from "lucide-react";
-import { cn } from "../utils";
+import { cn } from "@/utils";
 import { Button } from "./button";
 
 const Dialog = DialogPrimitive.Root;

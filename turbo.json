@@ -12,7 +12,7 @@
       "cache": false
     },
     "typecheck": {
-      "dependsOn": ["^@dkstore/env#build", "^typecheck"]
+      "dependsOn": ["^typecheck"]
     },
     "lint": {
       "dependsOn": ["^lint"]
@@ -21,7 +21,6 @@
       "dependsOn": ["^lint:fix"]
     },
     "dev": {
-      "dependsOn": ["^@dkstore/env#build"],
       "inputs": ["$TURBO_DEFAULT$", ".env"],
       "cache": false,
       "persistent": true
