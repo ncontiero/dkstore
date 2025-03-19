@@ -13,6 +13,10 @@ jobs:
   lint-styles:
     name: Lint Styles
     runs-on: ubuntu-latest
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
