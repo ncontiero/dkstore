@@ -1,7 +1,7 @@
 "use server";
 
+import { prisma } from "@dkstore/db";
 import { redirect } from "next/navigation";
-import { prisma } from "@/lib/prisma";
 import { authActionClient } from "@/lib/safe-action";
 import { sendEmailQueue } from "@/queue/email";
 import { comparePasswords, hashPassword } from "@/utils/password";

@@ -1,7 +1,7 @@
+import { prisma } from "@dkstore/db";
 import { renderVerifyEmail } from "@dkstore/email/verify-email";
 import { logger } from "@dkstore/utils";
 import { sendMail } from "@/lib/nodemailer";
-import { prisma } from "@/lib/prisma";
 import { env } from "../env";
 
 interface EmailVerification {

@@ -1,6 +1,5 @@
-import type { User as PrismaUser } from "@prisma/client";
 import type { User } from "@/utils/types";
-import { prisma } from "../prisma";
+import { type User as PrismaUser, prisma } from "@dkstore/db";
 import { getSession } from "./session";
 
 interface GetUserProps {

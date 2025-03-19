@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { prisma } from "@dkstore/db";
 import { Card } from "@dkstore/ui/card";
 import { Link } from "@dkstore/ui/link";
 import { Loading } from "@/app/auth/Loading";
 import { getUser } from "@/lib/auth/user";
-import { prisma } from "@/lib/prisma";
 import { ResetPasswordForm } from "./ResetPasswordForm";
 
 type PageProps = {

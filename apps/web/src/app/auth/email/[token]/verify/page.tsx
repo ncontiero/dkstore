@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
+import { prisma } from "@dkstore/db";
 import { Card } from "@dkstore/ui/card";
 import { Link } from "@dkstore/ui/link";
-import { prisma } from "@/lib/prisma";
 
 type PageProps = {
   readonly params: Promise<{ token: string }>;
