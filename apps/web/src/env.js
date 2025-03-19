@@ -1,4 +1,4 @@
-import { nextjsEnv } from "@dkstore/env";
+import { nextjsEnv } from "@dkstore/env/nextjs";
 import { createEnv } from "@t3-oss/env-nextjs";
 
 export const env = createEnv({
