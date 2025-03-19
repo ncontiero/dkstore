@@ -1,0 +1,13 @@
+{
+  "extends": "@dkstore/tsconfig/base.json",
+  "compilerOptions": {
+    "lib": ["ES2022"],
+    "baseUrl": ".",
+    "moduleResolution": "bundler",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}

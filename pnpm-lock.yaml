@@ -47,6 +47,9 @@ importers:
       '@dkstore/env':
         specifier: workspace:*
         version: link:../../packages/env
+      '@dkstore/queue':
+        specifier: workspace:*
+        version: link:../../packages/queue
       '@dkstore/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -65,9 +68,6 @@ importers:
       bcryptjs:
         specifier: ^3.0.2
         version: 3.0.2
-      bullmq:
-        specifier: ^5.44.0
-        version: 5.44.0
       jose:
         specifier: ^6.0.10
         version: 6.0.10
@@ -239,6 +239,37 @@ importers:
       '@t3-oss/env-core':
         specifier: ^0.12.0
         version: 0.12.0(typescript@5.8.2)(zod@3.24.2)
+      zod:
+        specifier: ^3.24.2
+        version: 3.24.2
+    devDependencies:
+      '@dkshs/eslint-config':
+        specifier: 4.5.0
+        version: 4.5.0(@types/eslint@9.6.1)(@typescript-eslint/eslint-plugin@8.26.1(@typescript-eslint/parser@8.26.1(eslint@9.22.0(jiti@2.4.2))(typescript@5.8.2))(eslint@9.22.0(jiti@2.4.2))(typescript@5.8.2))(eslint@9.22.0(jiti@2.4.2))(tailwindcss@3.4.17)(typescript@5.8.2)
+      '@dkstore/tsconfig':
+        specifier: workspace:*
+        version: link:../tsconfig
+      '@rslib/core':
+        specifier: ^0.5.4
+        version: 0.5.4(typescript@5.8.2)
+      '@types/node':
+        specifier: ^22.13.10
+        version: 22.13.10
+      eslint:
+        specifier: ^9.22.0
+        version: 9.22.0(jiti@2.4.2)
+      typescript:
+        specifier: ^5.8.2
+        version: 5.8.2
+
+  packages/queue:
+    dependencies:
+      '@dkstore/env':
+        specifier: workspace:*
+        version: link:../env
+      bullmq:
+        specifier: ^5.44.0
+        version: 5.44.0
       zod:
         specifier: ^3.24.2
         version: 3.24.2

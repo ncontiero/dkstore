@@ -4,7 +4,7 @@ import type {
   QueueOptions,
   WorkerOptions,
 } from "bullmq";
-import { env } from "@/env";
+import { env } from "./env";
 
 export const connection: ConnectionOptions = {
   host: env.REDIS_HOST,

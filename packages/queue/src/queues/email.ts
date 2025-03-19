@@ -1,5 +1,5 @@
 import type { SendEmailSchema } from "./schemas";
-import { createQueue } from "./utils";
+import { createQueue } from "@/utils";
 
 export const SEND_EMAIL_QUEUE_NAME = "email-queue";
 
