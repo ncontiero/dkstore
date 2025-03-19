@@ -1,4 +1,4 @@
-import { type QueueOptions, Queue } from "bullmq";
+import { type QueueOptions, Queue } from "@/bullmq";
 import { createQueueOpts } from "@/configs";
 
 export const createQueue = <T>(name: string, opts?: QueueOptions) =>

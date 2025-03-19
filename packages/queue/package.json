@@ -13,6 +13,10 @@
       "types": "./dist/utils/index.d.ts",
       "import": "./dist/utils/index.js"
     },
+    "./bullmq": {
+      "types": "./dist/bullmq.d.ts",
+      "import": "./dist/bullmq.js"
+    },
     "./*": {
       "types": "./dist/queues/*.d.ts",
       "import": "./dist/queues/*.js"
