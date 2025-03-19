@@ -137,3 +137,6 @@ dist
 
 # Turbo
 .turbo
+
+# Prisma
+packages/db/src/generated/
