@@ -16,7 +16,7 @@
   },
   "scripts": {
     "build": "turbo build",
-    "build:env": "pnpm build --filter=@dkstore/env",
+    "build:packages": "pnpm build --filter='./packages/*'",
     "dev": "turbo dev",
     "postdev": "pnpm -r pm2:down",
     "start": "turbo start",
