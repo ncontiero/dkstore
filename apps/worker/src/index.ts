@@ -1,5 +1,5 @@
 import { logger } from "@dkstore/utils";
-import { sendEmailWorker } from "./email";
+import { sendEmailWorker } from "./workers";
 
 const gracefulShutdown = async (signal: string) => {
   logger.warn(`Received ${signal}, closing/reloading workers...`);
@@ -7,11 +7,13 @@ const gracefulShutdown = async (signal: string) => {
   process.exit(0);
 };
 
-process.on("unhandledRejection", (error) => {
-  logger.error(error);
-  gracefulShutdown("unhandledRejection");
-});
 process.on("SIGINT", () => gracefulShutdown("SIGINT"));
 process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
-
-logger.info("Starting workers...");
+process.on("uncaughtException", (err) => {
+  logger.error(err);
+  gracefulShutdown("uncaughtException");
+});
+process.on("unhandledRejection", (err) => {
+  logger.error(err);
+  gracefulShutdown("unhandledRejection");
+});

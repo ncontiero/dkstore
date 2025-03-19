@@ -1,8 +1,8 @@
 import { prisma } from "@dkstore/db";
 import { renderChangeEmail } from "@dkstore/email/change-email";
 import { logger } from "@dkstore/utils";
+import { env } from "@/env";
 import { sendMail } from "@/lib/nodemailer";
-import { env } from "../env";
 
 interface ChangeEmailProps {
   fullName: string;

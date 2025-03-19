@@ -21,7 +21,7 @@
       "dependsOn": ["^lint:fix"]
     },
     "dev": {
-      "inputs": ["$TURBO_DEFAULT$", ".env"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "cache": false,
       "persistent": true
     },
