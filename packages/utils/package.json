@@ -1,0 +1,40 @@
+{
+  "name": "@dkstore/utils",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Shared utilities for DkStore.",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rslib build",
+    "dev": "rslib build --watch",
+    "clean": "git clean -xdf .turbo dist node_modules",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "colorette": "^2.0.20"
+  },
+  "devDependencies": {
+    "@dkshs/eslint-config": "4.5.0",
+    "@dkstore/tsconfig": "workspace:*",
+    "@rslib/core": "^0.5.4",
+    "@types/node": "^22.13.10",
+    "eslint": "^9.22.0",
+    "typescript": "^5.8.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
