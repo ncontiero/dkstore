@@ -14,13 +14,11 @@
       "types": "./dist/utils/index.d.ts",
       "import": "./dist/utils/index.js"
     },
-    "./tailwind.config": "./tailwind.config.ts",
-    "./globals.css": "./src/globals.css"
+    "./tailwind.config": "./dist/tailwind.config.ts",
+    "./globals.css": "./dist/globals.css"
   },
   "files": [
-    "dist",
-    "src/globals.css",
-    "tailwind.config.ts"
+    "dist"
   ],
   "scripts": {
     "dev": "rslib build --watch",

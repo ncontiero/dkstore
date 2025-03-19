@@ -9,6 +9,18 @@ export default defineConfig({
   },
   output: {
     target: "web",
+    copy: {
+      patterns: [
+        {
+          from: "./src/globals.css",
+          to: "./globals.css",
+        },
+        {
+          from: "./tailwind.config.ts",
+          to: "./tailwind.config.ts",
+        },
+      ],
+    },
   },
   lib: [
     {
