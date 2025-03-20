@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "Environment variables for DkStore.",
+  "sideEffects": false,
   "exports": {
     "./*": {
       "types": "./dist/*.d.ts",

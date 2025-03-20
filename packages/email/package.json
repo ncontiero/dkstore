@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "Emails for DKStore.",
+  "sideEffects": false,
   "exports": {
     "./*": {
       "types": "./dist/emails/*.d.ts",

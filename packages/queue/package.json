@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "Queue package for DkStore.",
+  "sideEffects": false,
   "exports": {
     "./configs": {
       "types": "./dist/configs.d.ts",
