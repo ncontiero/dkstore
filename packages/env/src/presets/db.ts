@@ -1,6 +1,5 @@
 import { createEnv } from "@t3-oss/env-core";
 import { z } from "zod";
-import { baseEnv } from "./base";
 
 export const dbEnvSchema = z.object({
   DATABASE_URL: z.string().url(),
@@ -14,5 +13,4 @@ export const dbEnv = () =>
   createEnv({
     server: dbEnvSchema.shape,
     runtimeEnv: dbRuntime,
-    extends: [baseEnv()],
   });

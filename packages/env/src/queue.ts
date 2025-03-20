@@ -1,7 +1,7 @@
 import { createEnv } from "@t3-oss/env-core";
 import { z } from "zod";
 import { baseEnv } from "./base";
-import { redisEnv } from "./presets";
+import { redisEnv } from "./presets/redis";
 
 export const queueEnvSchema = z.object({});
 

@@ -10,9 +10,9 @@
       "types": "./dist/*.d.ts",
       "import": "./dist/*.js"
     },
-    "./presets": {
-      "types": "./dist/presets/index.d.ts",
-      "import": "./dist/presets/index.js"
+    "./presets/*": {
+      "types": "./dist/presets/*.d.ts",
+      "import": "./dist/presets/*.js"
     }
   },
   "files": [
