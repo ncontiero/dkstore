@@ -1,9 +1,9 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env"],
-  "envMode": "loose",
   "tasks": {
     "build": {
+      "env": ["DATABASE_URL", "JWT_SECRET", "SITE_NAME", "SITE_LOCALE", "SITE_BASEURL"],
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "next-env.d.ts"]
@@ -30,10 +30,12 @@
       "cache": false
     },
     "db:migrate": {
+      "env": ["DATABASE_URL"],
       "cache": false,
       "persistent": true
     },
     "db:deploy": {
+      "env": ["DATABASE_URL"],
       "cache": false
     }
   }
