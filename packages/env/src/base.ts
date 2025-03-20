@@ -1,6 +1,5 @@
 import { createEnv } from "@t3-oss/env-core";
 import { z } from "zod";
-import { getAppUrl } from "./utils/url";
 
 export const baseEnvSchema = z.object({
   NODE_ENV: z
@@ -17,7 +16,7 @@ export const baseEnvRuntime = {
 
   SITE_NAME: process.env.SITE_NAME,
   SITE_LOCALE: process.env.SITE_LOCALE,
-  SITE_BASEURL: getAppUrl(),
+  SITE_BASEURL: process.env.SITE_BASEURL,
 };
 
 export const baseEnv = () =>
