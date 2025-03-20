@@ -47,6 +47,9 @@ importers:
       '@bull-board/ui':
         specifier: ^6.7.10
         version: 6.7.10
+      '@dkstore/env':
+        specifier: workspace:*
+        version: link:../../packages/env
       '@dkstore/queue':
         specifier: workspace:*
         version: link:../../packages/queue
