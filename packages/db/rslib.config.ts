@@ -15,6 +15,7 @@ export default defineConfig({
         },
       ],
     },
+    minify: process.env.NODE_ENV === "production",
   },
   lib: [
     {

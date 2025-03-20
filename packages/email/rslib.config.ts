@@ -7,6 +7,9 @@ export default defineConfig({
       index: "./src/**",
     },
   },
+  output: {
+    minify: process.env.NODE_ENV === "production",
+  },
   lib: [
     {
       format: "esm",

@@ -21,6 +21,10 @@ export default defineConfig({
         },
       ],
     },
+    minify: {
+      js: process.env.NODE_ENV === "production",
+      css: false,
+    },
   },
   lib: [
     {
