@@ -7,6 +7,9 @@
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "next-env.d.ts"]
     },
+    "start": {
+      "cache": false
+    },
     "clean": {
       "dependsOn": ["^clean"],
       "cache": false
