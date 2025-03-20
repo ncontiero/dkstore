@@ -6,11 +6,7 @@
   "description": "Worker for DkStore.",
   "scripts": {
     "build": "rslib build",
-    "dev:start": "pm2 start ecosystem.config.cjs --watch --env development && pm2 logs worker",
-    "dev": "concurrently --kill-others --names \"build,logs\" -c \"blue,yellow\" \"rslib build --watch\" \"pnpm dev:start\"",
-    "postdev": "pnpm pm2:down",
-    "start": "pm2-runtime start ecosystem.config.cjs --env production",
-    "pm2:down": "pm2 delete all",
+    "dev": "rslib build --watch",
     "clean": "git clean -xdf .turbo dist node_modules",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -22,8 +18,7 @@
     "@dkstore/env": "workspace:*",
     "@dkstore/queue": "workspace:*",
     "@dkstore/utils": "workspace:*",
-    "nodemailer": "^6.10.0",
-    "pm2": "^6.0.5"
+    "nodemailer": "^6.10.0"
   },
   "devDependencies": {
     "@dkshs/eslint-config": "4.5.2",
@@ -31,7 +26,6 @@
     "@rslib/core": "^0.5.5",
     "@types/node": "^22.13.10",
     "@types/nodemailer": "^6.4.17",
-    "concurrently": "^9.1.2",
     "eslint": "^9.22.0",
     "typescript": "^5.8.2"
   },

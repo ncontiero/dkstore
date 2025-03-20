@@ -6,11 +6,7 @@
   "description": "Queue dashboard for DKStore.",
   "scripts": {
     "build": "rslib build",
-    "dev:start": "pm2 start ecosystem.config.cjs --watch --env development && pm2 logs queue-dashboard",
-    "dev": "concurrently --kill-others --names \"build,logs\" -c \"blue,yellow\" \"rslib build --watch\" \"pnpm dev:start\"",
-    "postdev": "pnpm pm2:down",
-    "start": "pm2-runtime start ecosystem.config.cjs --env production",
-    "pm2:down": "pm2 delete all",
+    "dev": "rslib build --watch",
     "clean": "git clean -xdf .turbo dist node_modules",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -22,15 +18,13 @@
     "@bull-board/ui": "^6.7.10",
     "@dkstore/env": "workspace:*",
     "@dkstore/queue": "workspace:*",
-    "fastify": "^5.2.1",
-    "pm2": "^6.0.5"
+    "fastify": "^5.2.1"
   },
   "devDependencies": {
     "@dkshs/eslint-config": "4.5.2",
     "@dkstore/tsconfig": "workspace:*",
     "@rslib/core": "^0.5.5",
     "@types/node": "^22.13.10",
-    "concurrently": "^9.1.2",
     "eslint": "^9.22.0",
     "typescript": "^5.8.2"
   },
