@@ -47,7 +47,7 @@
     "tailwind-merge": "^2.6.0"
   },
   "devDependencies": {
-    "@dkshs/eslint-config": "4.5.0",
+    "@dkshs/eslint-config": "4.5.2",
     "@dkstore/tsconfig": "workspace:*",
     "@rsbuild/plugin-react": "^1.1.1",
     "@rslib/core": "^0.5.5",

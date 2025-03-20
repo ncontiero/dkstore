@@ -27,7 +27,7 @@
     "colorette": "^2.0.20"
   },
   "devDependencies": {
-    "@dkshs/eslint-config": "4.5.0",
+    "@dkshs/eslint-config": "4.5.2",
     "@dkstore/tsconfig": "workspace:*",
     "@rslib/core": "^0.5.5",
     "@types/node": "^22.13.10",
