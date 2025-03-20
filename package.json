@@ -17,6 +17,8 @@
   "scripts": {
     "build": "turbo build",
     "build:packages": "pnpm build --filter='./packages/*'",
+    "build:web": "pnpm build --filter=@dkstore/web",
+    "build:worker": "pnpm build --filter=@dkstore/worker",
     "dev": "turbo dev",
     "postdev": "pnpm -r pm2:down",
     "start:web": "turbo start --filter=@dkstore/web",
