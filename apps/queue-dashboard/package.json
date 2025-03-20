@@ -1,12 +1,12 @@
 {
-  "name": "@dkstore/worker",
+  "name": "@dkstore/queue-dashboard",
   "type": "module",
   "version": "0.1.0",
   "private": true,
-  "description": "Worker for DkStore.",
+  "description": "Queue dashboard for DKStore.",
   "scripts": {
     "build": "rslib build",
-    "dev:start": "pm2 start ecosystem.config.cjs --watch --env development && pm2 logs worker",
+    "dev:start": "pm2 start ecosystem.config.cjs --watch --env development && pm2 logs queue-dashboard",
     "dev": "concurrently --kill-others --names \"build,logs\" -c \"blue,yellow\" \"rslib build --watch\" \"pnpm dev:start\"",
     "postdev": "pnpm pm2:down",
     "start": "pm2-runtime start ecosystem.config.cjs --env production",
@@ -17,25 +17,18 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@dkstore/db": "workspace:*",
-    "@dkstore/email": "workspace:*",
-    "@dkstore/env": "workspace:*",
+    "@bull-board/api": "^6.7.10",
+    "@bull-board/fastify": "^6.7.10",
+    "@bull-board/ui": "^6.7.10",
     "@dkstore/queue": "workspace:*",
-    "@dkstore/utils": "workspace:*",
-    "nodemailer": "^6.10.0",
-    "pm2": "^6.0.5",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "fastify": "^5.2.1",
+    "pm2": "^6.0.5"
   },
   "devDependencies": {
     "@dkshs/eslint-config": "4.5.0",
     "@dkstore/tsconfig": "workspace:*",
-    "@rsbuild/plugin-react": "^1.1.1",
     "@rslib/core": "^0.5.5",
     "@types/node": "^22.13.10",
-    "@types/nodemailer": "^6.4.17",
-    "@types/react": "^19.0.12",
-    "@types/react-dom": "^19.0.4",
     "concurrently": "^9.1.2",
     "eslint": "^9.22.0",
     "typescript": "^5.8.2"

@@ -1,10 +1,11 @@
 module.exports = {
   apps: [
     {
-      name: "worker",
+      name: "queue-dashboard",
       cwd: "./dist",
       script: "./index.js",
-      instances: process.env.WORKER_INSTANCES || undefined,
+      instances: process.env.DASHBOARD_INSTANCES || undefined,
+      port: 3002,
       env_production: {
         NODE_ENV: "production",
       },
