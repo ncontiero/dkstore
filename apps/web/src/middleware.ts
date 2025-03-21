@@ -1,11 +1,14 @@
 import { createJWT, verifyJWT } from "@dkstore/utils/jwt";
+import { cookies } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
-import { sessionExpires } from "@/lib/auth/session";
+import { type SessionData, sessionExpires } from "@/lib/auth/session";
 import { authRoutes, protectedRoutes } from "./lib/auth/routes";
+import { getQueueDashboardURL } from "./utils/queue-dash-url";
 
 export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const { pathname, searchParams } = request.nextUrl;
   const signUrl = new URL("/auth/sign-in", request.url);
+  const redirectQuery = searchParams.get("redirect");
   const sessionCookie = request.cookies.get("session");
 
   const isProtectedRoute = protectedRoutes.some((route) =>
@@ -20,9 +23,10 @@ export async function middleware(request: NextRequest) {
 
   const res = NextResponse.next();
 
+  let parsedSession: SessionData | null = null;
   if (sessionCookie) {
     try {
-      const parsedSession = await verifyJWT(sessionCookie.value);
+      parsedSession = await verifyJWT<SessionData>(sessionCookie.value);
       const expires = sessionExpires();
 
       res.cookies.set({
@@ -47,6 +51,14 @@ export async function middleware(request: NextRequest) {
   }
 
   if (isAuthRoute && sessionCookie) {
+    if (redirectQuery && redirectQuery.includes("queue-dashboard")) {
+      if (searchParams.get("isNotAdmin") === "true") {
+        (await cookies()).delete("session");
+        signUrl.searchParams.set("redirect", redirectQuery);
+        return NextResponse.redirect(signUrl);
+      }
+      return NextResponse.redirect(await getQueueDashboardURL());
+    }
     return NextResponse.redirect(new URL("/", request.url));
   }
 

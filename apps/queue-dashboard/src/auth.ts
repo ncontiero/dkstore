@@ -1,8 +1,11 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { prisma } from "@dkstore/db";
 import { createJWT, verifyJWT } from "@dkstore/utils/jwt";
-import { logger } from "@dkstore/utils/logger";
 import { getSession, redirectUrl } from "./utils";
+
+type SessionProps = {
+  user: { id: string };
+};
 
 export function authRoutes(app: FastifyInstance) {
   app.get(
@@ -21,17 +24,14 @@ export function authRoutes(app: FastifyInstance) {
       const sessionCookie = getSession(req.headers.cookie);
 
       const token = (req.query as any).token;
-      logger.info(token);
 
       if (!sessionCookie && !token) {
         return reply.redirect(redirectUrl);
       }
 
-      let session: { user: { id: string } } | null = null;
+      let session: SessionProps | null = null;
       try {
-        session = await verifyJWT<{ user: { id: string } }>(
-          sessionCookie || token,
-        );
+        session = await verifyJWT<SessionProps>(sessionCookie || token);
       } catch {
         return reply.redirect(redirectUrl);
       }
@@ -46,8 +46,13 @@ export function authRoutes(app: FastifyInstance) {
         },
       });
 
-      if (!user || !user.isAdmin) {
+      if (!user) {
         return reply.redirect(redirectUrl);
+      }
+      if (!user.isAdmin) {
+        const isNotAdminUrl = new URL(redirectUrl);
+        isNotAdminUrl.searchParams.set("isNotAdmin", "true");
+        return reply.redirect(isNotAdminUrl.toString());
       }
 
       if (!sessionCookie) {
@@ -78,9 +83,9 @@ export async function authHook(req: FastifyRequest, reply: FastifyReply) {
     return reply.redirect(redirectUrl);
   }
 
-  let session: { user: { id: string } } | null = null;
+  let session: SessionProps | null = null;
   try {
-    session = await verifyJWT<{ user: { id: string } }>(sessionCookie);
+    session = await verifyJWT<SessionProps>(sessionCookie);
   } catch {
     return reply.redirect(redirectUrl);
   }
@@ -95,7 +100,12 @@ export async function authHook(req: FastifyRequest, reply: FastifyReply) {
     },
   });
 
-  if (!user || !user.isAdmin) {
+  if (!user) {
     return reply.redirect(redirectUrl);
+  }
+  if (!user.isAdmin) {
+    const isNotAdminUrl = new URL(redirectUrl);
+    isNotAdminUrl.searchParams.set("isNotAdmin", "true");
+    return reply.redirect(isNotAdminUrl.toString());
   }
 }
