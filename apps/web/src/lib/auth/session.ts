@@ -1,5 +1,5 @@
+import { createJWT, verifyJWT } from "@dkstore/utils/jwt";
 import { cookies } from "next/headers";
-import { createJWT, verifyJWT } from "@/utils/jwt";
 
 export type SessionData = {
   user: { id: string };

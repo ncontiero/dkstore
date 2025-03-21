@@ -1,5 +1,5 @@
+import { passwordSchema } from "@dkstore/utils/password";
 import { z } from "zod";
-import { passwordSchema } from "@/utils/password";
 import { emailSchema, nameSchema } from "../schema";
 
 export const signOutSchema = z.object({

@@ -5,7 +5,7 @@ import { renderWelcomeEmail } from "@dkstore/email/welcome";
 import { SEND_EMAIL_QUEUE_NAME } from "@dkstore/queue/email";
 import { type SendEmailSchema, sendEmailSchema } from "@dkstore/queue/schemas";
 import { createWorker } from "@dkstore/queue/utils";
-import { logger } from "@dkstore/utils";
+import { logger } from "@dkstore/utils/logger";
 import { env } from "@/env";
 import { sendMail } from "@/lib/nodemailer";
 import { changeEmail } from "./change-email";

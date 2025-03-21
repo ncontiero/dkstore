@@ -1,6 +1,6 @@
 import { prisma } from "@dkstore/db";
 import { renderVerifyEmail } from "@dkstore/email/verify-email";
-import { logger } from "@dkstore/utils";
+import { logger } from "@dkstore/utils/logger";
 import { env } from "@/env";
 import { sendMail } from "@/lib/nodemailer";
 

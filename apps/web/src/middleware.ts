@@ -1,6 +1,6 @@
+import { createJWT, verifyJWT } from "@dkstore/utils/jwt";
 import { type NextRequest, NextResponse } from "next/server";
 import { sessionExpires } from "@/lib/auth/session";
-import { createJWT, verifyJWT } from "@/utils/jwt";
 import { authRoutes, protectedRoutes } from "./lib/auth/routes";
 
 export async function middleware(request: NextRequest) {

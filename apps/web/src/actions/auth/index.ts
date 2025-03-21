@@ -2,11 +2,11 @@
 
 import { prisma } from "@dkstore/db";
 import { sendEmailQueue } from "@dkstore/queue/email";
+import { comparePasswords, hashPassword } from "@dkstore/utils/password";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { setSession } from "@/lib/auth/session";
 import { actionClient } from "@/lib/safe-action";
-import { comparePasswords, hashPassword } from "@/utils/password";
 import { sendEmailVerificationAction } from "../account";
 import {
   forgotPasswordSchema,

@@ -1,5 +1,6 @@
 import { createEnv } from "@t3-oss/env-core";
 import { z } from "zod";
+import { jwtEnv } from "./presets/jwt";
 import { queueEnv } from "./queue";
 
 export const queueDashboardEnvSchema = z.object({
@@ -14,5 +15,5 @@ export const queueDashboardEnv = () =>
   createEnv({
     server: queueDashboardEnvSchema.shape,
     runtimeEnv: queueDashboardRuntime,
-    extends: [queueEnv()],
+    extends: [queueEnv(), jwtEnv()],
   });

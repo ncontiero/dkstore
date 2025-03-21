@@ -1,4 +1,4 @@
-import { logger } from "@dkstore/utils";
+import { logger } from "@dkstore/utils/logger";
 import { sendEmailWorker } from "./workers";
 
 const gracefulShutdown = async (signal: string) => {

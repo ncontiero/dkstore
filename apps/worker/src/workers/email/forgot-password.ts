@@ -1,6 +1,6 @@
 import { prisma } from "@dkstore/db";
 import { renderResetPasswordEmail } from "@dkstore/email/reset-password";
-import { logger } from "@dkstore/utils";
+import { logger } from "@dkstore/utils/logger";
 import { sendMail } from "@/lib/nodemailer";
 
 interface ForgotPassword {
