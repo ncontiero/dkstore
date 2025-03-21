@@ -3,7 +3,14 @@
   "globalDependencies": ["**/.env"],
   "tasks": {
     "build": {
-      "env": ["DATABASE_URL", "JWT_SECRET", "SITE_NAME", "SITE_LOCALE", "SITE_BASEURL"],
+      "env": [
+        "DATABASE_URL",
+        "JWT_SECRET",
+        "QUEUE_DASHBOARD_BASEURL",
+        "SITE_NAME",
+        "SITE_LOCALE",
+        "SITE_BASEURL"
+      ],
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "next-env.d.ts"]
