@@ -57,12 +57,18 @@ importers:
       '@bull-board/ui':
         specifier: ^6.7.10
         version: 6.7.10
+      '@dkstore/db':
+        specifier: workspace:*
+        version: link:../../packages/db
       '@dkstore/env':
         specifier: workspace:*
         version: link:../../packages/env
       '@dkstore/queue':
         specifier: workspace:*
         version: link:../../packages/queue
+      '@dkstore/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
       fastify:
         specifier: ^5.2.1
         version: 5.2.1
