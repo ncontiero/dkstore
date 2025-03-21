@@ -66,7 +66,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
               toastClassName="bg-background text-foreground"
             />
             <Header />
-            <div className="sm:container">{children}</div>
+            <div className="md:container">{children}</div>
           </UserProvider>
         </ThemeProvider>
       </body>

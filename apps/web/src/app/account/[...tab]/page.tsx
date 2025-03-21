@@ -18,7 +18,7 @@ type PageProps = {
 
 const tabs = [
   {
-    name: "Your account details",
+    name: "Account details",
     value: "data",
     description: "Data that represents you in the store.",
     icon: User,
@@ -83,14 +83,14 @@ export default async function AccountPage({ params }: PageProps) {
       <Separator className="mt-3 md:mt-6" />
       <Suspense fallback={<div>Loading...</div>}>
         <AccountTabsRoot defaultTab={defaultTab} tabParam={tabParam}>
-          <ScrollArea className="w-full pb-2 md:w-1/4">
+          <ScrollArea className="w-auto pb-2 md:min-w-fit mdlg:w-1/4">
             <TabsList className="w-full gap-1 bg-transparent p-0">
               {tabs.map((tab) => (
                 <TabsTrigger
                   key={tab.value}
                   value={tab.value}
                   asChild
-                  className="duration-100 hover:bg-secondary/80 data-[state=active]:bg-secondary data-[state=active]:hover:bg-secondary/80"
+                  className="text-nowrap duration-100 hover:bg-secondary/80 data-[state=active]:bg-secondary data-[state=active]:hover:bg-secondary/80"
                 >
                   <Link href={`/account/${tab.value}`}>
                     <tab.icon className="mr-2 size-4" />
