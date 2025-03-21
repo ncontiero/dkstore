@@ -12,14 +12,14 @@ import {
   ShoppingBasket,
   User,
 } from "lucide-react";
-import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AccountTabsRoot } from "@/components/Account";
-import { env } from "@/env";
 import { getUser } from "@/lib/auth/user";
+import { getQueueDashboardURL } from "@/utils/queue-dash-url";
 import { AccountDetails } from "./TabsContent/AccountDetails";
 import { AccountSecurity } from "./TabsContent/AccountSecurity";
+import { Admin } from "./TabsContent/Admin";
 
 type PageProps = {
   readonly params: Promise<{ tab: string[] }>;
@@ -69,7 +69,7 @@ const tabs = [
     description: "Admin area for the store.",
     value: "admin",
     icon: ShieldUser,
-    content: (user: UserProps) => <AccountDetails user={user} />,
+    content: () => <Admin />,
   },
 ];
 
@@ -102,12 +102,7 @@ export default async function AccountPage({ params, searchParams }: PageProps) {
   }
 
   if (redirectSearch && redirectSearch === "queue-dashboard") {
-    const sessionCookie = (await cookies()).get("session");
-
-    const dashboardUrl = new URL("/auth/sign-in", env.QUEUE_DASHBOARD_BASEURL);
-    dashboardUrl.searchParams.set("token", sessionCookie!.value);
-
-    redirect(dashboardUrl.toString());
+    redirect(await getQueueDashboardURL());
   }
 
   return (
