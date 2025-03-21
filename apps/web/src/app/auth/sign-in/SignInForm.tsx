@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { Button } from "@dkstore/ui/button";
@@ -31,6 +32,12 @@ export function SignInForm() {
   function onSubmit(data: SignInSchema) {
     signIn.execute({ ...data, redirectTo });
   }
+
+  useEffect(() => {
+    if (redirectTo?.includes("redirect=queue-dashboard")) {
+      toast.error("Log in to your admin account to access this page.");
+    }
+  }, [redirectTo]);
 
   return (
     <BaseAuthFormContainer redirectTo={redirectTo}>

@@ -4,16 +4,28 @@ import { Suspense } from "react";
 import { ScrollArea, ScrollBar } from "@dkstore/ui/scroll-area";
 import { Separator } from "@dkstore/ui/separator";
 import { TabsContent, TabsList, TabsTrigger } from "@dkstore/ui/tabs";
-import { BookHeart, Lock, MapPin, ShoppingBasket, User } from "lucide-react";
+import {
+  BookHeart,
+  Lock,
+  MapPin,
+  ShieldUser,
+  ShoppingBasket,
+  User,
+} from "lucide-react";
+import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AccountTabsRoot } from "@/components/Account";
+import { env } from "@/env";
 import { getUser } from "@/lib/auth/user";
 import { AccountDetails } from "./TabsContent/AccountDetails";
 import { AccountSecurity } from "./TabsContent/AccountSecurity";
 
 type PageProps = {
   readonly params: Promise<{ tab: string[] }>;
+  readonly searchParams: Promise<{
+    [key: string]: string | string[] | undefined;
+  }>;
 };
 
 const tabs = [
@@ -52,6 +64,13 @@ const tabs = [
     icon: BookHeart,
     content: (user: UserProps) => <AccountDetails user={user} />,
   },
+  {
+    name: "Admin",
+    description: "Admin area for the store.",
+    value: "admin",
+    icon: ShieldUser,
+    content: (user: UserProps) => <AccountDetails user={user} />,
+  },
 ];
 
 export async function generateMetadata({
@@ -65,7 +84,8 @@ export async function generateMetadata({
   };
 }
 
-export default async function AccountPage({ params }: PageProps) {
+export default async function AccountPage({ params, searchParams }: PageProps) {
+  const redirectSearch = (await searchParams).redirect;
   const tabsParam = (await params).tab;
   const tabParam = tabsParam[0];
   const defaultTab = tabs[0]!.value;
@@ -77,6 +97,19 @@ export default async function AccountPage({ params }: PageProps) {
   const user = await getUser({});
   if (!user) return null;
 
+  if (tabParam === "admin" && !user.isAdmin) {
+    redirect(`/account/${defaultTab}`);
+  }
+
+  if (redirectSearch && redirectSearch === "queue-dashboard") {
+    const sessionCookie = (await cookies()).get("session");
+
+    const dashboardUrl = new URL("/auth/sign-in", env.QUEUE_DASHBOARD_BASEURL);
+    dashboardUrl.searchParams.set("token", sessionCookie!.value);
+
+    redirect(dashboardUrl.toString());
+  }
+
   return (
     <main className="mx-auto my-10 flex max-w-5xl flex-col gap-4 px-2 md:px-0">
       <h1 className="text-3xl font-bold">Account Settings</h1>
@@ -85,19 +118,21 @@ export default async function AccountPage({ params }: PageProps) {
         <AccountTabsRoot defaultTab={defaultTab} tabParam={tabParam}>
           <ScrollArea className="w-auto pb-2 md:min-w-fit mdlg:w-1/4">
             <TabsList className="w-full gap-1 bg-transparent p-0">
-              {tabs.map((tab) => (
-                <TabsTrigger
-                  key={tab.value}
-                  value={tab.value}
-                  asChild
-                  className="text-nowrap duration-100 hover:bg-secondary/80 data-[state=active]:bg-secondary data-[state=active]:hover:bg-secondary/80"
-                >
-                  <Link href={`/account/${tab.value}`}>
-                    <tab.icon className="mr-2 size-4" />
-                    {tab.name}
-                  </Link>
-                </TabsTrigger>
-              ))}
+              {tabs.map((tab) =>
+                tab.value === "admin" && !user.isAdmin ? null : (
+                  <TabsTrigger
+                    key={tab.value}
+                    value={tab.value}
+                    asChild
+                    className="text-nowrap duration-100 hover:bg-secondary/80 data-[state=active]:bg-secondary data-[state=active]:hover:bg-secondary/80"
+                  >
+                    <Link href={`/account/${tab.value}`}>
+                      <tab.icon className="mr-2 size-4" />
+                      {tab.name}
+                    </Link>
+                  </TabsTrigger>
+                ),
+              )}
             </TabsList>
             <ScrollBar orientation="horizontal" />
           </ScrollArea>
