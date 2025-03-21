@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const defaultOpts = {
   script: "./index.js",
   env_production: {
