@@ -349,8 +349,8 @@ importers:
         specifier: workspace:*
         version: link:../env
       bullmq:
-        specifier: ^5.44.0
-        version: 5.44.0
+        specifier: ^5.44.1
+        version: 5.44.1
       zod:
         specifier: ^3.24.2
         version: 3.24.2
@@ -2500,8 +2500,8 @@ packages:
     resolution: {integrity: sha512-p1n8zyCkt1BVrKNFymOHjcDSAl7oq/gUvfgULv2EblgpPVQlQr9yHnWjg9IJ2MhfwPqiYqMMrr01OY7yQoK2yA==}
     engines: {node: '>=18.20'}
 
-  bullmq@5.44.0:
-    resolution: {integrity: sha512-OnEtkuXyrUx2Jm5BpH92+ttrobblBdCbkhOe3OoR0hxZuAilI3mPWlwELslhfImRpDv8rK+C/0/VK7I8f3xIig==}
+  bullmq@5.44.1:
+    resolution: {integrity: sha512-NEWQIixKw5QdXmSnhQU25A336N10DvxuDcmiVXQyuwSx1lrzfNIdQA3BNADfpAUwHtuJkJImHVLCM3/KEr9nWA==}
 
   busboy@1.6.0:
     resolution: {integrity: sha512-8SFQbg/0hQ9xy3UNTB0YEnsNBbWfhf7RtnzpL7TkBiTBRfrQ9Fxcnz7VJsleJpyp6rVLvXiuORqjlHi5q+PYuA==}
@@ -3053,8 +3053,8 @@ packages:
     peerDependencies:
       eslint: '*'
 
-  eslint-plugin-command@3.1.0:
-    resolution: {integrity: sha512-KLgxB8NMQ0iL7iwehyeqWVE7MaqRPwLTGW4d2CXYOj5tt4j6yU/hiNxQ/35FLq4SnMhv+tpE6FCvYbV4VS+BLw==}
+  eslint-plugin-command@3.2.0:
+    resolution: {integrity: sha512-PSDOB9k7Wd57pp4HD/l3C1D93pKX8/wQo0kWDI4q6/UpgrfMTyNsavklipgiZqbXl1+VBABY1buCcQE5LDpg5g==}
     peerDependencies:
       eslint: '*'
 
@@ -5814,7 +5814,7 @@ snapshots:
       eslint-config-flat-gitignore: 2.1.0(eslint@9.22.0(jiti@2.4.2))
       eslint-merge-processors: 2.0.0(eslint@9.22.0(jiti@2.4.2))
       eslint-plugin-antfu: 3.1.1(eslint@9.22.0(jiti@2.4.2))
-      eslint-plugin-command: 3.1.0(eslint@9.22.0(jiti@2.4.2))
+      eslint-plugin-command: 3.2.0(eslint@9.22.0(jiti@2.4.2))
       eslint-plugin-de-morgan: 1.2.1(eslint@9.22.0(jiti@2.4.2))
       eslint-plugin-import-x: 4.9.1(eslint@9.22.0(jiti@2.4.2))(typescript@5.8.2)
       eslint-plugin-jsdoc: 50.6.8(eslint@9.22.0(jiti@2.4.2))
@@ -7426,7 +7426,7 @@ snapshots:
 
   builtin-modules@4.0.0: {}
 
-  bullmq@5.44.0:
+  bullmq@5.44.1:
     dependencies:
       cron-parser: 4.9.0
       ioredis: 5.6.0
@@ -8064,7 +8064,7 @@ snapshots:
     dependencies:
       eslint: 9.22.0(jiti@2.4.2)
 
-  eslint-plugin-command@3.1.0(eslint@9.22.0(jiti@2.4.2)):
+  eslint-plugin-command@3.2.0(eslint@9.22.0(jiti@2.4.2)):
     dependencies:
       '@es-joy/jsdoccomment': 0.50.0
       eslint: 9.22.0(jiti@2.4.2)
