@@ -7,6 +7,8 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { setSession } from "@/lib/auth/session";
 import { actionClient } from "@/lib/safe-action";
+import { decrypt } from "@/utils/cryptography";
+import { isTotpValid } from "@/utils/totp";
 import { sendEmailVerificationAction } from "../account";
 import {
   forgotPasswordSchema,
@@ -19,7 +21,7 @@ import {
 export const signInAction = actionClient
   .schema(signInSchema)
   .action(async ({ parsedInput: data }) => {
-    const { email, password, redirectTo } = data;
+    const { email, password, otpCode, redirectTo } = data;
 
     const user = await prisma.user.findUnique({
       where: { email },
@@ -33,6 +35,28 @@ export const signInAction = actionClient
     const passwordIsValid = await comparePasswords(password, user.passwordHash);
     if (!passwordIsValid) {
       throw new Error("Invalid credentials");
+    }
+
+    if (user.is2FAEnabled && user.twoFactorSecret && user.twoFactorSecretIV) {
+      if (!otpCode) {
+        return {
+          twoFactor: true,
+        };
+      }
+
+      const decryptedSecret = decrypt(
+        Buffer.from(user.twoFactorSecret),
+        Buffer.from(user.twoFactorSecretIV),
+      );
+      if (!decryptedSecret) {
+        throw new Error("Error decrypting secret. Please try again later");
+      }
+
+      const isValid = isTotpValid(decryptedSecret, otpCode);
+
+      if (!isValid) {
+        throw new Error("Invalid OTP code");
+      }
     }
 
     await setSession(user.id);

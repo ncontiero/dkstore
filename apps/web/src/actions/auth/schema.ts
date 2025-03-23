@@ -13,6 +13,10 @@ export const signInSchema = z
   .object({
     email: emailSchema,
     password: z.string().min(1, "Password is required"),
+    otpCode: z
+      .string()
+      .min(6, "OTP code must be at least 6 characters long")
+      .optional(),
   })
   .extend(signOutSchema.shape);
 

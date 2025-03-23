@@ -29,3 +29,9 @@ export const deleteUserSchema = z.object({
   confirmPassword: z.string().min(1, "Password is required"),
 });
 export type DeleteUserSchema = z.infer<typeof deleteUserSchema>;
+
+export const addOrEdit2FASchema = z.object({
+  code: z.string().min(6, "Your one-time password must be 6 characters."),
+  secret: z.string().min(1, "Secret is required"),
+});
+export type AddOrEdit2FASchema = z.infer<typeof addOrEdit2FASchema>;

@@ -9,14 +9,17 @@ datasource db {
 }
 
 model User {
-  id              String   @id @default(uuid())
-  name            String
-  email           String   @unique
-  isEmailVerified Boolean  @default(false) @map("is_email_verified")
-  isAdmin         Boolean  @default(false) @map("is_admin")
-  passwordHash    String   @map("password_hash")
-  createdAt       DateTime @default(now()) @map("created_at")
-  updatedAt       DateTime @updatedAt @map("updated_at")
+  id                String   @id @default(uuid())
+  name              String
+  email             String   @unique
+  isEmailVerified   Boolean  @default(false) @map("is_email_verified")
+  isAdmin           Boolean  @default(false) @map("is_admin")
+  passwordHash      String   @map("password_hash")
+  is2FAEnabled      Boolean  @default(false) @map("is_2fa_enabled")
+  twoFactorSecret   Bytes?   @map("two_factor_secret")
+  twoFactorSecretIV Bytes?   @map("two_factor_secret_iv")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
 
   tokens Token[]
 

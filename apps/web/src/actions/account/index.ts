@@ -5,8 +5,11 @@ import { sendEmailQueue } from "@dkstore/queue/email";
 import { comparePasswords, hashPassword } from "@dkstore/utils/password";
 import { redirect } from "next/navigation";
 import { authActionClient } from "@/lib/safe-action";
+import { encrypt } from "@/utils/cryptography";
+import { isTotpValid } from "@/utils/totp";
 import { signOutAction } from "../auth";
 import {
+  addOrEdit2FASchema,
   deleteUserSchema,
   updateUserEmailSchema,
   updateUserNameSchema,
@@ -158,4 +161,29 @@ export const deleteUserAction = authActionClient
     });
 
     await signOutAction({});
+  });
+
+export const addOrEdit2FAAction = authActionClient
+  .schema(addOrEdit2FASchema)
+  .action(async ({ clientInput: { code, secret }, ctx: { user } }) => {
+    const isValid = isTotpValid(secret, code);
+
+    if (!isValid) {
+      throw new Error("Invalid code");
+    }
+
+    const encryptedSecret = encrypt(secret);
+    if (!encryptedSecret) {
+      throw new Error("Error encrypting secret. Please try again later");
+    }
+    const { encrypted, ivAndAuthTag } = encryptedSecret;
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        is2FAEnabled: true,
+        twoFactorSecret: encrypted,
+        twoFactorSecretIV: ivAndAuthTag,
+      },
+    });
   });
