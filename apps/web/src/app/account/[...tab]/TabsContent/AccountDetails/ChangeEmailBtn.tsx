@@ -2,7 +2,8 @@
 
 import { useRef } from "react";
 import { toast } from "react-toastify";
-import { AlertDialogAction, AlertDialogCancel } from "@dkstore/ui/alert-dialog";
+import { Button } from "@dkstore/ui/button";
+import { DialogClose } from "@dkstore/ui/dialog";
 import { Loader2 } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { sendEmailToChangeEmailAction } from "@/actions/account";
@@ -22,26 +23,20 @@ export function ChangeEmailBtn() {
 
   return (
     <>
-      <AlertDialogCancel ref={dialogCloseRef}>Cancel</AlertDialogCancel>
-      <AlertDialogAction
+      <DialogClose ref={dialogCloseRef} asChild>
+        <Button variant="ghost">Cancel</Button>
+      </DialogClose>
+      <Button
         type="button"
-        onClick={(e) => {
-          e.preventDefault();
-          changeEmail.execute();
-        }}
-        disabled={
-          changeEmail.status === "executing" ||
-          changeEmail.status === "hasSucceeded"
-        }
+        onClick={() => changeEmail.execute()}
+        disabled={changeEmail.status === "executing"}
       >
         {changeEmail.status === "executing" ? (
           <Loader2 className="animate-spin" />
-        ) : changeEmail.status === "hasSucceeded" ? (
-          "Email sent"
         ) : (
           "Change email"
         )}
-      </AlertDialogAction>
+      </Button>
     </>
   );
 }

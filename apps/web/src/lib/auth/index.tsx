@@ -7,6 +7,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useState,
 } from "react";
 import { toast } from "react-toastify";
 import { useAction } from "next-safe-action/hooks";
@@ -16,6 +17,8 @@ import { authRoutes, protectedRoutes } from "./routes";
 
 type UserContextType = {
   user: User | null;
+  lastOtpVerifiedAt?: Date;
+  setLastOtpVerifiedAt: (date: Date) => void;
 };
 
 const UserContext = createContext<UserContextType | null>(null);
@@ -32,8 +35,15 @@ export function UserProvider({
   children,
   user,
 }: PropsWithChildren<{ readonly user: UserContextType["user"] }>) {
-  const props = useMemo(() => ({ user }), [user]);
+  const [lastOtpVerifiedAt, setLastOtpVerifiedAt] = useState<Date | undefined>(
+    undefined,
+  );
+  const props = useMemo(
+    () => ({ user, lastOtpVerifiedAt, setLastOtpVerifiedAt }),
+    [lastOtpVerifiedAt, user],
+  );
   const pathname = usePathname();
+
   const signOut = useAction(signOutAction, {
     onSuccess: () => {
       toast.warn("You have been signed out");

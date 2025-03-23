@@ -35,3 +35,8 @@ export const addOrEdit2FASchema = z.object({
   secret: z.string().min(1, "Secret is required"),
 });
 export type AddOrEdit2FASchema = z.infer<typeof addOrEdit2FASchema>;
+
+export const verify2FASchema = z.object({
+  otpCode: z.string().min(6, "Your one-time password must be 6 characters."),
+});
+export type Verify2FASchema = z.infer<typeof verify2FASchema>;

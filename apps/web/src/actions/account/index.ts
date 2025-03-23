@@ -5,7 +5,7 @@ import { sendEmailQueue } from "@dkstore/queue/email";
 import { comparePasswords, hashPassword } from "@dkstore/utils/password";
 import { redirect } from "next/navigation";
 import { authActionClient } from "@/lib/safe-action";
-import { encrypt } from "@/utils/cryptography";
+import { decrypt, encrypt } from "@/utils/cryptography";
 import { isTotpValid } from "@/utils/totp";
 import { signOutAction } from "../auth";
 import {
@@ -14,6 +14,7 @@ import {
   updateUserEmailSchema,
   updateUserNameSchema,
   updateUserPasswordSchema,
+  verify2FASchema,
 } from "./schema";
 
 export const sendEmailVerificationAction = authActionClient.action(
@@ -194,4 +195,28 @@ export const addOrEdit2FAAction = authActionClient
         is2FAEmail: { action: user.is2FAEnabled ? "edited" : "added" },
       });
     });
+  });
+
+export const verify2FAAction = authActionClient
+  .schema(verify2FASchema)
+
+  // eslint-disable-next-line require-await
+  .action(async ({ clientInput: { otpCode }, ctx: { user } }) => {
+    if (!user.twoFactorSecret || !user.twoFactorSecretIV) {
+      throw new Error("2FA not enabled");
+    }
+
+    const decryptedSecret = decrypt(
+      Buffer.from(user.twoFactorSecret),
+      Buffer.from(user.twoFactorSecretIV),
+    );
+    if (!decryptedSecret) {
+      throw new Error("Error decrypting secret. Please try again later");
+    }
+
+    const isValid = isTotpValid(decryptedSecret, otpCode);
+
+    if (!isValid) {
+      throw new Error("Invalid OTP code");
+    }
   });

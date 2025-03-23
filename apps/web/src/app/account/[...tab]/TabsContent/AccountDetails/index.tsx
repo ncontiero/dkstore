@@ -1,19 +1,11 @@
 import type { User } from "@/utils/types";
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@dkstore/ui/alert-dialog";
 import { Badge } from "@dkstore/ui/badge";
 import { Button } from "@dkstore/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogOverlay,
   DialogPortal,
@@ -30,6 +22,7 @@ import {
   AccountCardFooterDescription,
   AccountCardTitle,
 } from "@/components/Account";
+import { Confirm2FA } from "@/components/Confirm2FA";
 import { ChangeEmailBtn } from "./ChangeEmailBtn";
 import { DeleteUserForm } from "./forms/DeleteUserForm";
 import { UpdateUserNameForm } from "./forms/UpdateUserNameForm";
@@ -63,23 +56,29 @@ export function AccountDetails({ user }: { readonly user: User }) {
               : "Your email is not verified. Please verify your email address."}
           </AccountCardFooterDescription>
           {user.isEmailVerified ? (
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
+            <Dialog>
+              <DialogTrigger asChild>
                 <Button size="sm">Change email</Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Change email</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Are you sure you want to change your email address? You will
-                    receive an email with a link to change your email address.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <ChangeEmailBtn />
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+              </DialogTrigger>
+              <DialogPortal>
+                <DialogOverlay />
+                <Confirm2FA user={user}>
+                  <DialogHeader>
+                    <DialogTitle className="my-2 text-xl">
+                      Change email
+                    </DialogTitle>
+                    <DialogDescription className="text-base">
+                      Are you sure you want to change your email address? You
+                      will receive an email with a link to change your email
+                      address.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter className="mt-4">
+                    <ChangeEmailBtn />
+                  </DialogFooter>
+                </Confirm2FA>
+              </DialogPortal>
+            </Dialog>
           ) : (
             <VerifyEmailBtn />
           )}

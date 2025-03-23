@@ -22,6 +22,7 @@ import {
   AccountCardFooterDescription,
   AccountCardTitle,
 } from "@/components/Account";
+import { Confirm2FA } from "@/components/Confirm2FA";
 import { AddOrEdit2FA } from "./AddOrEdit2FA";
 import { UpdatePasswordForm } from "./forms/UpdatePasswordForm";
 
@@ -100,7 +101,7 @@ export function AccountSecurity({ user }: { readonly user: User }) {
             </DialogTrigger>
             <DialogPortal>
               <DialogOverlay />
-              <DialogContent>
+              <Confirm2FA user={user}>
                 <DialogHeader>
                   <DialogTitle className="my-2 text-xl">
                     {user.is2FAEnabled ? "Edit" : "Add"} two-factor
@@ -113,7 +114,7 @@ export function AccountSecurity({ user }: { readonly user: User }) {
                   </DialogDescription>
                 </DialogHeader>
                 <AddOrEdit2FA is2FAEnabled={user.is2FAEnabled} />
-              </DialogContent>
+              </Confirm2FA>
             </DialogPortal>
           </Dialog>
         </AccountCardFooter>
