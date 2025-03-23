@@ -17,8 +17,6 @@ import { authRoutes, protectedRoutes } from "./routes";
 
 type UserContextType = {
   user: User | null;
-  lastOtpVerifiedAt?: Date;
-  setLastOtpVerifiedAt: (date: Date) => void;
 };
 
 const UserContext = createContext<UserContextType | null>(null);
@@ -35,13 +33,7 @@ export function UserProvider({
   children,
   user,
 }: PropsWithChildren<{ readonly user: UserContextType["user"] }>) {
-  const [lastOtpVerifiedAt, setLastOtpVerifiedAt] = useState<Date | undefined>(
-    undefined,
-  );
-  const props = useMemo(
-    () => ({ user, lastOtpVerifiedAt, setLastOtpVerifiedAt }),
-    [lastOtpVerifiedAt, user],
-  );
+  const props = useMemo(() => ({ user }), [user]);
   const pathname = usePathname();
 
   const signOut = useAction(signOutAction, {

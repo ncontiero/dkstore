@@ -4,7 +4,8 @@ import { prisma } from "@dkstore/db";
 import { sendEmailQueue } from "@dkstore/queue/email";
 import { comparePasswords, hashPassword } from "@dkstore/utils/password";
 import { redirect } from "next/navigation";
-import { authActionClient } from "@/lib/safe-action";
+import { getSession, setSession } from "@/lib/auth/session";
+import { actionClient, authActionClient } from "@/lib/safe-action";
 import { decrypt, encrypt } from "@/utils/cryptography";
 import { isTotpValid } from "@/utils/totp";
 import { signOutAction } from "../auth";
@@ -200,7 +201,6 @@ export const addOrEdit2FAAction = authActionClient
 export const verify2FAAction = authActionClient
   .schema(verify2FASchema)
 
-  // eslint-disable-next-line require-await
   .action(async ({ clientInput: { otpCode }, ctx: { user } }) => {
     if (!user.twoFactorSecret || !user.twoFactorSecretIV) {
       throw new Error("2FA not enabled");
@@ -215,4 +215,10 @@ export const verify2FAAction = authActionClient
     if (!isValid) {
       throw new Error("Invalid OTP code");
     }
+
+    await setSession(user.id);
   });
+
+export const getSessionAction = actionClient.action(async () => {
+  return await getSession();
+});
