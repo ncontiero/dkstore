@@ -9,6 +9,7 @@ export const sendEmailSchema = z.object({
   isEmailChangedEmail: z.object({ newEmail: z.string().email() }).optional(),
   isPasswordChangeEmail: z.boolean().default(false).optional(),
   isPasswordResetEmail: z.boolean().default(false).optional(),
+  is2FAEmail: z.object({ action: z.enum(["added", "edited"]) }).optional(),
   isDeleteAccountEmail: z.boolean().default(false).optional(),
 });
 export type SendEmailSchema = z.infer<typeof sendEmailSchema>;

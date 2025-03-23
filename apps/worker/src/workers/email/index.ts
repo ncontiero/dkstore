@@ -1,6 +1,7 @@
 import { renderAccountDeletedEmail } from "@dkstore/email/deleted-account";
 import { renderEmailChangedEmail } from "@dkstore/email/email-changed";
 import { renderPasswordChangedEmail } from "@dkstore/email/password-changed";
+import { renderTwoFactorAuthChangedEmail } from "@dkstore/email/two-factor-auth-changed";
 import { renderWelcomeEmail } from "@dkstore/email/welcome";
 import { SEND_EMAIL_QUEUE_NAME } from "@dkstore/queue/email";
 import { type SendEmailSchema, sendEmailSchema } from "@dkstore/queue/schemas";
@@ -24,6 +25,7 @@ export const sendEmailWorker = createWorker<SendEmailSchema>(
       isEmailChangedEmail,
       isPasswordResetEmail,
       isPasswordChangeEmail,
+      is2FAEmail,
       isDeleteAccountEmail,
     } = sendEmailSchema.parse(data);
 
@@ -75,6 +77,20 @@ export const sendEmailWorker = createWorker<SendEmailSchema>(
 
     if (isPasswordResetEmail) {
       await forgotPassword({ fullName, email });
+      return;
+    }
+
+    if (is2FAEmail) {
+      await sendMail({
+        to: email,
+        subject: `Your two factor authentication has been ${is2FAEmail.action}`,
+        html: await renderTwoFactorAuthChangedEmail({
+          fullName,
+          action: is2FAEmail.action,
+        }),
+      });
+
+      logger.info(`Two factor authentication email sent to ${email}`);
       return;
     }
 

@@ -178,12 +178,20 @@ export const addOrEdit2FAAction = authActionClient
     }
     const { encrypted, ivAndAuthTag } = encryptedSecret;
 
-    await prisma.user.update({
-      where: { id: user.id },
-      data: {
-        is2FAEnabled: true,
-        twoFactorSecret: encrypted,
-        twoFactorSecretIV: ivAndAuthTag,
-      },
+    await prisma.$transaction(async (tx) => {
+      await tx.user.update({
+        where: { id: user.id },
+        data: {
+          is2FAEnabled: true,
+          twoFactorSecret: encrypted,
+          twoFactorSecretIV: ivAndAuthTag,
+        },
+      });
+
+      await sendEmailQueue.add("send-2fa-email", {
+        fullName: user.name,
+        email: user.email,
+        is2FAEmail: { action: user.is2FAEnabled ? "edited" : "added" },
+      });
     });
   });
