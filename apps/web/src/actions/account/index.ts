@@ -167,17 +167,17 @@ export const deleteUserAction = authActionClient
 export const addOrEdit2FAAction = authActionClient
   .schema(addOrEdit2FASchema)
   .action(async ({ clientInput: { code, secret }, ctx: { user } }) => {
-    const isValid = isTotpValid(secret, code);
-
-    if (!isValid) {
-      throw new Error("Invalid code");
-    }
-
     const encryptedSecret = encrypt(secret);
     if (!encryptedSecret) {
       throw new Error("Error encrypting secret. Please try again later");
     }
     const { encrypted, ivAndAuthTag } = encryptedSecret;
+
+    const isValid = isTotpValid(encrypted, ivAndAuthTag, code);
+
+    if (!isValid) {
+      throw new Error("Invalid code");
+    }
 
     await prisma.$transaction(async (tx) => {
       await tx.user.update({
@@ -206,15 +206,11 @@ export const verify2FAAction = authActionClient
       throw new Error("2FA not enabled");
     }
 
-    const decryptedSecret = decrypt(
-      Buffer.from(user.twoFactorSecret),
-      Buffer.from(user.twoFactorSecretIV),
+    const isValid = isTotpValid(
+      user.twoFactorSecret,
+      user.twoFactorSecretIV,
+      otpCode,
     );
-    if (!decryptedSecret) {
-      throw new Error("Error decrypting secret. Please try again later");
-    }
-
-    const isValid = isTotpValid(decryptedSecret, otpCode);
 
     if (!isValid) {
       throw new Error("Invalid OTP code");

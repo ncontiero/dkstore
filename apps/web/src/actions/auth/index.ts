@@ -44,15 +44,11 @@ export const signInAction = actionClient
         };
       }
 
-      const decryptedSecret = decrypt(
-        Buffer.from(user.twoFactorSecret),
-        Buffer.from(user.twoFactorSecretIV),
+      const isValid = isTotpValid(
+        user.twoFactorSecret,
+        user.twoFactorSecretIV,
+        otpCode,
       );
-      if (!decryptedSecret) {
-        throw new Error("Error decrypting secret. Please try again later");
-      }
-
-      const isValid = isTotpValid(decryptedSecret, otpCode);
 
       if (!isValid) {
         throw new Error("Invalid OTP code");
