@@ -11,8 +11,9 @@ import {
 import { toast } from "react-toastify";
 import { useAction } from "next-safe-action/hooks";
 import { usePathname } from "next/navigation";
+import { refreshSessionAction } from "@/actions/account";
 import { signOutAction } from "@/actions/auth";
-import { authRoutes, protectedRoutes } from "./routes";
+import { authRoutes } from "./routes";
 
 type SessionContextType = {
   session: SessionWhitUser | null;
@@ -37,25 +38,26 @@ export function SessionProvider({
 
   const signOut = useAction(signOutAction, {
     onSuccess: () => {
-      toast.warn("You have been signed out");
+      toast.warn("You have been signed out!");
     },
   });
 
-  const isProtectedRoute = useMemo(
-    () => protectedRoutes.some((route) => pathname.startsWith(route)),
-    [pathname],
-  );
   const isAuthRoute = useMemo(
     () => authRoutes.some((route) => pathname.startsWith(route)),
     [pathname],
   );
 
-  useEffect(() => {
-    if (isProtectedRoute && (!session || session.expires < new Date())) {
+  const refreshSession = useAction(refreshSessionAction, {
+    onError: () => {
       signOut.execute({ redirectTo: isAuthRoute ? "/" : pathname });
-    }
+    },
+  });
+
+  useEffect(() => {
+    if (session === null) return;
+    refreshSession.execute();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthRoute, isProtectedRoute, pathname, session]);
+  }, [pathname]);
 
   return (
     <SessionContext.Provider value={props}>{children}</SessionContext.Provider>

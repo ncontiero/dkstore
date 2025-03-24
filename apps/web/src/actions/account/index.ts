@@ -4,7 +4,7 @@ import { prisma } from "@dkstore/db";
 import { sendEmailQueue } from "@dkstore/queue/email";
 import { comparePasswords, hashPassword } from "@dkstore/utils/password";
 import { redirect } from "next/navigation";
-import { setSession } from "@/lib/auth/session";
+import { sessionExpires, setSession } from "@/lib/auth/session";
 import { authActionClient } from "@/lib/safe-action";
 import { encrypt } from "@/utils/cryptography";
 import { generateRecoveryCodes } from "@/utils/recoveryCodes";
@@ -19,6 +19,24 @@ import {
   updateUserPasswordSchema,
   verify2FASchema,
 } from "./schema";
+
+export const refreshSessionAction = authActionClient.action(
+  async ({ ctx: { session } }) => {
+    if (session.expires < new Date()) {
+      throw new Error("Session expired");
+    }
+
+    if (session.expires.getTime() - Date.now() < 1000 * 60 * 30) {
+      const newExpires = sessionExpires();
+      await prisma.session.update({
+        where: { id: session.id },
+        data: { expires: newExpires },
+      });
+
+      await setSession(session.id);
+    }
+  },
+);
 
 export const sendEmailVerificationAction = authActionClient.action(
   async ({ ctx: { session } }) => {
