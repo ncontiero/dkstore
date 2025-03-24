@@ -17,6 +17,7 @@ export const signInSchema = z
       .string()
       .min(6, "OTP code must be at least 6 characters long")
       .optional(),
+    recoveryCode: z.string().min(1, "Recovery code is required").optional(),
   })
   .extend(signOutSchema.shape);
 

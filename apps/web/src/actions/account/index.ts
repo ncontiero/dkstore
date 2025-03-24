@@ -6,12 +6,14 @@ import { comparePasswords, hashPassword } from "@dkstore/utils/password";
 import { redirect } from "next/navigation";
 import { getSession, setSession } from "@/lib/auth/session";
 import { actionClient, authActionClient } from "@/lib/safe-action";
-import { decrypt, encrypt } from "@/utils/cryptography";
+import { encrypt } from "@/utils/cryptography";
+import { generateRecoveryCodes } from "@/utils/recoveryCodes";
 import { isTotpValid } from "@/utils/totp";
 import { signOutAction } from "../auth";
 import {
   addOrEdit2FASchema,
   deleteUserSchema,
+  generateRecoveryCodesSchema,
   updateUserEmailSchema,
   updateUserNameSchema,
   updateUserPasswordSchema,
@@ -165,6 +167,28 @@ export const deleteUserAction = authActionClient
     await signOutAction({});
   });
 
+export const generateRecoveryCodesAction = actionClient
+  .schema(generateRecoveryCodesSchema)
+  .action(async ({ clientInput: { userId } }) => {
+    const recoveryCodes = generateRecoveryCodes();
+
+    await prisma.$transaction(async (tx) => {
+      await tx.recoveryCode.deleteMany({
+        where: { userId },
+      });
+
+      await tx.recoveryCode.createMany({
+        data: recoveryCodes.map(({ encryptedCode, encryptedCodeIV }) => ({
+          userId,
+          code: encryptedCode,
+          codeIV: encryptedCodeIV,
+        })),
+      });
+    });
+
+    return recoveryCodes.map(({ rawCode }) => rawCode);
+  });
+
 export const addOrEdit2FAAction = authActionClient
   .schema(addOrEdit2FASchema)
   .action(async ({ clientInput: { code, secret }, ctx: { user } }) => {
@@ -180,7 +204,21 @@ export const addOrEdit2FAAction = authActionClient
       throw new Error("Invalid code");
     }
 
+    const hasUserRecoveryCodes = await prisma.recoveryCode.findFirst({
+      where: { userId: user.id },
+    });
+
+    let recoveryCodes: string[] = [];
+
     await prisma.$transaction(async (tx) => {
+      recoveryCodes = hasUserRecoveryCodes
+        ? []
+        : (
+            await generateRecoveryCodesAction({
+              userId: user.id,
+            })
+          )?.data || [];
+
       await tx.user.update({
         where: { id: user.id },
         data: {
@@ -196,6 +234,10 @@ export const addOrEdit2FAAction = authActionClient
         is2FAEmail: { action: user.is2FAEnabled ? "edited" : "added" },
       });
     });
+
+    await setSession(user.id);
+
+    return recoveryCodes;
   });
 
 export const verify2FAAction = authActionClient

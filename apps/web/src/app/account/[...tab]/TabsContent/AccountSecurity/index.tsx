@@ -25,8 +25,15 @@ import {
 import { Confirm2FA } from "@/components/Confirm2FA";
 import { AddOrEdit2FA } from "./AddOrEdit2FA";
 import { UpdatePasswordForm } from "./forms/UpdatePasswordForm";
+import { GenerateRecoveryCodes } from "./GenerateRecoveryCodes";
 
-export function AccountSecurity({ user }: { readonly user: User }) {
+export function AccountSecurity({
+  user,
+  recoveryCodesLength = 0,
+}: {
+  readonly user: User;
+  readonly recoveryCodesLength?: number;
+}) {
   return (
     <>
       <AccountCard>
@@ -114,6 +121,58 @@ export function AccountSecurity({ user }: { readonly user: User }) {
                   </DialogDescription>
                 </DialogHeader>
                 <AddOrEdit2FA is2FAEnabled={user.is2FAEnabled} />
+              </Confirm2FA>
+            </DialogPortal>
+          </Dialog>
+        </AccountCardFooter>
+      </AccountCard>
+      <AccountCard>
+        <AccountCardContent>
+          <AccountCardTitle>
+            <span>Recovery codes</span>
+            {recoveryCodesLength > 0 && (
+              <Badge
+                className="ml-2"
+                variant={recoveryCodesLength > 2 ? "default" : "destructive"}
+              >
+                {recoveryCodesLength}
+              </Badge>
+            )}
+          </AccountCardTitle>
+          <AccountCardDescription>
+            These codes can be used to regain access to your account if your
+            two-factor authentication device is lost.
+          </AccountCardDescription>
+        </AccountCardContent>
+        <AccountCardFooter>
+          <AccountCardFooterDescription>
+            {recoveryCodesLength === 0 && !user.is2FAEnabled
+              ? "You have not enabled two-factor authentication. You can enable it to generate recovery codes."
+              : "Generate a new set of recovery codes. You can use these codes to regain access to your account if your two-factor authentication device is lost."}
+          </AccountCardFooterDescription>
+
+          <Dialog>
+            <DialogTrigger asChild disabled={!user.is2FAEnabled}>
+              <Button size="sm">
+                {!user.is2FAEnabled
+                  ? "Enable 2FA first"
+                  : "Generate new recovery codes"}
+              </Button>
+            </DialogTrigger>
+            <DialogPortal>
+              <DialogOverlay />
+              <Confirm2FA user={user}>
+                <DialogHeader className="space-y-4">
+                  <DialogTitle className="text-xl">
+                    Generate new recovery codes
+                  </DialogTitle>
+                  <DialogDescription className="text-base">
+                    Store these codes in a secure password manager. If your
+                    two-factor authentication device is lost, these codes can be
+                    used to regain access to your account.
+                  </DialogDescription>
+                </DialogHeader>
+                <GenerateRecoveryCodes userId={user.id} />
               </Confirm2FA>
             </DialogPortal>
           </Dialog>

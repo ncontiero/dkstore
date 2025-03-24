@@ -21,11 +21,14 @@ import {
 export const signInAction = actionClient
   .schema(signInSchema)
   .action(async ({ parsedInput: data }) => {
-    const { email, password, otpCode, redirectTo } = data;
+    const { email, password, otpCode, recoveryCode, redirectTo } = data;
 
     const user = await prisma.user.findUnique({
       where: { email },
       omit: { passwordHash: false },
+      include: {
+        recoveryCodes: true,
+      },
     });
 
     if (!user) {
@@ -38,6 +41,50 @@ export const signInAction = actionClient
     }
 
     if (user.is2FAEnabled && user.twoFactorSecret && user.twoFactorSecretIV) {
+      if (recoveryCode) {
+        if (user.recoveryCodes.length === 0) {
+          throw new Error("You don't have any recovery codes.");
+        }
+
+        const dbRecoveryCode = user.recoveryCodes.find((code) => {
+          const decryptedCode = decrypt(
+            Buffer.from(code.code),
+            Buffer.from(code.codeIV),
+          );
+          if (!decryptedCode) {
+            throw new Error(
+              "Error decrypting recovery code. Please try again later",
+            );
+          }
+
+          const isValid = decryptedCode === recoveryCode;
+          return isValid ? code : null;
+        });
+
+        if (!dbRecoveryCode) {
+          throw new Error("Invalid recovery code");
+        }
+
+        await prisma.$transaction(async (tx) => {
+          await tx.recoveryCode.delete({
+            where: { id: dbRecoveryCode.id },
+          });
+
+          await tx.user.update({
+            where: { id: user.id },
+            data: {
+              is2FAEnabled: false,
+              twoFactorSecret: null,
+              twoFactorSecretIV: null,
+            },
+          });
+        });
+
+        await setSession(user.id);
+
+        redirect(redirectTo || "/");
+      }
+
       if (!otpCode) {
         return {
           twoFactor: true,

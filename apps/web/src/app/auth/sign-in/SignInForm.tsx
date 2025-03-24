@@ -21,6 +21,7 @@ export function SignInForm() {
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirect") || undefined;
   const [is2FAEnabled, setIs2FAEnabled] = useState(false);
+  const [isUseRecoveryCode, setIsUseRecoveryCode] = useState(false);
 
   const signIn = useAction(signInAction, {
     onError: (error) => {
@@ -46,9 +47,30 @@ export function SignInForm() {
   }, [redirectTo]);
 
   return (
-    <BaseAuthFormContainer redirectTo={redirectTo} is2FAEnabled={is2FAEnabled}>
-      <form className="mt-8 space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
-        {is2FAEnabled ? (
+    <BaseAuthFormContainer
+      mode={
+        isUseRecoveryCode ? "recoveryCode" : is2FAEnabled ? "2fa" : "signin"
+      }
+      redirectTo={redirectTo}
+    >
+      <form className="mt-8" onSubmit={form.handleSubmit(onSubmit)}>
+        {isUseRecoveryCode ? (
+          <div className="space-y-1">
+            <Label htmlFor="recoveryCode">Recovery code</Label>
+            <Input
+              type="text"
+              id="recoveryCode"
+              placeholder="Enter your recovery code"
+              {...form.register("recoveryCode")}
+            />
+
+            {form.formState.errors.recoveryCode ? (
+              <p className="text-sm text-destructive">
+                {form.formState.errors.recoveryCode.message}
+              </p>
+            ) : null}
+          </div>
+        ) : is2FAEnabled ? (
           <div className="flex flex-col items-center gap-2">
             <Label htmlFor="otpCode">OTP Code</Label>
             <InputOTP
@@ -96,7 +118,7 @@ export function SignInForm() {
               ) : null}
             </div>
 
-            <div className="space-y-1">
+            <div className="mt-6 space-y-1">
               <div className="flex items-center justify-between">
                 <Label htmlFor="password">Password</Label>
                 <Link href="/auth/password/forgot" size="sm" variant="default">
@@ -119,13 +141,27 @@ export function SignInForm() {
           </>
         )}
 
-        <Button type="submit" className="w-full rounded-full">
+        <Button type="submit" className="mt-6 w-full rounded-full">
           {signIn.status === "executing" ? (
             <Loader className="animate-spin" />
           ) : (
             "Sign in"
           )}
         </Button>
+        {is2FAEnabled ? (
+          <div className="mt-3 flex w-full justify-center">
+            <Button
+              type="button"
+              variant="link"
+              className="size-fit p-0"
+              onClick={() => setIsUseRecoveryCode(!isUseRecoveryCode)}
+            >
+              {isUseRecoveryCode
+                ? "Use OTP code instead"
+                : "Use recovery code instead"}
+            </Button>
+          </div>
+        ) : null}
       </form>
     </BaseAuthFormContainer>
   );

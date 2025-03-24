@@ -30,6 +30,13 @@ export const deleteUserSchema = z.object({
 });
 export type DeleteUserSchema = z.infer<typeof deleteUserSchema>;
 
+export const generateRecoveryCodesSchema = z.object({
+  userId: z.string().uuid(),
+});
+export type GenerateRecoveryCodesSchema = z.infer<
+  typeof generateRecoveryCodesSchema
+>;
+
 export const addOrEdit2FASchema = z.object({
   code: z.string().min(6, "Your one-time password must be 6 characters."),
   secret: z.string().min(1, "Secret is required"),

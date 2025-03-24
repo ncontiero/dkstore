@@ -80,7 +80,7 @@ export function Confirm2FA({ children, user }: Confirm2FAProps) {
             Please wait while we load your data.
           </DialogDescription>
           <div className="flex items-center justify-center gap-2">
-            <Loader2 className="animate-spin size-10" />
+            <Loader2 className="size-10 animate-spin" />
           </div>
         </DialogHeader>
       ) : !hasAlreadyVerified && !isVerified && user.is2FAEnabled ? (

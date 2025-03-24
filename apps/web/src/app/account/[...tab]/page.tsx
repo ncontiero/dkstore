@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import type { User as UserProps } from "@/utils/types";
+import type { User as UserProps, UserWithRecoveryCodes } from "@/utils/types";
 import { Suspense } from "react";
 import { Badge } from "@dkstore/ui/badge";
 import { ScrollArea, ScrollBar } from "@dkstore/ui/scroll-area";
@@ -42,7 +42,12 @@ const tabs = [
     value: "security",
     description: "Security settings for your account.",
     icon: Lock,
-    content: (user: UserProps) => <AccountSecurity user={user} />,
+    content: (user: UserWithRecoveryCodes) => (
+      <AccountSecurity
+        user={user}
+        recoveryCodesLength={user.recoveryCodes.length}
+      />
+    ),
   },
   {
     name: "Your addresses",
@@ -95,7 +100,7 @@ export default async function AccountPage({ params, searchParams }: PageProps) {
     redirect(`/account/${defaultTab}`);
   }
 
-  const user = await getUser({});
+  const user = await getUser({ includeRecoveryCodes: true });
   if (!user) return null;
 
   if (tabParam === "admin" && !user.isAdmin) {

@@ -21,7 +21,8 @@ model User {
   createdAt         DateTime @default(now()) @map("created_at")
   updatedAt         DateTime @updatedAt @map("updated_at")
 
-  tokens Token[]
+  tokens        Token[]
+  recoveryCodes RecoveryCode[]
 
   @@map("users")
 }
@@ -41,4 +42,15 @@ model Token {
   userId String @map("user_id")
 
   @@map("tokens")
+}
+
+model RecoveryCode {
+  id     Int     @id @default(autoincrement())
+  userId String? @map("user_id")
+  code   Bytes
+  codeIV Bytes   @map("code_iv")
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@map("recovery_codes")
 }
