@@ -26,7 +26,7 @@ export const refreshSessionAction = authActionClient.action(
       throw new Error("Session expired");
     }
 
-    if (session.expires.getTime() - Date.now() < 1000 * 60 * 30) {
+    if (session.expires.getTime() - Date.now() < 1000 * 60 * 60) {
       const newExpires = sessionExpires();
       await prisma.session.update({
         where: { id: session.id },

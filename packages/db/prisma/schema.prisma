@@ -36,6 +36,11 @@ model Session {
   createdAt         DateTime @default(now()) @map("created_at")
   updatedAt         DateTime @updatedAt @map("updated_at")
 
+  ip              String?
+  device          String?
+  browser         String?
+  operatingSystem String?
+
   user User @relation(fields: [userId], references: [id])
 
   @@map("sessions")
