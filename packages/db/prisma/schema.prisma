@@ -21,10 +21,24 @@ model User {
   createdAt         DateTime @default(now()) @map("created_at")
   updatedAt         DateTime @updatedAt @map("updated_at")
 
+  sessions      Session[]
   tokens        Token[]
   recoveryCodes RecoveryCode[]
 
   @@map("users")
+}
+
+model Session {
+  id                String   @id @default(uuid())
+  userId            String   @map("user_id")
+  lastOtpVerifiedAt DateTime @default(now()) @map("last_otp_verified_at")
+  expires           DateTime
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("sessions")
 }
 
 enum TokenType {

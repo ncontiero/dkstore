@@ -5,7 +5,7 @@ import { sendEmailQueue } from "@dkstore/queue/email";
 import { comparePasswords, hashPassword } from "@dkstore/utils/password";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { setSession } from "@/lib/auth/session";
+import { getSession, sessionExpires, setSession } from "@/lib/auth/session";
 import { actionClient } from "@/lib/safe-action";
 import { decrypt } from "@/utils/cryptography";
 import { isTotpValid } from "@/utils/totp";
@@ -78,9 +78,15 @@ export const signInAction = actionClient
               twoFactorSecretIV: null,
             },
           });
-        });
 
-        await setSession(user.id);
+          const session = await prisma.session.create({
+            data: {
+              userId: user.id,
+              expires: sessionExpires(),
+            },
+          });
+          await setSession(session.id);
+        });
 
         redirect(redirectTo || "/");
       }
@@ -102,7 +108,13 @@ export const signInAction = actionClient
       }
     }
 
-    await setSession(user.id);
+    const session = await prisma.session.create({
+      data: {
+        userId: user.id,
+        expires: sessionExpires(),
+      },
+    });
+    await setSession(session.id);
 
     redirect(redirectTo || "/");
   });
@@ -123,16 +135,23 @@ export const signUpAction = actionClient
     const passwordHash = await hashPassword(password);
 
     try {
+      const user = await prisma.user.create({
+        data: {
+          name,
+          email,
+          passwordHash,
+        },
+      });
+
       await prisma.$transaction(async (tx) => {
-        const user = await tx.user.create({
+        const session = await tx.session.create({
           data: {
-            name,
-            email,
-            passwordHash,
+            userId: user.id,
+            expires: sessionExpires(),
           },
         });
 
-        await setSession(user.id);
+        await setSession(session.id);
       });
     } catch {
       throw new Error(
@@ -153,7 +172,14 @@ export const signUpAction = actionClient
 export const signOutAction = actionClient
   .schema(signOutSchema)
   .action(async ({ parsedInput: { redirectTo } }) => {
-    (await cookies()).delete("session");
+    const cookiesStore = await cookies();
+    const session = await getSession();
+
+    cookiesStore.delete("session");
+    if (session) {
+      await prisma.session.delete({ where: { id: session.id } });
+    }
+
     redirect(`/auth/sign-in${redirectTo ? `?redirect=${redirectTo}` : ""}`);
   });
 

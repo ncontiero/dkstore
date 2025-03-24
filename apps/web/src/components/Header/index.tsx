@@ -3,14 +3,14 @@ import { Link } from "@dkstore/ui/link";
 import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import NextLink from "next/link";
-import { getUser } from "@/lib/auth/user";
+import { getSession } from "@/lib/auth/db";
 import { ProfileButton } from "./ProfileButton";
 import { SearchDialog } from "./Search/Dialog";
 import { SearchForm } from "./Search/Form";
 import { ThemeToggle } from "./ThemeToggle";
 
 export async function Header() {
-  const user = await getUser({});
+  const session = await getSession({});
 
   return (
     <header className="sticky inset-x-0 top-0 z-[9999] h-14 w-full border-b-2 border-secondary bg-secondary/60 backdrop-blur md:h-16">
@@ -30,8 +30,8 @@ export async function Header() {
         <SearchForm />
         <div className="flex gap-1">
           <SearchDialog />
-          {user ? (
-            <ProfileButton user={user} />
+          {session?.user ? (
+            <ProfileButton user={session.user} />
           ) : (
             <>
               <Button

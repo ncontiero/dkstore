@@ -4,8 +4,8 @@ import { prisma } from "@dkstore/db";
 import { sendEmailQueue } from "@dkstore/queue/email";
 import { comparePasswords, hashPassword } from "@dkstore/utils/password";
 import { redirect } from "next/navigation";
-import { getSession, setSession } from "@/lib/auth/session";
-import { actionClient, authActionClient } from "@/lib/safe-action";
+import { setSession } from "@/lib/auth/session";
+import { authActionClient } from "@/lib/safe-action";
 import { encrypt } from "@/utils/cryptography";
 import { generateRecoveryCodes } from "@/utils/recoveryCodes";
 import { isTotpValid } from "@/utils/totp";
@@ -21,7 +21,9 @@ import {
 } from "./schema";
 
 export const sendEmailVerificationAction = authActionClient.action(
-  async ({ ctx: { user } }) => {
+  async ({ ctx: { session } }) => {
+    const { user } = session;
+
     if (user.isEmailVerified) {
       throw new Error("Email already verified");
     }
@@ -38,7 +40,9 @@ export const sendEmailVerificationAction = authActionClient.action(
 
 export const updateUserNameAction = authActionClient
   .schema(updateUserNameSchema)
-  .action(async ({ clientInput: { name }, ctx: { user } }) => {
+  .action(async ({ clientInput: { name }, ctx: { session } }) => {
+    const { user } = session;
+
     await prisma.user.update({
       where: { id: user.id },
       data: { name },
@@ -46,7 +50,9 @@ export const updateUserNameAction = authActionClient
   });
 
 export const sendEmailToChangeEmailAction = authActionClient.action(
-  async ({ ctx: { user } }) => {
+  async ({ ctx: { session } }) => {
+    const { user } = session;
+
     await sendEmailQueue.add("send-email-to-change-email", {
       fullName: user.name,
       email: user.email,
@@ -57,7 +63,9 @@ export const sendEmailToChangeEmailAction = authActionClient.action(
 
 export const updateUserEmailAction = authActionClient
   .schema(updateUserEmailSchema)
-  .action(async ({ parsedInput: { email }, ctx: { user } }) => {
+  .action(async ({ parsedInput: { email }, ctx: { session } }) => {
+    const { user } = session;
+
     if (email === user.email) {
       throw new Error("Emails are the same");
     }
@@ -95,8 +103,10 @@ export const updateUserPasswordAction = authActionClient
   .action(
     async ({
       parsedInput: { currentPassword, newPassword },
-      ctx: { user },
+      ctx: { session },
     }) => {
+      const { user } = session;
+
       if (!user.isEmailVerified) {
         throw new Error("Please verify your email address first.");
       }
@@ -140,7 +150,8 @@ export const updateUserPasswordAction = authActionClient
 
 export const deleteUserAction = authActionClient
   .schema(deleteUserSchema)
-  .action(async ({ clientInput: data, ctx: { user } }) => {
+  .action(async ({ clientInput: data, ctx: { session } }) => {
+    const { user } = session;
     const { confirmPassword, confirmEmail } = data;
 
     if (confirmEmail !== user.email) {
@@ -169,37 +180,42 @@ export const deleteUserAction = authActionClient
 
 export const generateRecoveryCodesAction = authActionClient
   .schema(generateRecoveryCodesSchema)
-  .action(async ({ clientInput: { isToSendEmail = true }, ctx: { user } }) => {
-    const recoveryCodes = generateRecoveryCodes();
+  .action(
+    async ({ clientInput: { isToSendEmail = true }, ctx: { session } }) => {
+      const { user } = session;
+      const recoveryCodes = generateRecoveryCodes();
 
-    await prisma.$transaction(async (tx) => {
-      await tx.recoveryCode.deleteMany({
-        where: { userId: user.id },
+      await prisma.$transaction(async (tx) => {
+        await tx.recoveryCode.deleteMany({
+          where: { userId: user.id },
+        });
+
+        await tx.recoveryCode.createMany({
+          data: recoveryCodes.map(({ encryptedCode, encryptedCodeIV }) => ({
+            userId: user.id,
+            code: encryptedCode,
+            codeIV: encryptedCodeIV,
+          })),
+        });
       });
 
-      await tx.recoveryCode.createMany({
-        data: recoveryCodes.map(({ encryptedCode, encryptedCodeIV }) => ({
-          userId: user.id,
-          code: encryptedCode,
-          codeIV: encryptedCodeIV,
-        })),
-      });
-    });
+      if (isToSendEmail) {
+        await sendEmailQueue.add("send-recovery-codes-email", {
+          fullName: user.name,
+          email: user.email,
+          isRecoveryCodesGeneratedEmail: true,
+        });
+      }
 
-    if (isToSendEmail) {
-      await sendEmailQueue.add("send-recovery-codes-email", {
-        fullName: user.name,
-        email: user.email,
-        isRecoveryCodesGeneratedEmail: true,
-      });
-    }
-
-    return recoveryCodes.map(({ rawCode }) => rawCode);
-  });
+      return recoveryCodes.map(({ rawCode }) => rawCode);
+    },
+  );
 
 export const addOrEdit2FAAction = authActionClient
   .schema(addOrEdit2FASchema)
-  .action(async ({ clientInput: { code, secret }, ctx: { user } }) => {
+  .action(async ({ clientInput: { code, secret }, ctx: { session } }) => {
+    const { user } = session;
+
     const encryptedSecret = encrypt(secret);
     if (!encryptedSecret) {
       throw new Error("Error encrypting secret. Please try again later");
@@ -243,15 +259,20 @@ export const addOrEdit2FAAction = authActionClient
       });
     });
 
-    await setSession(user.id);
+    await prisma.session.update({
+      where: { id: session.id },
+      data: { lastOtpVerifiedAt: new Date() },
+    });
+    await setSession(session.id);
 
     return recoveryCodes;
   });
 
 export const verify2FAAction = authActionClient
   .schema(verify2FASchema)
+  .action(async ({ clientInput: { otpCode }, ctx: { session } }) => {
+    const { user } = session;
 
-  .action(async ({ clientInput: { otpCode }, ctx: { user } }) => {
     if (!user.twoFactorSecret || !user.twoFactorSecretIV) {
       throw new Error("2FA not enabled");
     }
@@ -266,9 +287,9 @@ export const verify2FAAction = authActionClient
       throw new Error("Invalid OTP code");
     }
 
-    await setSession(user.id);
+    await prisma.session.update({
+      where: { id: session.id },
+      data: { lastOtpVerifiedAt: new Date() },
+    });
+    await setSession(session.id);
   });
-
-export const getSessionAction = actionClient.action(async () => {
-  return await getSession();
-});

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import type { User as UserProps, UserWithRecoveryCodes } from "@/utils/types";
+import type { SessionWhitUser, UserWithRecoveryCodes } from "@/utils/types";
 import { Suspense } from "react";
 import { Badge } from "@dkstore/ui/badge";
 import { ScrollArea, ScrollBar } from "@dkstore/ui/scroll-area";
@@ -16,7 +16,7 @@ import {
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AccountTabsRoot } from "@/components/Account";
-import { getUser } from "@/lib/auth/user";
+import { getSession } from "@/lib/auth/db";
 import { getQueueDashboardURL } from "@/utils/queue-dash-url";
 import { AccountDetails } from "./TabsContent/AccountDetails";
 import { AccountSecurity } from "./TabsContent/AccountSecurity";
@@ -35,17 +35,17 @@ const tabs = [
     value: "data",
     description: "Data that represents you in the store.",
     icon: User,
-    content: (user: UserProps) => <AccountDetails user={user} />,
+    content: (session: SessionWhitUser) => <AccountDetails session={session} />,
   },
   {
     name: "Security",
     value: "security",
     description: "Security settings for your account.",
     icon: Lock,
-    content: (user: UserWithRecoveryCodes) => (
+    content: (session: SessionWhitUser<UserWithRecoveryCodes>) => (
       <AccountSecurity
-        user={user}
-        recoveryCodesLength={user.recoveryCodes.length}
+        session={session}
+        recoveryCodesLength={session.user.recoveryCodes.length}
       />
     ),
   },
@@ -54,21 +54,21 @@ const tabs = [
     value: "addresses",
     description: "Addresses that you have registered in the store.",
     icon: MapPin,
-    content: (user: UserProps) => <AccountDetails user={user} />,
+    content: (session: SessionWhitUser) => <AccountDetails session={session} />,
   },
   {
     name: "Your orders",
     value: "orders",
     description: "Orders that you have made in the store.",
     icon: ShoppingBasket,
-    content: (user: UserProps) => <AccountDetails user={user} />,
+    content: (session: SessionWhitUser) => <AccountDetails session={session} />,
   },
   {
     name: "Your favorites",
     description: "Products you have added to your favorites in the store.",
     value: "favorites",
     icon: BookHeart,
-    content: (user: UserProps) => <AccountDetails user={user} />,
+    content: (session: SessionWhitUser) => <AccountDetails session={session} />,
   },
   {
     name: "Admin",
@@ -100,8 +100,9 @@ export default async function AccountPage({ params, searchParams }: PageProps) {
     redirect(`/account/${defaultTab}`);
   }
 
-  const user = await getUser({ includeRecoveryCodes: true });
-  if (!user) return null;
+  const session = await getSession({ includeUserRecoveryCodes: true });
+  if (!session) return null;
+  const { user } = session;
 
   if (tabParam === "admin" && !user.isAdmin) {
     redirect(`/account/${defaultTab}`);
@@ -152,7 +153,7 @@ export default async function AccountPage({ params, searchParams }: PageProps) {
                 <h2 className="text-xl font-bold">{tab.name}</h2>
                 <p className="text-foreground/80">{tab.description}</p>
               </div>
-              {tab.content(user)}
+              {tab.content(session)}
             </TabsContent>
           ))}
         </AccountTabsRoot>

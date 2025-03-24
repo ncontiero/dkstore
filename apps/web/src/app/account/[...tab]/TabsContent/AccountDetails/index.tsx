@@ -1,4 +1,4 @@
-import type { User } from "@/utils/types";
+import type { SessionWhitUser } from "@/utils/types";
 import { Badge } from "@dkstore/ui/badge";
 import { Button } from "@dkstore/ui/button";
 import {
@@ -28,7 +28,13 @@ import { DeleteUserForm } from "./forms/DeleteUserForm";
 import { UpdateUserNameForm } from "./forms/UpdateUserNameForm";
 import { VerifyEmailBtn } from "./VerifyEmailBtn";
 
-export function AccountDetails({ user }: { readonly user: User }) {
+export function AccountDetails({
+  session,
+}: {
+  readonly session: SessionWhitUser;
+}) {
+  const { user } = session;
+
   return (
     <>
       <UpdateUserNameForm user={user} />
@@ -62,7 +68,7 @@ export function AccountDetails({ user }: { readonly user: User }) {
               </DialogTrigger>
               <DialogPortal>
                 <DialogOverlay />
-                <Confirm2FA user={user}>
+                <Confirm2FA session={session}>
                   <DialogHeader>
                     <DialogTitle className="my-2 text-xl">
                       Change email

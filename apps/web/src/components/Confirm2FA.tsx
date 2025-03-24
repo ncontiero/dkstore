@@ -1,7 +1,7 @@
 "use client";
 
-import type { User } from "@/utils/types";
-import { type PropsWithChildren, useEffect, useMemo, useState } from "react";
+import type { SessionWhitUser } from "@/utils/types";
+import { type PropsWithChildren, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { Button } from "@dkstore/ui/button";
@@ -17,34 +17,24 @@ import { Label } from "@dkstore/ui/label";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
-import { getSessionAction, verify2FAAction } from "@/actions/account";
+import { verify2FAAction } from "@/actions/account";
 import {
   type Verify2FASchema,
   verify2FASchema,
 } from "@/actions/account/schema";
 
 export interface Confirm2FAProps extends PropsWithChildren {
-  readonly user: User;
+  readonly session: SessionWhitUser;
 }
 
-export function Confirm2FA({ children, user }: Confirm2FAProps) {
-  const [lastOtpVerifiedAt, setLastOtpVerifiedAt] = useState<Date | undefined>(
-    undefined,
-  );
+export function Confirm2FA({ children, session }: Confirm2FAProps) {
   const [isVerified, setIsVerified] = useState(false);
-  const getSession = useAction(getSessionAction, {
-    onSuccess: (args) => {
-      if (args.data?.lastOtpVerifiedAt) {
-        setLastOtpVerifiedAt(new Date(args.data.lastOtpVerifiedAt));
-      }
-    },
-  });
 
   const hasAlreadyVerified = useMemo(() => {
-    if (!lastOtpVerifiedAt) return false;
-    const diff = Date.now() - lastOtpVerifiedAt.getTime();
+    if (!session.lastOtpVerifiedAt) return false;
+    const diff = Date.now() - session.lastOtpVerifiedAt.getTime();
     return diff < 1000 * 60 * 5; // 5 minutes
-  }, [lastOtpVerifiedAt]);
+  }, [session.lastOtpVerifiedAt]);
 
   const verify2FA = useAction(verify2FAAction, {
     onError: (args) => {
@@ -52,7 +42,6 @@ export function Confirm2FA({ children, user }: Confirm2FAProps) {
     },
     onSuccess: () => {
       setIsVerified(true);
-      setLastOtpVerifiedAt(new Date());
     },
   });
 
@@ -66,24 +55,9 @@ export function Confirm2FA({ children, user }: Confirm2FAProps) {
     }
   }
 
-  useEffect(() => {
-    getSession.execute();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <DialogContent>
-      {getSession.status === "executing" ? (
-        <DialogHeader className="space-y-4">
-          <DialogTitle className="my-2 text-xl">Loading...</DialogTitle>
-          <DialogDescription className="text-base">
-            Please wait while we load your data.
-          </DialogDescription>
-          <div className="flex items-center justify-center gap-2">
-            <Loader2 className="size-10 animate-spin" />
-          </div>
-        </DialogHeader>
-      ) : !hasAlreadyVerified && !isVerified && user.is2FAEnabled ? (
+      {!hasAlreadyVerified && !isVerified && session.user.is2FAEnabled ? (
         <>
           <DialogHeader className="space-y-4">
             <DialogTitle className="text-xl">2FA Verification</DialogTitle>

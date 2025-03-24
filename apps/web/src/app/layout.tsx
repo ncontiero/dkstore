@@ -6,8 +6,8 @@ import { ThemeProvider } from "next-themes";
 import { Inter } from "next/font/google";
 import { Header } from "@/components/Header";
 import { env } from "@/env";
-import { UserProvider } from "@/lib/auth";
-import { getUser } from "@/lib/auth/user";
+import { SessionProvider } from "@/lib/auth";
+import { getSession } from "@/lib/auth/db";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -47,13 +47,13 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: PropsWithChildren) {
-  const user = await getUser({});
+  const session = await getSession({});
 
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.variable}>
         <ThemeProvider attribute="class">
-          <UserProvider user={user}>
+          <SessionProvider session={session}>
             <ToastContainer
               autoClose={3000}
               theme="dark"
@@ -67,7 +67,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
             />
             <Header />
             <div className="md:container">{children}</div>
-          </UserProvider>
+          </SessionProvider>
         </ThemeProvider>
       </body>
     </html>

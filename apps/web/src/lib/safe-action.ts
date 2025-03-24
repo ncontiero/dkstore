@@ -2,7 +2,7 @@ import {
   createSafeActionClient,
   DEFAULT_SERVER_ERROR_MESSAGE,
 } from "next-safe-action";
-import { getUser } from "./auth/user";
+import { getSession } from "./auth/db";
 
 export const actionClient = createSafeActionClient({
   handleServerError(error) {
@@ -15,11 +15,11 @@ export const actionClient = createSafeActionClient({
 });
 
 export const authActionClient = actionClient.use(async ({ next }) => {
-  const user = await getUser({ includePass: true });
+  const session = await getSession({ includeUserPass: true });
 
-  if (!user) {
+  if (!session) {
     throw new Error("You must be logged in to perform this action");
   }
 
-  return next({ ctx: { user } });
+  return next({ ctx: { session } });
 });

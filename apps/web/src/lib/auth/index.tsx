@@ -1,6 +1,6 @@
 "use client";
 
-import type { User } from "@/utils/types";
+import type { SessionWhitUser } from "@/utils/types";
 import {
   type PropsWithChildren,
   createContext,
@@ -14,25 +14,25 @@ import { usePathname } from "next/navigation";
 import { signOutAction } from "@/actions/auth";
 import { authRoutes, protectedRoutes } from "./routes";
 
-type UserContextType = {
-  user: User | null;
+type SessionContextType = {
+  session: SessionWhitUser | null;
 };
 
-const UserContext = createContext<UserContextType | null>(null);
+const SessionContext = createContext<SessionContextType | null>(null);
 
-export function useUser(): UserContextType {
-  const context = useContext(UserContext);
+export function useSession(): SessionContextType {
+  const context = useContext(SessionContext);
   if (context === null) {
-    throw new Error("useUser must be used within a UserProvider");
+    throw new Error("useSession must be used within a SessionProvider");
   }
   return context;
 }
 
-export function UserProvider({
+export function SessionProvider({
   children,
-  user,
-}: PropsWithChildren<{ readonly user: UserContextType["user"] }>) {
-  const props = useMemo(() => ({ user }), [user]);
+  session,
+}: PropsWithChildren<{ readonly session: SessionContextType["session"] }>) {
+  const props = useMemo(() => ({ session }), [session]);
   const pathname = usePathname();
 
   const signOut = useAction(signOutAction, {
@@ -51,11 +51,13 @@ export function UserProvider({
   );
 
   useEffect(() => {
-    if (isProtectedRoute && !user) {
+    if (isProtectedRoute && (!session || session.expires < new Date())) {
       signOut.execute({ redirectTo: isAuthRoute ? "/" : pathname });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthRoute, isProtectedRoute, user]);
+  }, [isAuthRoute, isProtectedRoute, pathname, session]);
 
-  return <UserContext.Provider value={props}>{children}</UserContext.Provider>;
+  return (
+    <SessionContext.Provider value={props}>{children}</SessionContext.Provider>
+  );
 }

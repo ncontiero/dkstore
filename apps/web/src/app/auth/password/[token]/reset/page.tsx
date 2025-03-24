@@ -4,7 +4,7 @@ import { prisma } from "@dkstore/db";
 import { Card } from "@dkstore/ui/card";
 import { Link } from "@dkstore/ui/link";
 import { Loading } from "@/app/auth/Loading";
-import { getUser } from "@/lib/auth/user";
+import { getSession } from "@/lib/auth/db";
 import { ResetPasswordForm } from "./ResetPasswordForm";
 
 type PageProps = {
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export default async function ResetPasswordPage({ params }: PageProps) {
   const { token } = await params;
 
-  const user = await getUser({});
+  const session = await getSession({});
   const existingToken = await prisma.token.findUnique({
     where: { id: token },
   });
@@ -33,7 +33,7 @@ export default async function ResetPasswordPage({ params }: PageProps) {
         <p className="mt-4 text-center">
           Request a new link on the{" "}
           <Link
-            href={`/auth/password/forgot${user ? `?email=${user.email}` : ""}`}
+            href={`/auth/password/forgot${session?.user ? `?email=${session.user.email}` : ""}`}
             className="text-primary"
           >
             forgot password page.

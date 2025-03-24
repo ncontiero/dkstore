@@ -1,4 +1,4 @@
-import type { User } from "@/utils/types";
+import type { SessionWhitUser } from "@/utils/types";
 import { Badge } from "@dkstore/ui/badge";
 import { Button } from "@dkstore/ui/button";
 import {
@@ -28,12 +28,14 @@ import { UpdatePasswordForm } from "./forms/UpdatePasswordForm";
 import { GenerateRecoveryCodes } from "./GenerateRecoveryCodes";
 
 export function AccountSecurity({
-  user,
+  session,
   recoveryCodesLength = 0,
 }: {
-  readonly user: User;
+  readonly session: SessionWhitUser;
   readonly recoveryCodesLength?: number;
 }) {
+  const { user } = session;
+
   return (
     <>
       <AccountCard>
@@ -108,7 +110,7 @@ export function AccountSecurity({
             </DialogTrigger>
             <DialogPortal>
               <DialogOverlay />
-              <Confirm2FA user={user}>
+              <Confirm2FA session={session}>
                 <DialogHeader>
                   <DialogTitle className="my-2 text-xl">
                     {user.is2FAEnabled ? "Edit" : "Add"} two-factor
@@ -161,7 +163,7 @@ export function AccountSecurity({
             </DialogTrigger>
             <DialogPortal>
               <DialogOverlay />
-              <Confirm2FA user={user}>
+              <Confirm2FA session={session}>
                 <DialogHeader className="space-y-4">
                   <DialogTitle className="text-xl">
                     Generate new recovery codes

@@ -2,8 +2,7 @@ import { createJWT, verifyJWT } from "@dkstore/utils/jwt";
 import { cookies } from "next/headers";
 
 export type SessionData = {
-  user: { id: string };
-  lastOtpVerifiedAt?: Date;
+  id: string;
   expires: string;
 };
 
@@ -18,11 +17,10 @@ export async function getSession() {
   return await verifyJWT<SessionData>(session);
 }
 
-export async function setSession(userId: string) {
+export async function setSession(sessionId: string) {
   const expires = sessionExpires();
   const session: SessionData = {
-    user: { id: userId },
-    lastOtpVerifiedAt: new Date(),
+    id: sessionId,
     expires: expires.toISOString(),
   };
   const encryptedSession = await createJWT(session);
