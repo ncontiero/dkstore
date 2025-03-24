@@ -5,7 +5,8 @@ import { sendEmailQueue } from "@dkstore/queue/email";
 import { comparePasswords, hashPassword } from "@dkstore/utils/password";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { getSession, sessionExpires, setSession } from "@/lib/auth/session";
+import { createSession } from "@/lib/auth/db";
+import { getSession } from "@/lib/auth/session";
 import { actionClient } from "@/lib/safe-action";
 import { decrypt } from "@/utils/cryptography";
 import { isTotpValid } from "@/utils/totp";
@@ -79,13 +80,7 @@ export const signInAction = actionClient
             },
           });
 
-          const session = await prisma.session.create({
-            data: {
-              userId: user.id,
-              expires: sessionExpires(),
-            },
-          });
-          await setSession(session.id);
+          await createSession(user.id);
         });
 
         redirect(redirectTo || "/");
@@ -108,13 +103,7 @@ export const signInAction = actionClient
       }
     }
 
-    const session = await prisma.session.create({
-      data: {
-        userId: user.id,
-        expires: sessionExpires(),
-      },
-    });
-    await setSession(session.id);
+    await createSession(user.id);
 
     redirect(redirectTo || "/");
   });
@@ -143,16 +132,7 @@ export const signUpAction = actionClient
         },
       });
 
-      await prisma.$transaction(async (tx) => {
-        const session = await tx.session.create({
-          data: {
-            userId: user.id,
-            expires: sessionExpires(),
-          },
-        });
-
-        await setSession(session.id);
-      });
+      await createSession(user.id);
     } catch {
       throw new Error(
         "An error occurred while creating your account. Please try again later",

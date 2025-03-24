@@ -4,7 +4,11 @@ import type {
   UserWithRecoveryCodes,
 } from "@/utils/types";
 import { type User as PrismaUser, prisma } from "@dkstore/db";
-import { getSession as getLocalSession } from "./session";
+import {
+  getSession as getLocalSession,
+  sessionExpires,
+  setSession,
+} from "./session";
 
 interface GetSessionProps {
   includeUserPass?: boolean;
@@ -42,6 +46,19 @@ export async function getSession<T extends GetSessionProps>({
   if (!session || new Date(session.expires) < new Date()) {
     return null;
   }
+
+  return session;
+}
+
+export async function createSession(userId: string) {
+  const session = await prisma.session.create({
+    data: {
+      userId,
+      expires: sessionExpires(),
+    },
+  });
+
+  await setSession(session.id);
 
   return session;
 }
