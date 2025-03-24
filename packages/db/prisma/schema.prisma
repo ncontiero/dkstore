@@ -41,7 +41,7 @@ model Session {
   browser         String?
   operatingSystem String?
 
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("sessions")
 }
@@ -69,7 +69,7 @@ model RecoveryCode {
   code   Bytes
   codeIV Bytes   @map("code_iv")
 
-  user User? @relation(fields: [userId], references: [id])
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("recovery_codes")
 }
