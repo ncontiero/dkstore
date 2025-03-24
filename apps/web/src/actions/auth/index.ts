@@ -80,7 +80,10 @@ export const signInAction = actionClient
             },
           });
 
-          await createSession(user.id);
+          await createSession(user.id, {
+            sendAccountAccessedWithRecoveryCodeEmail: true,
+            sendAccountAccessedEmail: false,
+          });
         });
 
         redirect(redirectTo || "/");
@@ -132,7 +135,7 @@ export const signUpAction = actionClient
         },
       });
 
-      await createSession(user.id);
+      await createSession(user.id, { sendAccountAccessedEmail: false });
     } catch {
       throw new Error(
         "An error occurred while creating your account. Please try again later",

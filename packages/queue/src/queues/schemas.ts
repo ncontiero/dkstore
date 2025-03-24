@@ -1,5 +1,11 @@
 import { z } from "zod";
 
+const accessedDataSchema = z.object({
+  ipAddress: z.string().ip(),
+  accessedAt: z.string(),
+  device: z.string(),
+});
+
 export const sendEmailSchema = z.object({
   fullName: z.string().min(1, "Full name is required"),
   email: z.string().email("Invalid email address"),
@@ -11,13 +17,8 @@ export const sendEmailSchema = z.object({
   isPasswordResetEmail: z.boolean().default(false).optional(),
   is2FAEmail: z.object({ action: z.enum(["added", "edited"]) }).optional(),
   isRecoveryCodesGeneratedEmail: z.boolean().default(false).optional(),
-  isAccountAccessedEmail: z
-    .object({
-      ipAddress: z.string().ip(),
-      accessedAt: z.string(),
-      device: z.string(),
-    })
-    .optional(),
+  isAccountAccessedEmail: accessedDataSchema.optional(),
+  isAccountAccessedWithRecoveryCodeEmail: accessedDataSchema.optional(),
   isDeleteAccountEmail: z.boolean().default(false).optional(),
 });
 export type SendEmailSchema = z.infer<typeof sendEmailSchema>;

@@ -1,4 +1,5 @@
 import { renderAccountAccessedEmail } from "@dkstore/email/account-accessed";
+import { renderAccountAccessedWithRecoveryCodeEmail } from "@dkstore/email/account-accessed-with-recovery-code";
 import { renderAccountDeletedEmail } from "@dkstore/email/deleted-account";
 import { renderEmailChangedEmail } from "@dkstore/email/email-changed";
 import { renderPasswordChangedEmail } from "@dkstore/email/password-changed";
@@ -30,6 +31,7 @@ export const sendEmailWorker = createWorker<SendEmailSchema>(
       is2FAEmail,
       isRecoveryCodesGeneratedEmail,
       isAccountAccessedEmail,
+      isAccountAccessedWithRecoveryCodeEmail,
       isDeleteAccountEmail,
     } = sendEmailSchema.parse(data);
 
@@ -115,13 +117,25 @@ export const sendEmailWorker = createWorker<SendEmailSchema>(
         subject: `Your account has been accessed`,
         html: await renderAccountAccessedEmail({
           fullName,
-          ipAddress: isAccountAccessedEmail.ipAddress,
-          accessedAt: isAccountAccessedEmail.accessedAt,
-          device: isAccountAccessedEmail.device,
+          ...isAccountAccessedEmail,
         }),
       });
 
       logger.info(`Account accessed email sent to ${email}`);
+      return;
+    }
+
+    if (isAccountAccessedWithRecoveryCodeEmail) {
+      await sendMail({
+        to: email,
+        subject: `Your account has been accessed with recovery code`,
+        html: await renderAccountAccessedWithRecoveryCodeEmail({
+          fullName,
+          ...isAccountAccessedWithRecoveryCodeEmail,
+        }),
+      });
+
+      logger.info(`Account accessed with recovery code email sent to ${email}`);
       return;
     }
 

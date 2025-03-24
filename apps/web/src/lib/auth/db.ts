@@ -53,7 +53,13 @@ export async function getSession<T extends GetSessionProps>({
   return session;
 }
 
-export async function createSession(userId: string) {
+export async function createSession(
+  userId: string,
+  isToSendEmail: {
+    sendAccountAccessedEmail?: boolean;
+    sendAccountAccessedWithRecoveryCodeEmail?: boolean;
+  } = { sendAccountAccessedEmail: true },
+) {
   const headerList = await headers();
   const { browser, device, os } = userAgent({ headers: headerList });
 
@@ -75,15 +81,29 @@ export async function createSession(userId: string) {
       include: { user: true },
     });
 
-    await sendEmailQueue.add("account-accessed", {
-      fullName: session.user.name,
-      email: session.user.email,
-      isAccountAccessedEmail: {
-        ipAddress: ip,
-        accessedAt: new Date().toLocaleString(),
-        device: `${browser.name} on ${os.name}`,
-      },
-    });
+    if (isToSendEmail.sendAccountAccessedEmail) {
+      await sendEmailQueue.add("account-accessed", {
+        fullName: session.user.name,
+        email: session.user.email,
+        isAccountAccessedEmail: {
+          ipAddress: ip,
+          accessedAt: new Date().toLocaleString(),
+          device: `${browser.name} on ${os.name}`,
+        },
+      });
+    }
+
+    if (isToSendEmail.sendAccountAccessedWithRecoveryCodeEmail) {
+      await sendEmailQueue.add("account-accessed-with-recovery-code", {
+        fullName: session.user.name,
+        email: session.user.email,
+        isAccountAccessedWithRecoveryCodeEmail: {
+          ipAddress: ip,
+          accessedAt: new Date().toLocaleString(),
+          device: `${browser.name} on ${os.name}`,
+        },
+      });
+    }
 
     await setSession(session.id);
 
