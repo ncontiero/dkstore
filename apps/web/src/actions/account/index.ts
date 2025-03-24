@@ -167,24 +167,32 @@ export const deleteUserAction = authActionClient
     await signOutAction({});
   });
 
-export const generateRecoveryCodesAction = actionClient
+export const generateRecoveryCodesAction = authActionClient
   .schema(generateRecoveryCodesSchema)
-  .action(async ({ clientInput: { userId } }) => {
+  .action(async ({ clientInput: { isToSendEmail = true }, ctx: { user } }) => {
     const recoveryCodes = generateRecoveryCodes();
 
     await prisma.$transaction(async (tx) => {
       await tx.recoveryCode.deleteMany({
-        where: { userId },
+        where: { userId: user.id },
       });
 
       await tx.recoveryCode.createMany({
         data: recoveryCodes.map(({ encryptedCode, encryptedCodeIV }) => ({
-          userId,
+          userId: user.id,
           code: encryptedCode,
           codeIV: encryptedCodeIV,
         })),
       });
     });
+
+    if (isToSendEmail) {
+      await sendEmailQueue.add("send-recovery-codes-email", {
+        fullName: user.name,
+        email: user.email,
+        isRecoveryCodesGeneratedEmail: true,
+      });
+    }
 
     return recoveryCodes.map(({ rawCode }) => rawCode);
   });
@@ -215,7 +223,7 @@ export const addOrEdit2FAAction = authActionClient
         ? []
         : (
             await generateRecoveryCodesAction({
-              userId: user.id,
+              isToSendEmail: false,
             })
           )?.data || [];
 

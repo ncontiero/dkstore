@@ -172,7 +172,7 @@ export function AccountSecurity({
                     used to regain access to your account.
                   </DialogDescription>
                 </DialogHeader>
-                <GenerateRecoveryCodes userId={user.id} />
+                <GenerateRecoveryCodes />
               </Confirm2FA>
             </DialogPortal>
           </Dialog>

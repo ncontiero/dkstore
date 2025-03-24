@@ -1,6 +1,7 @@
 import { renderAccountDeletedEmail } from "@dkstore/email/deleted-account";
 import { renderEmailChangedEmail } from "@dkstore/email/email-changed";
 import { renderPasswordChangedEmail } from "@dkstore/email/password-changed";
+import { renderRecoveryCodesGeneratedEmail } from "@dkstore/email/recovery-codes-generated";
 import { renderTwoFactorAuthChangedEmail } from "@dkstore/email/two-factor-auth-changed";
 import { renderWelcomeEmail } from "@dkstore/email/welcome";
 import { SEND_EMAIL_QUEUE_NAME } from "@dkstore/queue/email";
@@ -26,6 +27,7 @@ export const sendEmailWorker = createWorker<SendEmailSchema>(
       isPasswordResetEmail,
       isPasswordChangeEmail,
       is2FAEmail,
+      isRecoveryCodesGeneratedEmail,
       isDeleteAccountEmail,
     } = sendEmailSchema.parse(data);
 
@@ -91,6 +93,17 @@ export const sendEmailWorker = createWorker<SendEmailSchema>(
       });
 
       logger.info(`Two factor authentication email sent to ${email}`);
+      return;
+    }
+
+    if (isRecoveryCodesGeneratedEmail) {
+      await sendMail({
+        to: email,
+        subject: `New 2FA Recovery Codes Generated`,
+        html: await renderRecoveryCodesGeneratedEmail({ fullName }),
+      });
+
+      logger.info(`Recovery codes generated email sent to ${email}`);
       return;
     }
 

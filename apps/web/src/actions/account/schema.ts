@@ -31,7 +31,7 @@ export const deleteUserSchema = z.object({
 export type DeleteUserSchema = z.infer<typeof deleteUserSchema>;
 
 export const generateRecoveryCodesSchema = z.object({
-  userId: z.string().uuid(),
+  isToSendEmail: z.boolean().default(true),
 });
 export type GenerateRecoveryCodesSchema = z.infer<
   typeof generateRecoveryCodesSchema

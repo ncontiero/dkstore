@@ -9,7 +9,7 @@ import { Loader2 } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { generateRecoveryCodesAction } from "@/actions/account";
 
-export function GenerateRecoveryCodes({ userId }: { readonly userId: string }) {
+export function GenerateRecoveryCodes() {
   const [recoveryCodes, setRecoveryCodes] = useState<string[]>([]);
   const hasRecoveryCodes = recoveryCodes.length > 0;
 
@@ -64,7 +64,7 @@ export function GenerateRecoveryCodes({ userId }: { readonly userId: string }) {
           <Button
             type="button"
             disabled={generateRecoveryCodes.status === "executing"}
-            onClick={() => generateRecoveryCodes.execute({ userId })}
+            onClick={() => generateRecoveryCodes.execute({})}
             size="sm"
           >
             {generateRecoveryCodes.status === "executing" ? (
