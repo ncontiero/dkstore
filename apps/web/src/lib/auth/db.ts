@@ -4,6 +4,7 @@ import type {
   UserWithRecoveryCodes,
 } from "@/utils/types";
 import { type User as PrismaUser, prisma } from "@dkstore/db";
+import { sendEmailQueue } from "@dkstore/queue/email";
 import { headers } from "next/headers";
 import { userAgent } from "next/server";
 import {
@@ -56,22 +57,36 @@ export async function createSession(userId: string) {
   const headerList = await headers();
   const { browser, device, os } = userAgent({ headers: headerList });
 
-  const ip = headerList.get("x-forwarded-for")
-    ? headerList.get("x-forwarded-for")?.split(",")[0]
-    : headerList.get("remote-addr");
+  const ip =
+    (headerList.get("x-forwarded-for")
+      ? headerList.get("x-forwarded-for")?.split(",")[0]
+      : headerList.get("remote-addr")) || "unknown";
 
-  const session = await prisma.session.create({
-    data: {
-      userId,
-      expires: sessionExpires(),
-      browser: browser.name,
-      device: device.type === "mobile" ? "mobile" : "desktop",
-      operatingSystem: os.name,
-      ip: ip || "unknown",
-    },
+  return await prisma.$transaction(async (tx) => {
+    const session = await tx.session.create({
+      data: {
+        userId,
+        expires: sessionExpires(),
+        browser: browser.name,
+        device: device.type === "mobile" ? "mobile" : "desktop",
+        operatingSystem: os.name,
+        ip,
+      },
+      include: { user: true },
+    });
+
+    await sendEmailQueue.add("account-accessed", {
+      fullName: session.user.name,
+      email: session.user.email,
+      isAccountAccessedEmail: {
+        ipAddress: ip,
+        accessedAt: new Date().toLocaleString(),
+        device: `${browser.name} on ${os.name}`,
+      },
+    });
+
+    await setSession(session.id);
+
+    return session;
   });
-
-  await setSession(session.id);
-
-  return session;
 }

@@ -11,6 +11,13 @@ export const sendEmailSchema = z.object({
   isPasswordResetEmail: z.boolean().default(false).optional(),
   is2FAEmail: z.object({ action: z.enum(["added", "edited"]) }).optional(),
   isRecoveryCodesGeneratedEmail: z.boolean().default(false).optional(),
+  isAccountAccessedEmail: z
+    .object({
+      ipAddress: z.string().ip(),
+      accessedAt: z.string(),
+      device: z.string(),
+    })
+    .optional(),
   isDeleteAccountEmail: z.boolean().default(false).optional(),
 });
 export type SendEmailSchema = z.infer<typeof sendEmailSchema>;

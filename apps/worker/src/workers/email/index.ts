@@ -1,3 +1,4 @@
+import { renderAccountAccessedEmail } from "@dkstore/email/account-accessed";
 import { renderAccountDeletedEmail } from "@dkstore/email/deleted-account";
 import { renderEmailChangedEmail } from "@dkstore/email/email-changed";
 import { renderPasswordChangedEmail } from "@dkstore/email/password-changed";
@@ -28,6 +29,7 @@ export const sendEmailWorker = createWorker<SendEmailSchema>(
       isPasswordChangeEmail,
       is2FAEmail,
       isRecoveryCodesGeneratedEmail,
+      isAccountAccessedEmail,
       isDeleteAccountEmail,
     } = sendEmailSchema.parse(data);
 
@@ -104,6 +106,22 @@ export const sendEmailWorker = createWorker<SendEmailSchema>(
       });
 
       logger.info(`Recovery codes generated email sent to ${email}`);
+      return;
+    }
+
+    if (isAccountAccessedEmail) {
+      await sendMail({
+        to: email,
+        subject: `Your account has been accessed`,
+        html: await renderAccountAccessedEmail({
+          fullName,
+          ipAddress: isAccountAccessedEmail.ipAddress,
+          accessedAt: isAccountAccessedEmail.accessedAt,
+          device: isAccountAccessedEmail.device,
+        }),
+      });
+
+      logger.info(`Account accessed email sent to ${email}`);
       return;
     }
 
