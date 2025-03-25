@@ -24,7 +24,7 @@ export function ChangeEmailBtn() {
   return (
     <>
       <DialogClose ref={dialogCloseRef} asChild>
-        <Button variant="ghost">Cancel</Button>
+        <Button variant="secondary">Cancel</Button>
       </DialogClose>
       <Button
         type="button"
