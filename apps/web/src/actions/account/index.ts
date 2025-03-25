@@ -4,8 +4,8 @@ import { prisma } from "@dkstore/db";
 import { sendEmailQueue } from "@dkstore/queue/email";
 import { comparePasswords, hashPassword } from "@dkstore/utils/password";
 import { redirect } from "next/navigation";
-import { sessionExpires, setSession } from "@/lib/auth/session";
-import { authActionClient } from "@/lib/safe-action";
+import { getSession, sessionExpires, setSession } from "@/lib/auth/session";
+import { actionClient, authActionClient } from "@/lib/safe-action";
 import { encrypt } from "@/utils/cryptography";
 import { generateRecoveryCodes } from "@/utils/recoveryCodes";
 import { isTotpValid } from "@/utils/totp";
@@ -21,23 +21,33 @@ import {
   verify2FASchema,
 } from "./schema";
 
-export const refreshSessionAction = authActionClient.action(
-  async ({ ctx: { session } }) => {
-    if (session.expires < new Date()) {
-      throw new Error("Session expired");
-    }
+export const refreshSessionAction = actionClient.action(async () => {
+  const jwtSession = await getSession();
+  if (!jwtSession) {
+    return;
+  }
 
-    if (session.expires.getTime() - Date.now() < 1000 * 60 * 60) {
-      const newExpires = sessionExpires();
-      await prisma.session.update({
-        where: { id: session.id },
-        data: { expires: newExpires },
-      });
+  const dbSession = await prisma.session.findUnique({
+    where: { id: jwtSession.id },
+  });
+  if (!dbSession) {
+    throw new Error("Session not found");
+  }
 
-      await setSession(session.id);
-    }
-  },
-);
+  if (dbSession.expires < new Date()) {
+    throw new Error("Session expired");
+  }
+
+  if (dbSession.expires.getTime() - Date.now() < 1000 * 60 * 60) {
+    const newExpires = sessionExpires();
+    await prisma.session.update({
+      where: { id: dbSession.id },
+      data: { expires: newExpires },
+    });
+
+    await setSession(dbSession.id);
+  }
+});
 
 export const sendEmailVerificationAction = authActionClient.action(
   async ({ ctx: { session } }) => {

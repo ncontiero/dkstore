@@ -159,8 +159,15 @@ export const signOutAction = actionClient
     const session = await getSession();
 
     cookiesStore.delete("session");
+
     if (session) {
-      await prisma.session.delete({ where: { id: session.id } });
+      const dbSession = await prisma.session.findUnique({
+        where: { id: session.id },
+      });
+
+      if (dbSession) {
+        await prisma.session.delete({ where: { id: session.id } });
+      }
     }
 
     redirect(`/auth/sign-in${redirectTo ? `?redirect=${redirectTo}` : ""}`);

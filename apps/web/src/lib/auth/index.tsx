@@ -15,11 +15,11 @@ import { refreshSessionAction } from "@/actions/account";
 import { signOutAction } from "@/actions/auth";
 import { authRoutes } from "./routes";
 
-type SessionContextType = {
+interface SessionContextType {
   session: SessionWhitUser | null;
-};
+}
 
-const SessionContext = createContext<SessionContextType | null>(null);
+const SessionContext = createContext<SessionContextType>({ session: null });
 
 export function useSession(): SessionContextType {
   const context = useContext(SessionContext);
@@ -29,32 +29,35 @@ export function useSession(): SessionContextType {
   return context;
 }
 
-export function SessionProvider({
-  children,
-  session,
-}: PropsWithChildren<{ readonly session: SessionContextType["session"] }>) {
-  const props = useMemo(() => ({ session }), [session]);
+interface SessionProviderProps extends PropsWithChildren {
+  readonly session: SessionWhitUser | null;
+}
+
+export function SessionProvider({ children, session }: SessionProviderProps) {
   const pathname = usePathname();
+  const isAuthRoute = useMemo(
+    () => authRoutes.some((route) => pathname.startsWith(route)),
+    [pathname],
+  );
+  const props = useMemo(() => ({ session }), [session]);
 
   const signOut = useAction(signOutAction, {
     onSuccess: () => {
       toast.warn("You have been signed out!");
     },
+    onError: () => {
+      toast.error("Sign out failed!");
+    },
   });
 
-  const isAuthRoute = useMemo(
-    () => authRoutes.some((route) => pathname.startsWith(route)),
-    [pathname],
-  );
-
   const refreshSession = useAction(refreshSessionAction, {
-    onError: () => {
+    onError: ({ error }) => {
+      toast.error(`Session refresh failed: ${error.serverError}`);
       signOut.execute({ redirectTo: isAuthRoute ? "/" : pathname });
     },
   });
 
   useEffect(() => {
-    if (session === null) return;
     refreshSession.execute();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
