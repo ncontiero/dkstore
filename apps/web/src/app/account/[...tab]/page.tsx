@@ -96,6 +96,7 @@ export default async function AccountPage({ params, searchParams }: PageProps) {
   const tabsParam = (await params).tab;
   const tabParam = tabsParam[0];
   const defaultTab = tabs[0]!.value;
+  const tab = tabs.find((t) => t.value === tabParam) || tabs[0]!;
 
   if (tabsParam.length > 1 || !tabs.some((tab) => tab.value === tabParam)) {
     redirect(`/account/${defaultTab}`);
@@ -144,19 +145,13 @@ export default async function AccountPage({ params, searchParams }: PageProps) {
             </TabsList>
             <ScrollBar orientation="horizontal" />
           </ScrollArea>
-          {tabs.map((tab) => (
-            <TabsContent
-              key={tab.value}
-              value={tab.value}
-              className="mt-0 w-full rounded-md"
-            >
-              <div className="flex flex-col gap-1">
-                <h2 className="text-xl font-bold">{tab.name}</h2>
-                <p className="text-foreground/80">{tab.description}</p>
-              </div>
-              {tab.content(session)}
-            </TabsContent>
-          ))}
+          <TabsContent value={tab.value} className="mt-0 w-full rounded-md">
+            <div className="flex flex-col gap-1">
+              <h2 className="text-xl font-bold">{tab.name}</h2>
+              <p className="text-foreground/80">{tab.description}</p>
+            </div>
+            {tab.content(session)}
+          </TabsContent>
         </AccountTabsRoot>
       </Suspense>
     </main>
