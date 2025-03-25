@@ -47,7 +47,7 @@ export default async function ResetPasswordPage({ params }: PageProps) {
     <Suspense fallback={<Loading />}>
       <Card
         title="Reset password"
-        description="Enter your new password below to reset your password"
+        description="Enter your new password below to reset your password. This link will expire in 1 hour."
       >
         <ResetPasswordForm userId={existingToken.userId} />
       </Card>

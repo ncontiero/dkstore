@@ -80,9 +80,8 @@ export async function AccountSecurity({
                     Change your password
                   </DialogTitle>
                   <DialogDescription className="text-foreground/80">
-                    Update your password. Make sure it&apos;s least 8 characters
-                    long, and includes a combination of numbers, letters and
-                    special characters.
+                    Update your password. After saving, you&apos; ll be logged
+                    out.
                   </DialogDescription>
                 </DialogHeader>
                 <Separator />

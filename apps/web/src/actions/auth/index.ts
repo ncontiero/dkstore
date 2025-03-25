@@ -280,6 +280,7 @@ export const resetPasswordAction = actionClient
       await tx.token.deleteMany({
         where: { userId, type: "RESET_PASSWORD" },
       });
+      await tx.session.deleteMany({ where: { userId: user.id } });
 
       await sendEmailQueue.add("send-password-change-email", {
         fullName: user.name,
