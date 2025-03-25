@@ -47,3 +47,7 @@ export const verify2FASchema = z.object({
   otpCode: z.string().min(6, "Your one-time password must be 6 characters."),
 });
 export type Verify2FASchema = z.infer<typeof verify2FASchema>;
+
+export const revokeSessionSchema = z.object({
+  sessionId: z.string().uuid(),
+});

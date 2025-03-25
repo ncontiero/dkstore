@@ -1,4 +1,5 @@
 import type { SessionWhitUser } from "@/utils/types";
+import { prisma } from "@dkstore/db";
 import { Badge } from "@dkstore/ui/badge";
 import { Button } from "@dkstore/ui/button";
 import {
@@ -13,7 +14,8 @@ import {
 } from "@dkstore/ui/dialog";
 import { Link } from "@dkstore/ui/link";
 import { Separator } from "@dkstore/ui/separator";
-import { LockKeyhole } from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
+import { Laptop, LockKeyhole, Smartphone } from "lucide-react";
 import {
   AccountCard,
   AccountCardContent,
@@ -26,8 +28,9 @@ import { Confirm2FA } from "@/components/Confirm2FA";
 import { AddOrEdit2FA } from "./AddOrEdit2FA";
 import { UpdatePasswordForm } from "./forms/UpdatePasswordForm";
 import { GenerateRecoveryCodes } from "./GenerateRecoveryCodes";
+import { RevokeSessionBtn } from "./RevokeSessionBtn";
 
-export function AccountSecurity({
+export async function AccountSecurity({
   session,
   recoveryCodesLength = 0,
 }: {
@@ -35,6 +38,15 @@ export function AccountSecurity({
   readonly recoveryCodesLength?: number;
 }) {
   const { user } = session;
+  const sessions = (
+    await prisma.session.findMany({
+      where: { userId: user.id },
+    })
+  ).sort((a, b) => {
+    if (a.id === session.id) return -1;
+    if (b.id === session.id) return 1;
+    return 0;
+  });
 
   return (
     <>
@@ -179,6 +191,79 @@ export function AccountSecurity({
             </DialogPortal>
           </Dialog>
         </AccountCardFooter>
+      </AccountCard>
+      <AccountCard>
+        <AccountCardContent>
+          <AccountCardTitle>
+            <span>Session</span>
+          </AccountCardTitle>
+          <AccountCardDescription>
+            This is a list of devices that have logged into your account. Revoke
+            any sessions that you do not recognize.
+          </AccountCardDescription>
+          <div className="flex flex-col divide-y rounded-md border">
+            {sessions.map(
+              ({ id, browser, operatingSystem, device, ip, updatedAt }) => (
+                <div
+                  key={id}
+                  className="relative flex flex-col gap-2 px-7 py-4"
+                >
+                  <div className="flex items-center gap-2">
+                    {device === "mobile" ? (
+                      <Smartphone className="size-6" />
+                    ) : (
+                      <Laptop className="size-6" />
+                    )}
+                    <span className="font-bold">
+                      {browser} on {operatingSystem}
+                    </span>
+                    {id === session.id && (
+                      <Badge variant="secondary">This device</Badge>
+                    )}
+                  </div>
+                  <div className="mt-2 flex flex-col gap-2">
+                    <span className="text-sm text-muted-foreground">{ip}</span>
+                    <span className="text-sm text-muted-foreground">
+                      {formatDistanceToNow(updatedAt, {
+                        addSuffix: true,
+                        includeSeconds: true,
+                      })}
+                    </span>
+                  </div>
+                  {id !== session.id && (
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="sm"
+                          className="absolute right-4 top-4 w-fit"
+                        >
+                          Revoke session
+                        </Button>
+                      </DialogTrigger>
+                      <DialogPortal>
+                        <DialogOverlay />
+                        <Confirm2FA session={session}>
+                          <DialogHeader className="space-y-4">
+                            <DialogTitle className="text-xl">
+                              Revoke session
+                            </DialogTitle>
+                            <DialogDescription className="text-base">
+                              Are you sure you want to revoke this session? This
+                              action cannot be undone.
+                            </DialogDescription>
+                          </DialogHeader>
+                          <RevokeSessionBtn sessionId={id} />
+                        </Confirm2FA>
+                      </DialogPortal>
+                    </Dialog>
+                  )}
+                </div>
+              ),
+            )}
+          </div>
+        </AccountCardContent>
       </AccountCard>
     </>
   );

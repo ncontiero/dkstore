@@ -14,6 +14,7 @@ import {
   addOrEdit2FASchema,
   deleteUserSchema,
   generateRecoveryCodesSchema,
+  revokeSessionSchema,
   updateUserEmailSchema,
   updateUserNameSchema,
   updateUserPasswordSchema,
@@ -310,4 +311,18 @@ export const verify2FAAction = authActionClient
       data: { lastOtpVerifiedAt: new Date() },
     });
     await setSession(session.id);
+  });
+
+export const revokeSessionAction = authActionClient
+  .schema(revokeSessionSchema)
+  .action(async ({ clientInput: { sessionId }, ctx: { session } }) => {
+    const { user } = session;
+
+    if (user.id === sessionId) {
+      throw new Error("You cannot revoke your own session");
+    }
+
+    await prisma.session.delete({
+      where: { id: sessionId },
+    });
   });
