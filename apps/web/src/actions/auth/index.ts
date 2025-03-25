@@ -3,21 +3,76 @@
 import { prisma } from "@dkstore/db";
 import { sendEmailQueue } from "@dkstore/queue/email";
 import { comparePasswords, hashPassword } from "@dkstore/utils/password";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { createSession } from "@/lib/auth/db";
-import { getSession } from "@/lib/auth/session";
+import { userAgent } from "next/server";
+import { getSession, sessionExpires, setSession } from "@/lib/auth/session";
 import { actionClient } from "@/lib/safe-action";
 import { decrypt } from "@/utils/cryptography";
 import { isTotpValid } from "@/utils/totp";
 import { sendEmailVerificationAction } from "../account";
 import {
+  createSessionSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
   signInSchema,
   signOutSchema,
   signUpSchema,
 } from "./schema";
+
+export const createSessionAction = actionClient
+  .schema(createSessionSchema)
+  .action(async ({ clientInput: { userId, isToSendEmail } }) => {
+    const headerList = await headers();
+    const { browser, device, os } = userAgent({ headers: headerList });
+
+    const ip =
+      (headerList.get("x-forwarded-for")
+        ? headerList.get("x-forwarded-for")?.split(",")[0]
+        : headerList.get("remote-addr")) || "unknown";
+
+    return await prisma.$transaction(async (tx) => {
+      const session = await tx.session.create({
+        data: {
+          userId,
+          expires: sessionExpires(),
+          browser: browser.name,
+          device: device.type === "mobile" ? "mobile" : "desktop",
+          operatingSystem: os.name,
+          ip,
+        },
+        include: { user: true },
+      });
+
+      if (isToSendEmail?.accountAccessedEmail) {
+        await sendEmailQueue.add("account-accessed", {
+          fullName: session.user.name,
+          email: session.user.email,
+          isAccountAccessedEmail: {
+            ipAddress: ip,
+            accessedAt: new Date().toLocaleString(),
+            device: `${browser.name} on ${os.name}`,
+          },
+        });
+      }
+
+      if (isToSendEmail?.accountAccessedWithRecoveryCodeEmail) {
+        await sendEmailQueue.add("account-accessed-with-recovery-code", {
+          fullName: session.user.name,
+          email: session.user.email,
+          isAccountAccessedWithRecoveryCodeEmail: {
+            ipAddress: ip,
+            accessedAt: new Date().toLocaleString(),
+            device: `${browser.name} on ${os.name}`,
+          },
+        });
+      }
+
+      await setSession(session.id);
+
+      return session;
+    });
+  });
 
 export const signInAction = actionClient
   .schema(signInSchema)
@@ -80,9 +135,12 @@ export const signInAction = actionClient
             },
           });
 
-          await createSession(user.id, {
-            sendAccountAccessedWithRecoveryCodeEmail: true,
-            sendAccountAccessedEmail: false,
+          await createSessionAction({
+            userId: user.id,
+            isToSendEmail: {
+              accountAccessedEmail: false,
+              accountAccessedWithRecoveryCodeEmail: true,
+            },
           });
         });
 
@@ -106,7 +164,10 @@ export const signInAction = actionClient
       }
     }
 
-    await createSession(user.id);
+    await createSessionAction({
+      userId: user.id,
+      isToSendEmail: { accountAccessedEmail: true },
+    });
 
     redirect(redirectTo || "/");
   });
@@ -135,7 +196,10 @@ export const signUpAction = actionClient
         },
       });
 
-      await createSession(user.id, { sendAccountAccessedEmail: false });
+      await createSessionAction({
+        userId: user.id,
+        isToSendEmail: { accountAccessedEmail: false },
+      });
     } catch {
       throw new Error(
         "An error occurred while creating your account. Please try again later",

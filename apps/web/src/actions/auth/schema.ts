@@ -2,6 +2,14 @@ import { passwordSchema } from "@dkstore/utils/password";
 import { z } from "zod";
 import { emailSchema, nameSchema } from "../schema";
 
+export const createSessionSchema = z.object({
+  userId: z.string().uuid(),
+  isToSendEmail: z.object({
+    accountAccessedEmail: z.boolean().default(true),
+    accountAccessedWithRecoveryCodeEmail: z.boolean().default(false),
+  }),
+});
+
 export const signOutSchema = z.object({
   redirectTo: z
     .string()
