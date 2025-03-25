@@ -75,7 +75,7 @@ const tabs = [
     description: "Admin area for the store.",
     value: "admin",
     icon: ShieldUser,
-    content: () => <Admin />,
+    content: (session: SessionWhitUser) => <Admin session={session} />,
   },
 ];
 
@@ -114,7 +114,7 @@ export default async function AccountPage({ params, searchParams }: PageProps) {
 
   return (
     <main className="mx-auto my-10 flex max-w-5xl flex-col gap-4 px-2 md:px-0">
-      <div className="flex flex-col items-center gap-1 sm:flex-row">
+      <div className="flex flex-col items-center gap-1 md:flex-row">
         <h1 className="text-3xl font-bold">Account Settings</h1>
         <Badge variant={user.isAdmin ? "blue" : "secondary"} className="mt-1">
           {user.isAdmin ? "Admin" : "User"}
@@ -123,7 +123,7 @@ export default async function AccountPage({ params, searchParams }: PageProps) {
       <Separator className="mt-3 md:mt-6" />
       <Suspense fallback={<div>Loading...</div>}>
         <AccountTabsRoot defaultTab={defaultTab} tabParam={tabParam}>
-          <ScrollArea className="w-auto pb-2 md:min-w-fit mdlg:w-1/4">
+          <ScrollArea className="w-auto pb-2 mdlg:min-w-fit lg:w-1/4">
             <TabsList className="w-full gap-1 bg-transparent p-0">
               {tabs.map((tab) =>
                 tab.value === "admin" && !user.isAdmin ? null : (

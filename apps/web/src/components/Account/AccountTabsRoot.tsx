@@ -18,8 +18,8 @@ export function AccountTabsRoot({
     <Tabs
       defaultValue={tabParam ?? defaultTab}
       value={tabParam}
-      orientation={width && width < 768 ? "horizontal" : "vertical"}
-      className="flex flex-col gap-4 md:flex-row"
+      orientation={width && width < 867 ? "horizontal" : "vertical"}
+      className="flex flex-col gap-4 mdlg:flex-row"
     >
       {children}
     </Tabs>
