@@ -16,6 +16,7 @@ import {
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AccountTabsRoot } from "@/components/Account";
+import { SuspenseLoading } from "@/components/SuspenseLoading";
 import { getSession } from "@/lib/auth/db";
 import { getQueueDashboardURL } from "@/utils/queue-dash-url";
 import { AccountDetails } from "./TabsContent/AccountDetails";
@@ -121,10 +122,10 @@ export default async function AccountPage({ params, searchParams }: PageProps) {
         </Badge>
       </div>
       <Separator className="mt-3 md:mt-6" />
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<SuspenseLoading />}>
         <AccountTabsRoot defaultTab={defaultTab} tabParam={tabParam}>
           <ScrollArea className="w-auto pb-2 mdlg:min-w-fit lg:w-1/4">
-            <TabsList className="w-full gap-1 bg-transparent p-0">
+            <TabsList className="w-full gap-1 bg-transparent p-1">
               {tabs.map((tab) =>
                 tab.value === "admin" && !user.isAdmin ? null : (
                   <TabsTrigger

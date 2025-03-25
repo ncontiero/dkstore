@@ -100,14 +100,14 @@ export const columns: ColumnDef<User>[] = [
     cell: () => (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="size-8 p-0 ml-2">
+          <Button variant="ghost" className="ml-2 size-8 p-0">
             <span className="sr-only">Open menu</span>
             <MoreHorizontal />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem className="p-3 gap-2">
+          <DropdownMenuItem className="gap-2 p-3">
             <ShieldUser />
             <span>Turn admin</span>
           </DropdownMenuItem>
