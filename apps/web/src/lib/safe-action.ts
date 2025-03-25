@@ -20,6 +20,9 @@ export const authActionClient = actionClient.use(async ({ next }) => {
   if (!session) {
     throw new Error("You must be logged in to perform this action");
   }
+  if (session.expires < new Date()) {
+    throw new Error("Your session has expired");
+  }
 
   return next({ ctx: { session } });
 });
