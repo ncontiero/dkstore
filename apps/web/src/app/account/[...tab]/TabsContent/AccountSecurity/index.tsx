@@ -15,7 +15,7 @@ import {
 import { Link } from "@dkstore/ui/link";
 import { Separator } from "@dkstore/ui/separator";
 import { formatDistanceToNow } from "date-fns";
-import { Laptop, LockKeyhole, Smartphone } from "lucide-react";
+import { CircleX, Laptop, LockKeyhole, Smartphone } from "lucide-react";
 import {
   AccountCard,
   AccountCardContent,
@@ -207,17 +207,21 @@ export async function AccountSecurity({
                   key={id}
                   className="relative flex flex-col gap-2 px-7 py-4"
                 >
-                  <div className="flex items-center gap-2">
-                    {device === "mobile" ? (
-                      <Smartphone className="size-6" />
-                    ) : (
-                      <Laptop className="size-6" />
-                    )}
-                    <span className="font-bold">
-                      {browser} on {operatingSystem}
-                    </span>
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                    <div className="flex items-center gap-2">
+                      {device === "mobile" ? (
+                        <Smartphone className="size-6" />
+                      ) : (
+                        <Laptop className="size-6" />
+                      )}
+                      <span className="font-bold">
+                        {browser} on {operatingSystem}
+                      </span>
+                    </div>
                     {id === session.id && (
-                      <Badge variant="secondary">This device</Badge>
+                      <Badge variant="secondary" className="size-fit">
+                        This device
+                      </Badge>
                     )}
                   </div>
                   <div className="mt-2 flex flex-col gap-2">
@@ -236,9 +240,12 @@ export async function AccountSecurity({
                           type="button"
                           variant="destructive"
                           size="sm"
-                          className="absolute right-4 top-4 w-fit"
+                          className="absolute bottom-4 right-4 size-fit w-fit p-2 sm:top-4"
                         >
-                          Revoke session
+                          <span className="hidden sm:flex">Revoke session</span>
+                          <span className="flex sm:hidden">
+                            <CircleX />
+                          </span>
                         </Button>
                       </DialogTrigger>
                       <DialogPortal>
