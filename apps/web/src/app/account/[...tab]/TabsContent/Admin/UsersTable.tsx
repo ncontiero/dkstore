@@ -2,6 +2,8 @@
 
 import type { User } from "@/utils/types";
 import { useState } from "react";
+import { toast } from "react-toastify";
+import { Badge } from "@dkstore/ui/badge";
 import { Button } from "@dkstore/ui/button";
 import {
   DropdownMenu,
@@ -21,6 +23,7 @@ import {
   TableRow,
 } from "@dkstore/ui/table";
 import {
+  type CellContext,
   type ColumnDef,
   type ColumnFiltersState,
   type SortingState,
@@ -38,7 +41,56 @@ import {
   ChevronDown,
   MoreHorizontal,
   ShieldUser,
+  UserIcon,
 } from "lucide-react";
+import { useAction } from "next-safe-action/hooks";
+import { enableOrDisableUserAdminAction } from "@/actions/admin";
+
+function ActionComp({ row }: CellContext<User, unknown>) {
+  const enableOrDisableAdmin = useAction(enableOrDisableUserAdminAction, {
+    onExecute: () => {
+      toast.loading("Updating user...", { toastId: "update-user" });
+    },
+    onError: ({ error }) => {
+      toast.update("update-user", {
+        render: error.serverError,
+        type: "error",
+        isLoading: false,
+      });
+    },
+    onSuccess: () => {
+      toast.update("update-user", {
+        render: "User updated successfully",
+        type: "success",
+        isLoading: false,
+      });
+    },
+  });
+
+  const user = row.original;
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="ml-2 size-8 p-0">
+          <span className="sr-only">Open menu</span>
+          <MoreHorizontal />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuItem
+          className="cursor-pointer gap-2 p-3"
+          disabled={enableOrDisableAdmin.status === "executing"}
+          onClick={() => enableOrDisableAdmin.execute({ userId: user.id })}
+        >
+          {user.isAdmin ? <UserIcon /> : <ShieldUser />}
+          <span>Make {user.isAdmin ? "user" : "admin"}</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
 
 export const columns: ColumnDef<User>[] = [
   {
@@ -55,7 +107,14 @@ export const columns: ColumnDef<User>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="ml-2">{row.getValue("name")}</div>,
+    cell: ({ row }) => (
+      <div className="ml-2">
+        {row.getValue("name")}{" "}
+        <Badge className="px-1 py-0 text-xs">
+          {row.original.isAdmin ? "Admin" : "User"}
+        </Badge>
+      </div>
+    ),
   },
   {
     accessorKey: "email",
@@ -97,23 +156,7 @@ export const columns: ColumnDef<User>[] = [
     id: "actions",
     enableHiding: false,
     header: "Actions",
-    cell: () => (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="ml-2 size-8 p-0">
-            <span className="sr-only">Open menu</span>
-            <MoreHorizontal />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem className="gap-2 p-3">
-            <ShieldUser />
-            <span>Turn admin</span>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    ),
+    cell: ActionComp,
   },
 ];
 

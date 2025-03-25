@@ -26,3 +26,13 @@ export const authActionClient = actionClient.use(async ({ next }) => {
 
   return next({ ctx: { session } });
 });
+
+export const adminActionClient = authActionClient.use(
+  ({ next, ctx: { session } }) => {
+    if (!session.user.isAdmin) {
+      throw new Error("You must be an admin to perform this action");
+    }
+
+    return next({ ctx: { session } });
+  },
+);
