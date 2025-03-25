@@ -4,7 +4,7 @@ import { createJWT, verifyJWT } from "@dkstore/utils/jwt";
 import { getSession, redirectUrl } from "./utils";
 
 type SessionProps = {
-  user: { id: string };
+  id: string;
 };
 
 export function authRoutes(app: FastifyInstance) {
@@ -36,20 +36,19 @@ export function authRoutes(app: FastifyInstance) {
         return reply.redirect(redirectUrl);
       }
 
-      if (!session || !session.user?.id) {
+      if (!session || !session.id) {
         return reply.redirect(redirectUrl);
       }
 
-      const user = await prisma.user.findUnique({
-        where: {
-          id: session.user.id,
-        },
+      const dbSession = await prisma.session.findUnique({
+        where: { id: session.id },
+        include: { user: true },
       });
 
-      if (!user) {
+      if (!dbSession || dbSession.expires < new Date()) {
         return reply.redirect(redirectUrl);
       }
-      if (!user.isAdmin) {
+      if (!dbSession.user.isAdmin) {
         const isNotAdminUrl = new URL(redirectUrl);
         isNotAdminUrl.searchParams.set("isNotAdmin", "true");
         return reply.redirect(isNotAdminUrl.toString());
@@ -57,8 +56,8 @@ export function authRoutes(app: FastifyInstance) {
 
       if (!sessionCookie) {
         const maxAge = 60 * 60 * 24 * 1;
-        const newToken = await createJWT({
-          user: { id: user.id },
+        const newToken = await createJWT<SessionProps>({
+          id: dbSession.id,
         });
 
         reply.header(
@@ -90,20 +89,19 @@ export async function authHook(req: FastifyRequest, reply: FastifyReply) {
     return reply.redirect(redirectUrl);
   }
 
-  if (!session || !session.user?.id) {
+  if (!session || !session.id) {
     return reply.redirect(redirectUrl);
   }
 
-  const user = await prisma.user.findUnique({
-    where: {
-      id: session.user.id,
-    },
+  const dbSession = await prisma.session.findUnique({
+    where: { id: session.id },
+    include: { user: true },
   });
 
-  if (!user) {
+  if (!dbSession || dbSession.expires < new Date()) {
     return reply.redirect(redirectUrl);
   }
-  if (!user.isAdmin) {
+  if (!dbSession.user.isAdmin) {
     const isNotAdminUrl = new URL(redirectUrl);
     isNotAdminUrl.searchParams.set("isNotAdmin", "true");
     return reply.redirect(isNotAdminUrl.toString());
