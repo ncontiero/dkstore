@@ -21,7 +21,7 @@
     "@dkstore/env": "workspace:*",
     "@dkstore/queue": "workspace:*",
     "@dkstore/utils": "workspace:*",
-    "fastify": "^5.2.1"
+    "fastify": "^5.2.2"
   },
   "devDependencies": {
     "@dkshs/eslint-config": "4.5.2",
