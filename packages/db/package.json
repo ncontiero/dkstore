@@ -36,7 +36,7 @@
     "@dkshs/eslint-config": "4.6.0",
     "@dkstore/tsconfig": "workspace:*",
     "@rslib/core": "^0.6.0",
-    "@types/node": "^22.13.13",
+    "@types/node": "^22.13.14",
     "concurrently": "^9.1.2",
     "eslint": "^9.23.0",
     "prisma": "6.5.0",
