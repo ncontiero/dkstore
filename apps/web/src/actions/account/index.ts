@@ -12,6 +12,8 @@ import { isTotpValid } from "@/utils/totp";
 import { signOutAction } from "../auth";
 import {
   addOrEdit2FASchema,
+  addOrUpdateAddressSchema,
+  deleteAddressSchema,
   deleteUserSchema,
   generateRecoveryCodesSchema,
   revokeSessionSchema,
@@ -335,5 +337,48 @@ export const revokeSessionAction = authActionClient
 
     await prisma.session.delete({
       where: { id: sessionId },
+    });
+  });
+
+export const addOrUpdateAddressAction = authActionClient
+  .schema(addOrUpdateAddressSchema)
+  .action(async ({ clientInput: data, ctx: { session } }) => {
+    const { user } = session;
+
+    await prisma.$transaction(async (tx) => {
+      const hasDefaultAddress = await tx.address.findMany({
+        where: { userId: user.id, isDefault: true },
+      });
+
+      if (hasDefaultAddress.length < 2 || data.isDefault) {
+        data.isDefault = true;
+      }
+
+      if (data.isDefault && hasDefaultAddress.length > 0) {
+        // If the address is default, we need to set all other addresses to not be default
+        await tx.address.updateMany({
+          where: { userId: user.id, isDefault: true },
+          data: { isDefault: false },
+        });
+      }
+
+      await tx.address.upsert({
+        where: { id: data.id || -1, userId: user.id },
+        update: data,
+        create: {
+          ...data,
+          userId: user.id,
+        },
+      });
+    });
+  });
+
+export const deleteAddressAction = authActionClient
+  .schema(deleteAddressSchema)
+  .action(async ({ clientInput: { id }, ctx: { session } }) => {
+    const { user } = session;
+
+    await prisma.address.deleteMany({
+      where: { id, userId: user.id },
     });
   });

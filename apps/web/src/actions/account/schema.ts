@@ -51,3 +51,22 @@ export type Verify2FASchema = z.infer<typeof verify2FASchema>;
 export const revokeSessionSchema = z.object({
   sessionId: z.string().uuid(),
 });
+
+export const addOrUpdateAddressSchema = z.object({
+  id: z.number().optional(),
+  country: z.string().min(1, "Country is required"),
+  zipCode: z.string().min(1, "Zip Code is required"),
+  street: z.string().min(1, "Street is required"),
+  number: z.string().min(1, "Number is required"),
+  complement: z.string().optional(),
+  neighborhood: z.string().min(1, "Neighborhood is required"),
+  city: z.string().min(1, "City is required"),
+  state: z.string().min(1, "State is required"),
+  isDefault: z.boolean().default(false).optional(),
+});
+export type AddOrUpdateAddressSchema = z.infer<typeof addOrUpdateAddressSchema>;
+
+export const deleteAddressSchema = z.object({
+  id: z.number().min(1, "Address ID is required"),
+});
+export type DeleteAddressSchema = z.infer<typeof deleteAddressSchema>;

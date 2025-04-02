@@ -21,6 +21,7 @@ import { getSession } from "@/lib/auth/db";
 import { getQueueDashboardURL } from "@/utils/queue-dash-url";
 import { AccountDetails } from "./TabsContent/AccountDetails";
 import { AccountSecurity } from "./TabsContent/AccountSecurity";
+import { Addresses } from "./TabsContent/Addresses";
 import { Admin } from "./TabsContent/Admin";
 
 type PageProps = {
@@ -55,7 +56,7 @@ const tabs = [
     value: "addresses",
     description: "Addresses that you have registered in the store.",
     icon: MapPin,
-    content: (session: SessionWhitUser) => <AccountDetails session={session} />,
+    content: (session: SessionWhitUser) => <Addresses session={session} />,
   },
   {
     name: "Your orders",
