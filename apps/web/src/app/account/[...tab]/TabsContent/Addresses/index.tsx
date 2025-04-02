@@ -40,11 +40,11 @@ export async function Addresses({
         <AccountCardDescription>
           Manage your shipping and billing addresses.
         </AccountCardDescription>
-        <div className="my-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="my-2 grid grid-cols-1 gap-4 sm:grid-cols-2">
           {addresses.map((address) => (
             <div
               key={address.id}
-              className="flex flex-col text-muted-foreground border rounded-md p-4"
+              className="flex flex-col rounded-md border p-4 text-muted-foreground"
             >
               <p>
                 {address.street} {address.number}
@@ -56,13 +56,13 @@ export async function Addresses({
               <p>{address.country}</p>
               {address.complement ? <p>{address.complement}</p> : null}
               {address.isDefault ? (
-                <p className="text-sm text-green-500 mt-1">Default address</p>
+                <p className="mt-1 text-sm text-green-500">Default address</p>
               ) : null}
               <Separator className="my-4" />
-              <div className="flex items-center gap-2 justify-between">
+              <div className="flex items-center justify-between gap-2">
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button type="button" variant="link" className="p-0 h-auto">
+                    <Button type="button" variant="link" className="h-auto p-0">
                       Update
                     </Button>
                   </DialogTrigger>
@@ -86,7 +86,7 @@ export async function Addresses({
                     <Button
                       type="button"
                       variant="link"
-                      className="p-0 h-auto text-destructive ring-destructive"
+                      className="h-auto p-0 text-destructive ring-destructive"
                       disabled={addresses.length === 1}
                     >
                       {addresses.length === 1 && (

@@ -22,8 +22,8 @@
     "nodemailer": "^6.10.0"
   },
   "devDependencies": {
-    "@dkshs/eslint-config": "4.6.0",
     "@dkstore/tsconfig": "workspace:*",
+    "@ncontiero/eslint-config": "5.1.1",
     "@rslib/core": "^0.6.0",
     "@types/node": "^22.13.14",
     "@types/nodemailer": "^6.4.17",

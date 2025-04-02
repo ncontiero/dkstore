@@ -50,9 +50,9 @@ export function AddOrUpdateAddress({
   }
 
   return (
-    <ScrollArea className="max-h-[564px] relative mb-14 -mx-2">
+    <ScrollArea className="relative -mx-2 mb-14 max-h-[564px]">
       <form
-        className="mt-4 flex flex-col gap-6 pr-4 pl-2"
+        className="mt-4 flex flex-col gap-6 pl-2 pr-4"
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <div className="flex flex-col gap-2">
@@ -202,7 +202,7 @@ export function AddOrUpdateAddress({
         <div className="flex items-center gap-2">
           <Label
             htmlFor="is-default"
-            className="text-muted-foreground cursor-pointer"
+            className="cursor-pointer text-muted-foreground"
           >
             Set as default address
           </Label>

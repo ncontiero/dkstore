@@ -1,7 +1,7 @@
 # DkStore
 
 [![license mit](https://img.shields.io/badge/licence-MIT-7c3aed)](/LICENSE)
-[![Built with dkcutter-nextjs](https://img.shields.io/badge/built%20with-DKCutter%20NextJs-7c3aed.svg)](https://github.com/dkshs/dkcutter-nextjs)
+[![Built with dkcutter-nextjs](https://img.shields.io/badge/built%20with-DKCutter%20NextJs-7c3aed.svg)](https://github.com/ncontiero/dkcutter-nextjs)
 
 An e-commerce with Turborepo, Next.Js, BullMQ and React Email.
 
@@ -18,7 +18,7 @@ Do you use `nvm`? Then you can run `nvm install` in the project folder to instal
 ### Get the repository
 
 ```bash
-git clone https://github.com/dkshs/dkstore.git
+git clone https://github.com/ncontiero/dkstore.git
 ```
 
 ### Local Dependencies

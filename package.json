@@ -7,12 +7,12 @@
   "description": "An e-commerce with Turborepo, Next.Js, BullMQ and React Email.",
   "author": {
     "name": "Nicolas Contiero",
-    "url": "https://github.com/dkshs"
+    "url": "https://github.com/ncontiero"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/dkshs/dkstore.git"
+    "url": "https://github.com/ncontiero/dkstore.git"
   },
   "scripts": {
     "build": "turbo build",
@@ -48,8 +48,8 @@
   "devDependencies": {
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
-    "@dkshs/eslint-config": "4.6.0",
     "@dkstore/tsconfig": "workspace:*",
+    "@ncontiero/eslint-config": "5.1.1",
     "concurrently": "^9.1.2",
     "dotenv": "^16.4.7",
     "eslint": "^9.23.0",

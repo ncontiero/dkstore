@@ -1,6 +1,6 @@
-import { dkshs } from "@dkshs/eslint-config";
+import { ncontiero } from "@ncontiero/eslint-config";
 
-export default dkshs(
+export default ncontiero(
   { tailwindcss: true },
   {
     files: ["src/index.tsx", "src/emails/*.tsx"],
