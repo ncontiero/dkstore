@@ -28,7 +28,7 @@ export function ResetPasswordForm({ userId }: { readonly userId: string }) {
     },
   });
 
-  const form = useForm<ResetPasswordSchema>({
+  const form = useForm({
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
       userId,

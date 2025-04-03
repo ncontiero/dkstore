@@ -24,7 +24,7 @@ export function UpdateEmailForm() {
     },
   });
 
-  const form = useForm<UpdateUserEmailSchema>({
+  const form = useForm({
     resolver: zodResolver(updateUserEmailSchema),
   });
 

@@ -13,7 +13,7 @@ export function SearchForm({ size = "md" }: { readonly size?: "sm" | "md" }) {
   const searchQuery = useSearchParams().get("q");
   const search = useAction(searchAction);
 
-  const form = useForm<SearchSchema>({
+  const form = useForm({
     resolver: zodResolver(searchSchema),
     defaultValues: {
       search: searchQuery || "",

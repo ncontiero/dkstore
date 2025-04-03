@@ -32,7 +32,7 @@ export function SignInForm() {
     },
   });
 
-  const form = useForm<SignInSchema>({
+  const form = useForm({
     resolver: zodResolver(signInSchema),
   });
 

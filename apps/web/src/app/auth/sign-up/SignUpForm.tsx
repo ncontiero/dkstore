@@ -28,7 +28,7 @@ export function SignUpForm() {
     },
   });
 
-  const form = useForm<SignUpSchema>({
+  const form = useForm({
     resolver: zodResolver(signUpSchema),
   });
 

@@ -29,7 +29,7 @@ export function UpdatePasswordForm() {
     },
   });
 
-  const form = useForm<UpdateUserPasswordSchema>({
+  const form = useForm({
     resolver: zodResolver(updateUserPasswordSchema),
   });
 

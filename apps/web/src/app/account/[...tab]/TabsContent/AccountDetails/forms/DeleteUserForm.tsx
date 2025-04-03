@@ -26,7 +26,7 @@ export function DeleteUserForm() {
     },
   });
 
-  const form = useForm<DeleteUserSchema>({
+  const form = useForm({
     resolver: zodResolver(deleteUserSchema),
   });
 

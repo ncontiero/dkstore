@@ -33,7 +33,7 @@ export function UpdateUserNameForm({ user }: { readonly user: User }) {
     },
   });
 
-  const form = useForm<UpdateUserNameSchema>({
+  const form = useForm({
     resolver: zodResolver(updateUserNameSchema),
     defaultValues: {
       name: user.name,

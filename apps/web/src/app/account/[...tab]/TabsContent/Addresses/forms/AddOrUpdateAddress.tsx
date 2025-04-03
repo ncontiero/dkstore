@@ -36,7 +36,7 @@ export function AddOrUpdateAddress({
     },
   });
 
-  const form = useForm<AddOrUpdateAddressSchema>({
+  const form = useForm({
     resolver: zodResolver(addOrUpdateAddressSchema),
     defaultValues: {
       ...address,

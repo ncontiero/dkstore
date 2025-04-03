@@ -49,11 +49,11 @@ export function AddOrEdit2FA({
   const [qrCode, setQrCode] = useState<string | null>(null);
   const [unableToScan, setUnableToScan] = useState(false);
 
-  const form = useForm<AddOrEdit2FASchema>({
+  const form = useForm({
     resolver: zodResolver(addOrEdit2FASchema),
     defaultValues: {
       code: "",
-      secret: otpSecret?.base32,
+      secret: otpSecret?.base32 || "",
     },
   });
 

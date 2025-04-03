@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.1.0",
   "private": true,
-  "packageManager": "pnpm@10.7.0",
+  "packageManager": "pnpm@10.7.1",
   "description": "An e-commerce with Turborepo, Next.Js, BullMQ and React Email.",
   "author": {
     "name": "Nicolas Contiero",

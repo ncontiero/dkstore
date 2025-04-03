@@ -1,3 +1,4 @@
+import type { BaseAdapter } from "@bull-board/api/dist/src/queueAdapters/base";
 import { createBullBoard } from "@bull-board/api";
 import { BullMQAdapter } from "@bull-board/api/bullMQAdapter.js";
 import { FastifyAdapter } from "@bull-board/fastify";
@@ -13,7 +14,7 @@ fastify.register(authRoutes);
 const serverAdapter = new FastifyAdapter();
 
 createBullBoard({
-  queues: [new BullMQAdapter(sendEmailQueue)],
+  queues: [new BullMQAdapter(sendEmailQueue) as BaseAdapter],
   serverAdapter,
 });
 

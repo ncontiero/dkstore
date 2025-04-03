@@ -24,7 +24,7 @@ export function ForgotPasswordForm({ email }: { readonly email?: string }) {
     },
   });
 
-  const form = useForm<ForgotPasswordSchema>({
+  const form = useForm({
     resolver: zodResolver(forgotPasswordSchema),
     defaultValues: {
       email: email || "",

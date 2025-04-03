@@ -45,7 +45,7 @@ export function Confirm2FA({ children, session }: Confirm2FAProps) {
     },
   });
 
-  const form = useForm<Verify2FASchema>({
+  const form = useForm({
     resolver: zodResolver(verify2FASchema),
   });
 

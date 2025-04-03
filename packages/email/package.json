@@ -29,7 +29,7 @@
   "dependencies": {
     "@dkstore/env": "workspace:*",
     "@dkstore/ui": "workspace:*",
-    "@react-email/components": "0.0.34",
+    "@react-email/components": "0.0.35",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
@@ -37,13 +37,13 @@
     "@dkstore/tsconfig": "workspace:*",
     "@ncontiero/eslint-config": "5.1.1",
     "@rsbuild/plugin-react": "^1.1.1",
-    "@rslib/core": "^0.6.0",
-    "@types/node": "^22.13.14",
-    "@types/react": "^19.0.12",
-    "@types/react-dom": "^19.0.4",
+    "@rslib/core": "^0.6.1",
+    "@types/node": "^22.14.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.1",
     "concurrently": "^9.1.2",
     "eslint": "^9.23.0",
-    "react-email": "4.0.2",
+    "react-email": "4.0.3",
     "typescript": "^5.8.2"
   },
   "engines": {
