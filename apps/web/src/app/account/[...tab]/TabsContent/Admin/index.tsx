@@ -11,7 +11,9 @@ import {
   AccountCardTitle,
 } from "@/components/Account";
 import { getQueueDashboardURL } from "@/utils/queue-dash-url";
-import { UsersDataTable } from "./UsersTable";
+import { AddOrUpdateProduct } from "./dialogs/AddOrUpdateProduct";
+import { ProductsDataTable } from "./Tables/ProductsTable";
+import { UsersDataTable } from "./Tables/UsersTable";
 
 export async function Admin({
   session,
@@ -21,6 +23,7 @@ export async function Admin({
   const users = await prisma.user.findMany({
     where: { NOT: { id: session.userId } },
   });
+  const products = await prisma.product.findMany();
   const queueDashboardURL = await getQueueDashboardURL();
 
   return (
@@ -51,6 +54,21 @@ export async function Admin({
           </AccountCardDescription>
           <UsersDataTable users={users} />
         </AccountCardContent>
+      </AccountCard>
+      <AccountCard>
+        <AccountCardContent className="overflow-hidden">
+          <AccountCardTitle>Products</AccountCardTitle>
+          <AccountCardDescription>
+            This is products table. You can manage products here.
+          </AccountCardDescription>
+          <ProductsDataTable products={products} />
+        </AccountCardContent>
+        <AccountCardFooter>
+          <AccountCardFooterDescription>
+            Create a new product.
+          </AccountCardFooterDescription>
+          <AddOrUpdateProduct />
+        </AccountCardFooter>
       </AccountCard>
     </>
   );

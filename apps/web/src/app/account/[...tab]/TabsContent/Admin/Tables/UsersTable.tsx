@@ -92,7 +92,7 @@ function ActionComp({ row }: CellContext<User, unknown>) {
   );
 }
 
-export const columns: ColumnDef<User>[] = [
+const columns: ColumnDef<User>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => {
