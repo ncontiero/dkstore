@@ -49,8 +49,8 @@ importers:
   apps/queue-dashboard:
     dependencies:
       '@bull-board/api':
-        specifier: ^6.8.0
-        version: 6.8.0(@bull-board/ui@6.8.0)
+        specifier: ^6.8.1
+        version: 6.8.1(@bull-board/ui@6.8.0)
       '@bull-board/fastify':
         specifier: ^6.8.0
         version: 6.8.0
@@ -628,6 +628,11 @@ packages:
     resolution: {integrity: sha512-7sTWAuThHS6+fBQdge1HwyKqka6FBI/rKmVBE+8GsJ9YsNUAxdpYX6Z5Fj7LtYKMU7KeMf4EZKRRWznNOU5VLg==}
     peerDependencies:
       '@bull-board/ui': 6.8.0
+
+  '@bull-board/api@6.8.1':
+    resolution: {integrity: sha512-Esy9QQIHaaKfIYDZZxj3rV01a7KB+tS5e06QxvdzkgzlQgjFMCuWnMRMTiCydy1I/MTWezRS5TDaQogeymP3SQ==}
+    peerDependencies:
+      '@bull-board/ui': 6.8.1
 
   '@bull-board/fastify@6.8.0':
     resolution: {integrity: sha512-rogv8vUJAKFZ5m9iO4Dmx7mhvkUBrXPyZ+Pgz5iNH97KO5xnXYQgAvTpkZnLU1lVrjvHHt09j1S3RBb7l5WcTQ==}
@@ -5763,6 +5768,11 @@ snapshots:
       '@babel/helper-validator-identifier': 7.25.9
 
   '@bull-board/api@6.8.0(@bull-board/ui@6.8.0)':
+    dependencies:
+      '@bull-board/ui': 6.8.0
+      redis-info: 3.1.0
+
+  '@bull-board/api@6.8.1(@bull-board/ui@6.8.0)':
     dependencies:
       '@bull-board/ui': 6.8.0
       redis-info: 3.1.0
