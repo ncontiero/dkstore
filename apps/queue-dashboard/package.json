@@ -16,7 +16,7 @@
   "dependencies": {
     "@bull-board/api": "^6.8.0",
     "@bull-board/fastify": "^6.8.0",
-    "@bull-board/ui": "^6.8.0",
+    "@bull-board/ui": "^6.8.1",
     "@dkstore/db": "workspace:*",
     "@dkstore/env": "workspace:*",
     "@dkstore/queue": "workspace:*",
