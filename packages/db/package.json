@@ -40,7 +40,7 @@
     "concurrently": "^9.1.2",
     "eslint": "^9.24.0",
     "prisma": "6.5.0",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.3"
   },
   "engines": {
     "node": ">=20"
