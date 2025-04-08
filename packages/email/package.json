@@ -43,7 +43,7 @@
     "@types/react-dom": "^19.1.1",
     "concurrently": "^9.1.2",
     "eslint": "^9.24.0",
-    "react-email": "4.0.4",
+    "react-email": "4.0.5",
     "typescript": "^5.8.3"
   },
   "engines": {
