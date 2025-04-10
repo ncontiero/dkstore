@@ -51,7 +51,7 @@
     "@dkstore/tsconfig": "workspace:*",
     "@ncontiero/eslint-config": "5.1.1",
     "concurrently": "^9.1.2",
-    "dotenv": "^16.4.7",
+    "dotenv": "^16.5.0",
     "eslint": "^9.24.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.0",
