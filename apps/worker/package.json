@@ -25,7 +25,7 @@
     "@dkstore/tsconfig": "workspace:*",
     "@ncontiero/eslint-config": "5.1.1",
     "@rslib/core": "^0.6.2",
-    "@types/node": "^22.14.0",
+    "@types/node": "^22.14.1",
     "@types/nodemailer": "^6.4.17",
     "eslint": "^9.24.0",
     "typescript": "^5.8.3"
