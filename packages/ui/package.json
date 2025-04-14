@@ -53,7 +53,7 @@
     "@dkstore/tsconfig": "workspace:*",
     "@ncontiero/eslint-config": "5.1.1",
     "@rsbuild/plugin-react": "^1.2.0",
-    "@rslib/core": "^0.6.2",
+    "@rslib/core": "^0.6.3",
     "@types/node": "^22.14.1",
     "@types/react": "^19.1.1",
     "@types/react-dom": "^19.1.2",
