@@ -14,9 +14,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@bull-board/api": "^6.9.1",
-    "@bull-board/fastify": "^6.9.1",
-    "@bull-board/ui": "^6.9.1",
+    "@bull-board/api": "^6.9.2",
+    "@bull-board/fastify": "^6.9.2",
+    "@bull-board/ui": "^6.9.2",
     "@dkstore/db": "workspace:*",
     "@dkstore/env": "workspace:*",
     "@dkstore/queue": "workspace:*",
