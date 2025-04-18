@@ -21,7 +21,7 @@
     "@dkstore/env": "workspace:*",
     "@dkstore/queue": "workspace:*",
     "@dkstore/utils": "workspace:*",
-    "fastify": "^5.3.0"
+    "fastify": "^5.3.1"
   },
   "devDependencies": {
     "@dkstore/tsconfig": "workspace:*",
