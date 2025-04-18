@@ -367,8 +367,8 @@ importers:
         specifier: workspace:*
         version: link:../env
       bullmq:
-        specifier: ^5.49.0
-        version: 5.49.0
+        specifier: ^5.49.1
+        version: 5.49.1
       zod:
         specifier: ^3.24.2
         version: 3.24.2
@@ -2686,8 +2686,8 @@ packages:
     resolution: {integrity: sha512-bkXY9WsVpY7CvMhKSR6pZilZu9Ln5WDrKVBUXf2S443etkmEO4V58heTecXcUIsNsi4Rx8JUO4NfX1IcQl4deg==}
     engines: {node: '>=18.20'}
 
-  bullmq@5.49.0:
-    resolution: {integrity: sha512-qwNOgUfD3kHI33bU2HOsn6YKEoSdUfHTledQUy95V8HogVdgGg/HS3+TQh7Y7YH19h5yK2Oo/FFEnzyXJhgy3w==}
+  bullmq@5.49.1:
+    resolution: {integrity: sha512-tui5dgCZjL0LA5GTFhvuvcLxZnhfkptK/6xs7H/DnhFMgriXerHhwNphCb9Bs/0IuXaM1FabD9tFaNmDqHL0XA==}
 
   busboy@1.6.0:
     resolution: {integrity: sha512-8SFQbg/0hQ9xy3UNTB0YEnsNBbWfhf7RtnzpL7TkBiTBRfrQ9Fxcnz7VJsleJpyp6rVLvXiuORqjlHi5q+PYuA==}
@@ -7771,7 +7771,7 @@ snapshots:
 
   builtin-modules@5.0.0: {}
 
-  bullmq@5.49.0:
+  bullmq@5.49.1:
     dependencies:
       cron-parser: 4.9.0
       ioredis: 5.6.0
