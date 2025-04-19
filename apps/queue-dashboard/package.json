@@ -21,14 +21,14 @@
     "@dkstore/env": "workspace:*",
     "@dkstore/queue": "workspace:*",
     "@dkstore/utils": "workspace:*",
-    "fastify": "^5.3.1"
+    "fastify": "^5.3.2"
   },
   "devDependencies": {
     "@dkstore/tsconfig": "workspace:*",
     "@ncontiero/eslint-config": "5.1.1",
     "@rslib/core": "^0.6.5",
     "@types/node": "^22.14.1",
-    "eslint": "^9.24.0",
+    "eslint": "^9.25.0",
     "typescript": "^5.8.3"
   },
   "engines": {
